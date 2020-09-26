@@ -1,0 +1,43 @@
+/** welcom page style */
+
+app-welcome {
+    box-sizing: border-box;
+
+    ion-header {
+        ion-toolbar {
+            position: fixed;
+            --background: rgba(0,0,0,0);
+
+            ion-button {
+                padding: 0.2em 1em 0em 0em;
+            }
+        }
+    }
+
+    ion-content {
+        ion-slides {
+            .swiper-pagination {
+                padding-bottom: 3em;
+            }
+
+            .slide-three {
+                display: flex;
+                flex-direction: column;
+
+                .login-signup-buttons {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-around;
+                    width: 100%;
+                    box-sizing: border-box;
+                    position: absolute;
+                    bottom: 1em;
+
+                    ion-button {
+                        min-width: 40%;
+                    }
+                }
+            }
+        }
+    }
+}
