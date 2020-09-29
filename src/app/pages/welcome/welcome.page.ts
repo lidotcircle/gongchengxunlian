@@ -1,5 +1,13 @@
+import { LocalStorageService } from './../../shared/service/local-storage.service';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { StaticValue } from '../../shared/static-value/static-value.module';
+
+interface AppConfig {
+  hasRun: boolean;
+  version: string;
+}
 
 @Component({
   selector: 'app-welcome',
@@ -18,8 +26,7 @@ export class WelcomePage implements OnInit {
     });
   }
 
- constructor() {}
+ constructor(private localstorage: LocalStorageService, private router: Router) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }
