@@ -16,8 +16,16 @@ app-welcome {
 
     ion-content {
         ion-slides {
+            box-sizing: border-box;
+            height: 100%;
             .swiper-pagination {
-                padding-bottom: 3em;
+                padding-bottom: 4em;
+            }
+
+            ion-slide {
+                img {
+                    align-self: start;
+                }
             }
 
             .slide-three {
@@ -31,7 +39,7 @@ app-welcome {
                     width: 100%;
                     box-sizing: border-box;
                     position: absolute;
-                    bottom: 1em;
+                    bottom: 0.5em;
 
                     ion-button {
                         min-width: 40%;
