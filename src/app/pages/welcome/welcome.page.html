@@ -8,8 +8,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-slides mode="md" pager="md" scrollbar="md" pager="true" scrollbar="false" (ionSlideWillChange)="onSlideWillChange($event)">
+<ion-content class="welcome-content">
+  <ion-slides mode="md" pager="md" scrollbar="md" pager="true" 
+      scrollbar="false" (ionSlideWillChange)="onSlideWillChange($event)">
     <ion-slide>
       <img src="../../../assets/img/slides/splsh_one.png" alt="load image fail">
     </ion-slide>
@@ -28,6 +29,6 @@
           </ion-button>
         </div>
       </div>
-  </ion-slide>
+    </ion-slide>
   </ion-slides>
 </ion-content>

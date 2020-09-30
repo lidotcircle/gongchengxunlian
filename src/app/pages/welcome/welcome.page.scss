@@ -14,12 +14,13 @@ app-welcome {
         }
     }
 
-    ion-content {
+    .welcome-content {
         ion-slides {
             box-sizing: border-box;
             height: 100%;
+            --bullet-background: #555;
             .swiper-pagination {
-                padding-bottom: 4em;
+                margin-bottom: 4em;
             }
 
             ion-slide {
@@ -32,21 +33,22 @@ app-welcome {
                 align-self: start;
                 display: flex;
                 flex-direction: column;
-
-                .login-signup-buttons {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-around;
-                    width: 100%;
-                    box-sizing: border-box;
-                    position: absolute;
-                    bottom: 0.5em;
-
-                    ion-button {
-                        min-width: 40%;
-                    }
-                }
             }
         }
     }
+
+    .login-signup-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        box-sizing: border-box;
+        position: fixed;
+        bottom: 0.5em;
+
+        ion-button {
+            min-width: 40%;
+        }
+    }
 }
+

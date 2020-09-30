@@ -16,7 +16,7 @@ interface AppConfig {
 })
 export class WelcomePage implements OnInit {
     showSkip = true;
-    @ViewChild('slides', {static: false}) slides: IonSlides;
+    @ViewChild('slides', {static: true}) slides: IonSlides;
 
     /** slides change */
     onSlideWillChange(event) {
