@@ -1,15 +1,21 @@
 /** constants string and symbol */
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
-@NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
-})
-export class StaticValue {
-  static APP_KEY   = 'APP';
-  static IS_LANUCHED = 'IS_LANUCHED';
-  static APP_VERSION = '1.0.0';
-}
+export const APP_KEY = 'APP';
+export const LOGIN_KEY = 'LOGIN_INFO';
+export const USERDB_KEY = 'USER_DATABASE';
+export const APP_VERSION = '1.0.0';
+
+export class AppConfig {
+    hasRun: boolean = false;
+    version: string = APP_VERSION;
+};
+
+export class LoginInfo {
+    username: string = null;
+    password: string = null;
+};
+
+export class UserDB {
+    users: LoginInfo[] = [];
+};
+

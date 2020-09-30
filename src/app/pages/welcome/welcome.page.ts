@@ -2,7 +2,6 @@ import { LocalStorageService } from './../../shared/service/local-storage.servic
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { StaticValue } from '../../shared/static-value/static-value.module';
 
 interface AppConfig {
   hasRun: boolean;
@@ -16,17 +15,31 @@ interface AppConfig {
   encapsulation: ViewEncapsulation.None
 })
 export class WelcomePage implements OnInit {
-  showSkip = true;
-  @ViewChild('slides', {static: false}) slides: IonSlides;
+    showSkip = true;
+    @ViewChild('slides', {static: false}) slides: IonSlides;
 
-  /** slides change */
-  onSlideWillChange(event) {
-    event.target.isEnd().then((end) => {
-      this.showSkip = !end;
-    });
-  }
+    /** slides change */
+    onSlideWillChange(event) {
+        event.target.isEnd().then((end) => {
+            this.showSkip = !end;
+        });
+    }
+    
+    /** on skip */
+    onSkip() {
+        this.gotoLogin();
+    }
 
- constructor(private localstorage: LocalStorageService, private router: Router) {}
+    gotoLogin() {
+        console.log("goto login");
+        this.router.navigateByUrl('login');
+    }
 
-  ngOnInit() {}
+    gotoSignup() {
+        this.router.navigateByUrl('signup');
+    }
+
+    constructor(private localstorage: LocalStorageService, private router: Router) {}
+
+    ngOnInit() {}
 }

@@ -3,7 +3,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="end">
-      <ion-button [hidden]="!showSkip" color="primary" fill="outline">跳过</ion-button>
+      <ion-button (click)="onSkip($event)" [hidden]="!showSkip" color="primary" fill="outline">跳过</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -20,10 +20,10 @@
       <div class="slide-three">
         <img src="../../../assets/img/slides/splsh_three.png" alt="load image fail">
         <div class="login-signup-buttons">
-          <ion-button color="primary" (click)="onClick()" expand="block" fill="outline" shape="round">
+          <ion-button color="primary" (click)="onSkip($event)" expand="block" fill="outline" shape="round">
             登录
           </ion-button>
-          <ion-button color="primary" (click)="onClick()" expand="block" shape="round">
+          <ion-button color="primary" (click)="gotoSignup()" expand="block" shape="round">
             注册
           </ion-button>
         </div>
