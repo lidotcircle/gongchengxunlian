@@ -16,16 +16,6 @@ const routes: Routes = [
         canActivate: [StartAppGuard]
     },
 
-    {
-        path: 'login',
-        loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule ),
-        canActivate: [LoginGuard]
-    },
-    {
-        path: 'signup',
-        loadChildren: () => import('./pages/signup/signup.module').then( m => m.SignupPageModule)
-    },
-
     /** require login info, else redirect to welcome page */
     {
         path: '',
@@ -41,6 +31,11 @@ const routes: Routes = [
             },
         ]
     },
+  {
+    path: 'passport',
+    loadChildren: () => import('./pages/passport/passport.module').then( m => m.PassportPageModule)
+  },
+
 ];
 
 @NgModule({
