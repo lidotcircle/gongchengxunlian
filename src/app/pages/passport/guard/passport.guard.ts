@@ -1,3 +1,4 @@
+import { SharedModule, LocalStorageService } from './../../../shared/shared.module';
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -11,6 +12,7 @@ export class PassportGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return true;
   }
+}
 
 /** if there has login info, redirect to home page */
 @Injectable({
@@ -51,5 +53,3 @@ export class UserDomainGuard implements CanActivate {
 }
 
 
-  
-}
