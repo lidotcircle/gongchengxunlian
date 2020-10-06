@@ -10,3 +10,8 @@ import { CommonModule } from '@angular/common';
   ]
 })
 export class SharedModule { }
+
+export function assert(value: any, error?: string) {
+  if(!value)
+    throw error ? error : "bad value";
+}

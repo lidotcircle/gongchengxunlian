@@ -19,14 +19,14 @@ export class StartAppGuard implements CanActivate {
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree 
     {
         const appConfig: AppConfig = this.localstorage.get(StaticValue.APP_KEY, {
-            hasRun: false,
+            isLaunched: false,
             version: StaticValue.APP_VERSION
         });
-        if (appConfig.hasRun) {
+        if (appConfig.isLaunched) {
             this.router.navigateByUrl('login');
             return false;
         } else {
-            appConfig.hasRun = true;
+            appConfig.isLaunched = true;
             this.localstorage.set(StaticValue.APP_KEY, appConfig);
             return true;
         }

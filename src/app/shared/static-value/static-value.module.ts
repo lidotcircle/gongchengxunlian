@@ -6,7 +6,7 @@ export const USERDB_KEY = 'USER_DATABASE';
 export const APP_VERSION = '1.0.0';
 
 export class AppConfig {
-    hasRun: boolean = false;
+    isLaunched: boolean = false;
     version: string = APP_VERSION;
 };
 

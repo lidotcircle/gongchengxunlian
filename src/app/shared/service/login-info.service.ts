@@ -45,6 +45,7 @@ export class LoginInfoService {
     }
 
     public changePassword(__old: string, __new: string) {
+        if(!this.login()) return;
         let user = this.localstorage.get(StaticValue.LOGIN_KEY, new LoginInfo()) as LoginInfo;
         if(user.username == null) {
             /** require debug */
@@ -55,6 +56,22 @@ export class LoginInfoService {
             this.localstorage.set(StaticValue.LOGIN_KEY, user);
             this.update_user(user);
         }
+    }
+
+    public hasName(name: string) {
+        let userdb = this.localstorage.get(StaticValue.USERDB_KEY, new UserDB) as UserDB;
+        for(let user of userdb.users) {
+            if(user.username == name) return false;
+        }
+        return false;
+    }
+
+    public addUser(user: LoginInfo): boolean {
+        if(this.hasName(user.username)) return false;
+        let userdb = this.localstorage.get(StaticValue.USERDB_KEY, new UserDB) as UserDB;
+        let new_user = Object.assign({}, user);
+        userdb.users.push(new_user);
+        return true;
     }
 
     public removeLoginInfo() {

@@ -4,5 +4,68 @@
 </div>
 
 <ion-content>
-    hello
+    <div class="signup-process">
+        <div class="signup-process-item">
+            <img src="../../../assets/img/register/registered_one.png"     *ngIf="slideIndex==0" alt="signup process one">
+            <img src="../../../assets/img/register/registered_one_one.png" *ngIf="slideIndex>0"  alt="signup process one">
+        </div>
+        <div class="divide"></div>
+        <div class="signup-process-item">
+            <img src="../../../assets/img/register/registered_two.png"     *ngIf="slideIndex<=1" alt="signup process two">
+            <img src="../../../assets/img/register/registered_two_two.png" *ngIf="slideIndex>1"  alt="signup process tw0">
+        </div>
+        <div class="divide"></div>
+        <div class="signup-process-item">
+            <img src="../../../assets/img/register/registered_three.png"       *ngIf="slideIndex<=2" alt="signup process three">
+            <img src="../../../assets/img/register/registered_three_three.png" *ngIf="slideIndex>2"  alt="signup process three">
+        </div>
+        <div class="divide"></div>
+        <div class="signup-process-item">
+            <img src="../../../assets/img/register/register_four.png"      *ngIf="true"  alt="signup process four">
+            <img src="../../../assets/img/register/register_four_four.png" *ngIf="false" alt="signup process four">
+        </div>
+    </div>
+
+    <ion-slides mode="md" (ionSlideWillChange)="onSlideWillChange($event)" [options]="{allowTouchMove: false}">
+        <ion-slide>
+            <form novalidate>
+                <ion-list>
+                    <ion-item>
+                        <ion-input name="phone" type="text" required 
+                                   [pattern]="validPhone"
+                                   placeholder="请输入手机号" [(ngModel)]="signupData.phone">
+                        </ion-input>
+                    </ion-item>
+                    <ion-text color="danger" class="ion-text-left">
+                        <h1>Awesome text</h1>
+                    </ion-text>
+                    <ion-item>
+                        <ion-input name="email" type="text" required placeholder="请输入邮箱" [(ngModel)]="signupData.email">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-input name="shopName" type="text" required placeholder="请输入店铺名" [(ngModel)]="signupData.shopName">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-input name="password" type="password" required placeholder="请输入密码" [(ngModel)]="signupData.password">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-input name="confirmPassword" type="password" required placeholder="请输入确认密码" [(ngModel)]="signupData.confirmPassword">
+                        </ion-input>
+                    </ion-item>
+                </ion-list>
+            </form>
+        </ion-slide>
+        <ion-slide>
+            <h1>P2</h1>
+        </ion-slide>
+        <ion-slide>
+            <h1>P3</h1>
+        </ion-slide>
+        <ion-slide>
+            <h1>P4</h1>
+        </ion-slide>
+    </ion-slides>
 </ion-content>

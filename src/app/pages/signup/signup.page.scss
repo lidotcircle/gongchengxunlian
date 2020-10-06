@@ -4,4 +4,26 @@ app-signup {
         padding: 0.8em 0em;
         width: 33%;
     }
+
+    .signup-process {
+        box-sizing: border-box;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        padding: 0.8em, 1em;
+        align-items: center;
+
+        .signup-process-item {
+            box-sizing: border-box;
+            width: 19%;
+            padding: 0.6em;
+        }
+
+        .divide {
+            width: 8%;
+            height: 1.5px;
+            box-sizing: border-box;
+            background: black;
+        }
+    }
 }
