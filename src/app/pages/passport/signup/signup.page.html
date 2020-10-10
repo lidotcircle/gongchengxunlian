@@ -28,7 +28,7 @@
 
     <ion-slides mode="md" (ionSlideWillChange)="onSlideWillChange($event)" [options]="{allowTouchMove: false}">
         <ion-slide>
-            <form novalidate>
+            <form novalidate #fs1="ngForm">
                 <ion-list>
                     <ion-item>
                         <ion-input name="phone" type="text" required 

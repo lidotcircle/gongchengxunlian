@@ -2,11 +2,8 @@ import { LocalStorageService } from './../../shared/service/local-storage.servic
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { StaticValue } from 'src/app/shared/static-value/static-value.module';
 
-interface AppConfig {
-  hasRun: boolean;
-  version: string;
-}
 
 @Component({
   selector: 'app-welcome',
@@ -31,12 +28,11 @@ export class WelcomePage implements OnInit {
     }
 
     gotoLogin() {
-        console.log("goto login");
-        this.router.navigateByUrl('login');
+        this.router.navigateByUrl(StaticValue.URLS.SIGNIN);
     }
 
     gotoSignup() {
-        this.router.navigateByUrl('signup');
+        this.router.navigateByUrl(StaticValue.URLS.SIGNUP);
     }
 
     constructor(private localstorage: LocalStorageService, private router: Router) {}

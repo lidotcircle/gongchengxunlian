@@ -1,9 +1,8 @@
-import { LoginInfoService } from './../../shared/service/login-info.service';
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
-import { Router } from '@angular/router';
-import { assert } from './../../shared/shared.module';
-import { SignupDataModel } from './signup-data-model';
+import { LoginInfoService } from 'src/app/shared/service/login-info.service';
+import { StaticValue } from './../../../shared/static-value/static-value.module';
 
 @Component({
   selector: 'app-signup',
@@ -16,7 +15,7 @@ export class SignupPage implements OnInit {
   @ViewChild(IonSlides, { static: false })
   slides: IonSlides;
 
-  signupData: SignupDataModel = new SignupDataModel();
+  signupData: StaticValue.SignupDataModel = new StaticValue.SignupDataModel();
   slideIndex: number = 0;
 
   validPhone = /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,3,5-9]))\d{8}$/;
@@ -52,15 +51,12 @@ export class SignupPage implements OnInit {
   }
 
   nextSlide() {
-    assert(this.slideIndex < 3);
     this.slides.slideNext();
   }
   prevSlide() {
-    assert(this.slideIndex > 0);
     this.slides.slidePrev();
   }
 
   constructor(private logininfo: LoginInfoService) { }
   ngOnInit() { }
 }
-

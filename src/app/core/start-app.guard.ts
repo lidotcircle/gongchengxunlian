@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import * as StaticValue from '../shared/static-value/static-value.module';
 
-import { AppConfig, LoginInfo } from '../shared/static-value/static-value.module';
+import { StaticValue } from '../shared/static-value/static-value.module';
 import { LoginInfoService } from '../shared/service/login-info.service';
 
+
+/** 检查是否第一次启动，如果否 redirect to 'login' */
 @Injectable({
   providedIn: 'root'
 })
@@ -18,17 +19,36 @@ export class StartAppGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree 
     {
-        const appConfig: AppConfig = this.localstorage.get(StaticValue.APP_KEY, {
+        const appConfig: StaticValue.AppConfig = this.localstorage.get(StaticValue.APP_KEY, {
             isLaunched: false,
             version: StaticValue.APP_VERSION
         });
         if (appConfig.isLaunched) {
-            this.router.navigateByUrl('login');
+            this.router.navigateByUrl(StaticValue.URLS.SIGNIN);
             return false;
         } else {
             appConfig.isLaunched = true;
             this.localstorage.set(StaticValue.APP_KEY, appConfig);
             return true;
         }
+    }
+}
+
+
+/** 需要登录的页面，如果没有合法的登录信息 redirect to 'welcome' */
+@Injectable({
+  providedIn: 'root'
+})
+export class UserDomainGuard implements CanActivate {
+    constructor(private localstorage: LocalStorageService, private loginservice: LoginInfoService, private router: Router) {}
+
+    canActivate(
+        next: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree 
+    {
+        if(this.loginservice.login())
+            return true;
+        this.router.navigateByUrl(StaticValue.URLS.WELCOME);
+        return false;
     }
 }
