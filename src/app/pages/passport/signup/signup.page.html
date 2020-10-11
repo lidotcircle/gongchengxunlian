@@ -1,9 +1,10 @@
 
+<div class="container">
 <div class="ion-text-center">
     <img class="logo" src="../../../assets/img/register/logo.png" alt="logo">
 </div>
 
-<ion-content>
+<div class="content">
     <div class="signup-process">
         <div class="signup-process-item">
             <img src="../../../assets/img/register/registered_one.png"     *ngIf="slideIndex==0" alt="signup process one">
@@ -26,46 +27,76 @@
         </div>
     </div>
 
+    <div class="pop-message" [style]="'display: ' + (displayMessager ? 'block' : 'none')">
+        <div class="pop-closer">
+            <button (click)="hidePopMessage()">X</button>
+        </div>
+        【生意专家】尊敬的用户，您的验证码: <span class="validate-code" #validCode></span>，
+        工作人员不会索取，请勿泄露。
+    </div>
+
     <ion-slides mode="md" (ionSlideWillChange)="onSlideWillChange($event)" [options]="{allowTouchMove: false}">
         <ion-slide>
-            <form novalidate #fs1="ngForm">
-                <ion-list>
+            <form #fs1="ngForm" class='input-form' novalidate>
+                <div class="phone-line with-warning">
                     <ion-item>
-                        <ion-input name="phone" type="text" required 
-                                   [pattern]="validPhone"
-                                   placeholder="请输入手机号" [(ngModel)]="signupData.phone">
+                        <ion-label color="stable" position="floating">输入手机号</ion-label>
+                        <ion-input name="phone" #phone="ngModel" type="text"
+                                   required [pattern]="validPhone"
+                                   [(ngModel)]="signupData.phone">
                         </ion-input>
                     </ion-item>
-                    <ion-text color="danger" class="ion-text-left">
-                        <h1>Awesome text</h1>
-                    </ion-text>
+                    <div color="danger" class="warning" *ngIf="phone.errors?.required && phone.touched">手机号是必选</div>
+                    <div color="danger" class="warning" *ngIf="phone.errors?.pattern">输入正确的手机号</div>
+                </div>
+                <div class="validate-code-line">
                     <ion-item>
-                        <ion-input name="email" type="text" required placeholder="请输入邮箱" [(ngModel)]="signupData.email">
-                        </ion-input>
+                        <ion-label position="floating">验证码</ion-label>
+                        <ion-input name="verifyCode" #verifyCode="ngModel" type="text"
+                                   required [pattern]="testVerifyCode()"
+                                   [(ngModel)]="signupData.code"></ion-input>
                     </ion-item>
-                    <ion-item>
-                        <ion-input name="shopName" type="text" required placeholder="请输入店铺名" [(ngModel)]="signupData.shopName">
-                        </ion-input>
-                    </ion-item>
-                    <ion-item>
-                        <ion-input name="password" type="password" required placeholder="请输入密码" [(ngModel)]="signupData.password">
-                        </ion-input>
-                    </ion-item>
-                    <ion-item>
-                        <ion-input name="confirmPassword" type="password" required placeholder="请输入确认密码" [(ngModel)]="signupData.confirmPassword">
-                        </ion-input>
-                    </ion-item>
-                </ion-list>
+                    <ion-button (click)="NewVerification()" expand="block" fill="solid"
+                        [disabled]="getVerificationCodeWait!=0 || phone.invalid">
+                        <div *ngIf="getVerificationCodeWait==0">获取验证码</div>
+                        <div *ngIf="getVerificationCodeWait!=0">{{getVerificationCodeWait}}s可获取验证码</div>
+                    </ion-button>
+                </div>
+                <div class="take-space"></div>
+                <ion-button class="next-slide" (click)="nextSlide()" expand="block" fill="solid" 
+                            [disabled]="!slide1Acceptable()">
+                    下一步
+                </ion-button>
             </form>
         </ion-slide>
         <ion-slide>
-            <h1>P2</h1>
+            <form #fs1="ngForm" class='input-form' novalidate>
+                <div class="email-line with-warning">
+                    <ion-item>
+                        <ion-label position="floating">输入邮箱</ion-label>
+                        <ion-input name="email" #email="ngModel" type="text"
+                                   required [pattern]="validEmail"
+                                   [(ngModel)]="signupData.email">
+                        </ion-input>
+                    </ion-item>
+                    <div color="danger" class="warning" *ngIf="email.errors?.required && email.touched">邮箱是必选</div>
+                    <div color="danger" class="warning" *ngIf="email.errors?.pattern">输入正确的邮箱</div>
+                </div>
+                <div class="take-space"></div>
+                <div class="prev-next-slide">
+                    <ion-button class="prev-slide" (click)="prevSlide()" expand="block" fill="solid" [disabled]="!slide1Acceptable()">
+                        上一步
+                    </ion-button>
+                    <ion-button class="next-slide" (click)="nextSlide()" expand="block" fill="solid" [disabled]="!slide1Acceptable()">
+                        下一步
+                    </ion-button>
+                </div>
+            </form>
         </ion-slide>
         <ion-slide>
-            <h1>P3</h1>
         </ion-slide>
         <ion-slide>
-            <h1>P4</h1>
         </ion-slide>
     </ion-slides>
-</ion-content>
+</div>
+</div>

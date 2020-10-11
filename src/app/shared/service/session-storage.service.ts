@@ -4,9 +4,9 @@ import { CommonStorage } from './Storage';
 @Injectable({
   providedIn: 'root'
 })
-export class LocalStorageService extends CommonStorage {
+export class SessionStorageService extends CommonStorage {
   constructor() {
     super();
-    this.mStorage = window.localStorage;
+    this.mStorage = window.sessionStorage;
   }
 }
