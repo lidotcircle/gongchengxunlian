@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { StaticValue } from '../shared/static-value/static-value.module';
-import { LoginInfoService } from '../shared/service/login-info.service';
+import { AccountManageService } from '../shared/service/account-manage.service';
 
 
 /** 检查是否第一次启动，如果否 redirect to 'login' */
@@ -40,13 +40,13 @@ export class StartAppGuard implements CanActivate {
   providedIn: 'root'
 })
 export class UserDomainGuard implements CanActivate {
-    constructor(private localstorage: LocalStorageService, private loginservice: LoginInfoService, private router: Router) {}
+    constructor(private localstorage: LocalStorageService, private accountService: AccountManageService, private router: Router) {}
 
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree 
     {
-        if(this.loginservice.login())
+        if(this.accountService.login())
             return true;
         this.router.navigateByUrl(StaticValue.URLS.WELCOME);
         return false;

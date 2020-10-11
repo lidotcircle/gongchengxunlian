@@ -16,16 +16,11 @@ export module StaticValue {
         version: string = APP_VERSION;
     };
 
-    export class LoginInfo {
-        username: string = null;
-        password: string = null;
-    };
+    export module MSG {
+        export const MSG_ID = '__message__';
+    }
 
-    export class UserDB {
-        users: LoginInfo[] = [];
-    };
-
-    export module URLS {
+   export module URLS {
         export const HOME = 'home';
         export const WELCOME = 'welcome';
         export const SIGNIN = 'passport/login';
@@ -39,5 +34,14 @@ export module StaticValue {
         password: string = '';
         confirmPassword: string = '';
         code: string = '';
+        userid: number = -1;
+        createTime: string = '';
     }
+
+    export class LoginInfo extends SignupDataModel {
+    }
+
+    export class UserDB {
+        users: LoginInfo[] = [];
+    };
 }

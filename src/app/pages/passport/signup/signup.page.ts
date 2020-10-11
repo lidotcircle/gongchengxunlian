@@ -1,12 +1,16 @@
 import { ElementRef, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
-import { LoginInfoService } from 'src/app/shared/service/login-info.service';
+import { AccountManageService } from 'src/app/shared/service/account-manage.service';
 import { StaticValue } from './../../../shared/static-value/static-value.module';
 import * as MD5 from 'md5';
-import { makeCode } from 'src/app/shared/utils/utils.module';
 import { SessionStorageService } from 'src/app/shared/service/session-storage.service';
 import { LocalStorageService } from 'src/app/shared/service/local-storage.service';
+import { AuthenticationCodeService } from 'src/app/shared/service/authentication-code.service';
+import { Router } from '@angular/router';
+
+const MatchAll: string = "^.*$";
+const NotMatch: string = "x{2000000}";
 
 @Component({
   selector: 'app-signup',
@@ -23,22 +27,15 @@ export class SignupPage implements OnInit {
 
   /** Slide 1 */
   validPhone = /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,3,5-9]))\d{8}$/;
-  @ViewChild('validCode', { static: false })
-  validCodeItem: ElementRef;
-  VerificationCodeMd5: string="";
-  displayMessager: boolean=false;
-  showPopMessage() {this.displayMessager = true;}
-  hidePopMessage() {this.displayMessager = false;}
 
+  /** slide 2 */
+  VerificationCodeMd5: string="";
   getVerificationCodeWait: number=0;
   NewVerification(): void {
     if(this.getVerificationCodeWait>0) return;
 
-    let code = makeCode(6);
-    this.VerificationCodeMd5 = MD5(code);
-
-    (this.validCodeItem.nativeElement as HTMLElement).innerHTML = code;
-    this.showPopMessage();
+    this.VerificationCodeMd5 = this.authenticationCode.NewVerificode(this.signupData.phone);
+    this.storeState();
 
     this.getVerificationCodeWait=StaticValue.VerificationCodeWait;
     this.getVerificationCodeWait++;
@@ -52,59 +49,108 @@ export class SignupPage implements OnInit {
   }
   testVerifyCode(): string {
     let xmd5 = MD5(this.signupData.code);
-    return (this.VerificationCodeMd5 == xmd5) ? '^.*$' : '^1{1600}$';
+    return (this.VerificationCodeMd5 == xmd5) ? MatchAll : NotMatch;
   }
-  slide1Acceptable(): boolean {
+  slide2Acceptable(): boolean {
     let xmd5 = MD5(this.signupData.code);
     return this.validPhone.test(this.signupData.phone) && this.VerificationCodeMd5 == xmd5;
   }
 
-  /** Slide 2 */
-  validEmail = /^.*[@].*\..*$/;
-  validName = /^[A-Za-z][A-Za-z0-9]{2,}$/;
+  /** Slide 3 */
+  // 支持汉字的正则表达式
+  // /\p{Script=Han}/u        经测试能匹配标点
+  // /\p{Unified_Ideograph}/u 不匹配标点
 
-  validatePassword(): boolean {
-    if (this.signupData.password.length < 6) return false;
-    if (!/[0-9]/.test(this.signupData.password)) return false;
-    if (!/[a-z]/.test(this.signupData.password)) return false;
-    if (!/[A-Z]/.test(this.signupData.password)) return false;
+  validEmail = /^.*[@].*\..*$/;
+  validName  = /^([A-Za-z]|\p{Unified_Ideograph})([A-Za-z0-9_]|\p{Unified_Ideograph}){2,}$/u;
+  duplicateUsername = false;
+
+  validatePassword(): string {
+    if (this.signupData.password.length < 6) return NotMatch;
+    if (!/[0-9]/.test(this.signupData.password)) return NotMatch;
+    if (!/[a-z]/.test(this.signupData.password)) return NotMatch;
+    if (!/[A-Z]/.test(this.signupData.password)) return NotMatch;
+    return MatchAll;
   }
-  validateConfirmPassword(): boolean {
-    return this.signupData.password === this.signupData.confirmPassword;
+  validateConfirmPassword(): string {
+    return (this.signupData.password === this.signupData.confirmPassword) ? MatchAll : NotMatch;
   }
-  validateEmail(): boolean {
-    return this.validEmail.test(this.signupData.email);
+  validateEmail(): string {
+    return this.validEmail.test(this.signupData.email) ? MatchAll : NotMatch;
   }
-  validateName(): boolean {
-    return this.validName.test(this.signupData.shopName);
+  validateName(): string {
+    let valid = true;
+    if (!this.validName.test(this.signupData.shopName))
+      valid = false;
+    this.duplicateUsername = false;
+    if (this.accountService.hasName(this.signupData.shopName)) {
+      valid = false;
+      this.duplicateUsername = true;
+    }
+    return valid ? MatchAll : NotMatch;
   }
-  validateAll(): boolean {
-           return this.validateConfirmPassword() && this.validateEmail() && 
-           this.validateName();
+  slide3Acceptable(): boolean {
+    return (this.validateName() === MatchAll &&  this.validateEmail() === MatchAll &&
+            this.validatePassword() === MatchAll && this.validateConfirmPassword() === MatchAll);
+  }
+
+  /** Slide 4 */
+  signupFail: boolean = false;
+  signupSuccess: boolean = false;
+  confirmSignup() {
+    this.signupFail = false;
+    this.signupSuccess = false;
+    if (!this.slide2Acceptable() || !this.slide3Acceptable()) {
+      this.signupFail = true;
+      return;
+    }
+    let r = this.accountService.addUser(this.signupData);
+    if (r) {
+      this.signupSuccess = true;
+      this.sessionStorage.remove(StaticValue.SIGNUP_INFO);
+      this.sessionStorage.remove(StaticValue.SIGNUP_MD5);
+      window.setTimeout(() => {
+        this.router.navigateByUrl(StaticValue.URLS.SIGNIN);
+        this.signupSuccess = false;
+        this.signupData = new StaticValue.SignupDataModel();
+      }, 2000);
+    } else {
+      this.signupFail = true;
+    }
+    return r;
   }
 
   onSlideWillChange(event) {
     this.slides.getActiveIndex().then(index => this.slideIndex = index);
   }
 
-  nextSlide() {
+  storeState() {
     this.sessionStorage.set(StaticValue.SIGNUP_INFO, this.signupData);
     this.sessionStorage.set(StaticValue.SIGNUP_MD5,  this.VerificationCodeMd5);
+  }
+
+  recoverState() {
+    let signinState = this.sessionStorage.get(StaticValue.SIGNUP_INFO, new StaticValue.SignupDataModel());
+    let signinMd5 = this.sessionStorage.get(StaticValue.SIGNUP_MD5, "");
+    this.signupData = signinState;
+    this.VerificationCodeMd5 = signinMd5;
+  }
+
+  nextSlide() {
+    this.storeState();
     this.slides.slideNext();
   }
   prevSlide() {
     this.slides.slidePrev();
   }
 
-  /** TODO remove session info when finish signup */
-  constructor(private logininfo: LoginInfoService, private localStorage: LocalStorageService, private sessionStorage: SessionStorageService) {
+  constructor(private accountService: AccountManageService, 
+              private router: Router,
+              private authenticationCode: AuthenticationCodeService,
+              private sessionStorage: SessionStorageService) {
   }
+
   ngOnInit() {
-    console.log(this.localStorage);
-    console.log(this.sessionStorage);
-    let signinState = this.sessionStorage.get(StaticValue.SIGNUP_INFO, new StaticValue.SignupDataModel());
-    let signinMd5 = this.sessionStorage.get(StaticValue.SIGNUP_MD5, "");
-    this.signupData = signinState;
-    this.VerificationCodeMd5 = signinMd5;
+    this.recoverState();
   }
 }

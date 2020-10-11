@@ -18,3 +18,9 @@ export function makeCode(length: number): string //{
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   return result;
 } //}
+
+export function makeElement(htmlText: string): Element {
+  let div = document.createElement('div');
+  div.innerHTML = htmlText;
+  return div.children[0];
+}

@@ -27,14 +27,6 @@
         </div>
     </div>
 
-    <div class="pop-message" [style]="'display: ' + (displayMessager ? 'block' : 'none')">
-        <div class="pop-closer">
-            <button (click)="hidePopMessage()">X</button>
-        </div>
-        【生意专家】尊敬的用户，您的验证码: <span class="validate-code" #validCode></span>，
-        工作人员不会索取，请勿泄露。
-    </div>
-
     <ion-slides mode="md" (ionSlideWillChange)="onSlideWillChange($event)" [options]="{allowTouchMove: false}">
         <ion-slide>
             <form #fs1="ngForm" class='input-form' novalidate>
@@ -49,6 +41,15 @@
                     <div color="danger" class="warning" *ngIf="phone.errors?.required && phone.touched">手机号是必选</div>
                     <div color="danger" class="warning" *ngIf="phone.errors?.pattern">输入正确的手机号</div>
                 </div>
+                <div class="take-space"></div>
+                <ion-button class="next-slide" (click)="nextSlide()" expand="block" fill="solid" 
+                            [disabled]="phone.invalid">
+                    下一步
+                </ion-button>
+            </form>
+        </ion-slide>
+        <ion-slide>
+            <form #fs1="ngForm" class='input-form' novalidate>
                 <div class="validate-code-line">
                     <ion-item>
                         <ion-label position="floating">验证码</ion-label>
@@ -63,39 +64,109 @@
                     </ion-button>
                 </div>
                 <div class="take-space"></div>
-                <ion-button class="next-slide" (click)="nextSlide()" expand="block" fill="solid" 
-                            [disabled]="!slide1Acceptable()">
-                    下一步
-                </ion-button>
-            </form>
-        </ion-slide>
-        <ion-slide>
-            <form #fs1="ngForm" class='input-form' novalidate>
-                <div class="email-line with-warning">
-                    <ion-item>
-                        <ion-label position="floating">输入邮箱</ion-label>
-                        <ion-input name="email" #email="ngModel" type="text"
-                                   required [pattern]="validEmail"
-                                   [(ngModel)]="signupData.email">
-                        </ion-input>
-                    </ion-item>
-                    <div color="danger" class="warning" *ngIf="email.errors?.required && email.touched">邮箱是必选</div>
-                    <div color="danger" class="warning" *ngIf="email.errors?.pattern">输入正确的邮箱</div>
-                </div>
-                <div class="take-space"></div>
                 <div class="prev-next-slide">
-                    <ion-button class="prev-slide" (click)="prevSlide()" expand="block" fill="solid" [disabled]="!slide1Acceptable()">
+                    <ion-button class="prev-slide" (click)="prevSlide()" expand="block" fill="solid">
                         上一步
                     </ion-button>
-                    <ion-button class="next-slide" (click)="nextSlide()" expand="block" fill="solid" [disabled]="!slide1Acceptable()">
+                    <ion-button class="next-slide" (click)="nextSlide()" expand="block" fill="solid" [disabled]="!slide2Acceptable()">
                         下一步
                     </ion-button>
                 </div>
             </form>
         </ion-slide>
         <ion-slide>
+            <form #fs1="ngForm" class='input-form' novalidate>
+                <div class="user-line with-warning">
+                    <ion-item>
+                        <ion-label position="floating">输入用户名</ion-label>
+                        <ion-input name="username" #username="ngModel" type="text"
+                                   required [pattern]="validateName()"
+                                   [(ngModel)]="signupData.shopName">
+                        </ion-input>
+                    </ion-item>
+                    <div color="danger" class="warning" *ngIf="username.errors?.required && username.touched">用户名是必选</div>
+                    <div color="danger" class="warning" *ngIf="duplicateUsername">用户名已被占用</div>
+                    <div color="danger" class="warning" *ngIf="!duplicateUsername && username.errors?.pattern">
+                        用户名长度不小于3，不含特殊符号，首字为字母或汉字
+                    </div>
+                </div>
+                <div class="email-line with-warning">
+                    <ion-item>
+                        <ion-label position="floating">输入邮箱</ion-label>
+                        <ion-input name="email" #email="ngModel" type="text"
+                                   required [pattern]="validateEmail()"
+                                   [(ngModel)]="signupData.email">
+                        </ion-input>
+                    </ion-item>
+                    <div color="danger" class="warning" *ngIf="email.errors?.required && email.touched">邮箱是必选</div>
+                    <div color="danger" class="warning" *ngIf="email.errors?.pattern">输入正确的邮箱</div>
+                </div>
+                <div class="password-line with-warning">
+                    <ion-item>
+                        <ion-label position="floating">输入密码</ion-label>
+                        <ion-input name="password" #password="ngModel" type="password"
+                                   required [pattern]="validatePassword()"
+                                   [(ngModel)]="signupData.password">
+                        </ion-input>
+                    </ion-item>
+                    <div color="danger" class="warning" *ngIf="password.errors?.required && password.touched">需要密码</div>
+                    <div color="danger" class="warning" *ngIf="password.errors?.pattern">密码长度大于6，且含0-9, a-z, A-Z</div>
+                </div>
+                <div class="confirm-password-line with-warning">
+                    <ion-item>
+                        <ion-label position="floating">输入确认密码</ion-label>
+                        <ion-input name="confirmPassword" #confirmPassword="ngModel" type="password"
+                                   required [pattern]="validateConfirmPassword()"
+                                   [(ngModel)]="signupData.confirmPassword">
+                        </ion-input>
+                    </ion-item>
+                    <div color="danger" class="warning" *ngIf="confirmPassword.errors?.required && confirmPassword.touched">请输入确认密码</div>
+                    <div color="danger" class="warning" *ngIf="confirmPassword.errors?.pattern">确认密码与密码不符</div>
+                </div>
+                <div class="take-space"></div>
+                <div class="prev-next-slide">
+                    <ion-button class="prev-slide" (click)="prevSlide()" expand="block" fill="solid">
+                        上一步
+                    </ion-button>
+                    <ion-button class="next-slide" (click)="nextSlide()" expand="block" fill="solid" [disabled]="!slide3Acceptable()">
+                        下一步
+                    </ion-button>
+                </div>
+            </form>
         </ion-slide>
         <ion-slide>
+            <form #fs1="ngForm" class='confirm-form' novalidate>
+                <ion-list lines="none">
+                    <ion-item>
+                        <ion-label class="confirm">请确认注册信息</ion-label>
+                    </ion-item>
+                </ion-list>
+                <ion-list>
+                   <ion-item>
+                        <ion-label class="item">用户名</ion-label>
+                        <ion-label class="info">{{ signupData.shopName }}</ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label class="item">手机号码</ion-label>
+                        <ion-label class="info">{{ signupData.phone }}</ion-label>
+                    </ion-item>
+                     <ion-item>
+                        <ion-label class="item">电子邮箱</ion-label>
+                        <ion-label class="info">{{ signupData.email }}</ion-label>
+                    </ion-item>
+                </ion-list>
+                <ion-button class="confirm-signup" (click)="confirmSignup()" expand="block" fill="solid">
+                    确认注册
+                </ion-button>
+                <ion-label color="danger"    *ngIf="signupFail">注册失败，原因未知，请重试</ion-label>
+                <ion-label color="secondary" *ngIf="signupSuccess">注册成功，将跳转到登录页</ion-label>
+                <div class="take-space"></div>
+                <div class="prev-next-slide">
+                    <ion-button class="prev-slide" (click)="prevSlide()" expand="block" fill="solid">
+                        上一步
+                    </ion-button>
+                </div>
+            </form>
         </ion-slide>
     </ion-slides>
 </div>
