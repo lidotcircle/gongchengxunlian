@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { StaticValue } from '../static-value/static-value.module';
 import * as MD5 from 'md5';
 
+const EMPTY_SIGNUP = new StaticValue.SignupDataModel();
+
 @Injectable({
   providedIn: 'root'
 })
@@ -82,6 +84,28 @@ export class AccountManageService {
     }
 
     /**
+     * 测试占用情况
+     *
+     * @private
+     * @param {string} field 属性名
+     * @param {string} value 值
+     * @return {*} 
+     * @memberof AccountManageService
+     */
+    private testOccupy(field: string, value: string) {
+        if (Object.keys(EMPTY_SIGNUP).indexOf(field) == -1) {
+            console.error("bad property name");
+            return false;
+        }
+        let userdb = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB) as StaticValue.UserDB;
+        for(let user of userdb.users) {
+            if(user[field] == value) 
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * 测试是否用户名被占用
      *
      * @param {string} name 检测的用户名
@@ -89,11 +113,28 @@ export class AccountManageService {
      * @memberof AccountManageService
      */
     public hasName(name: string) {
-        let userdb = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB) as StaticValue.UserDB;
-        for(let user of userdb.users) {
-            if(user.shopName == name) return true;
-        }
-        return false;
+        // TODO
+        return this.testOccupy("shopName", name);
+    }
+
+    /**
+     * 测试电话号码是否被占用
+     *
+     * @param {string} email
+     * @memberof AccountManageService
+     */
+    public hasEmail(email: string) {
+        return this.testOccupy("email", email);
+    }
+
+    /**
+     * 测试邮箱是否已被占用
+     *
+     * @param {string} phone
+     * @memberof AccountManageService
+     */
+    public hasPhone(phone: string) {
+        return this.testOccupy("phone", phone);
     }
 
     /**
@@ -105,6 +146,9 @@ export class AccountManageService {
      */
     public addUser(user: StaticValue.LoginInfo): boolean {
         if(this.hasName(user.shopName)) return false;
+        if(this.hasEmail(user.email)) return false;
+        if(this.hasPhone(user.phone)) return false;
+
         let userdb = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB) as StaticValue.UserDB;
         let new_user = Object.assign({}, user);
         let uid = 0;

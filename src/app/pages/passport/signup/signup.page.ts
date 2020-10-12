@@ -27,6 +27,18 @@ export class SignupPage implements OnInit {
 
   /** Slide 1 */
   validPhone = /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,3,5-9]))\d{8}$/;
+  duplicatePhone = false;
+  validatePhone(): string {
+    let valid = true;
+    if (!this.validPhone.test(this.signupData.phone))
+      valid = false;
+    this.duplicatePhone = false;
+    if (this.accountService.hasPhone(this.signupData.phone)) {
+      valid = false;
+      this.duplicatePhone = true;
+    }
+    return valid ? MatchAll : NotMatch;
+  }
 
   /** slide 2 */
   VerificationCodeMd5: string="";
@@ -64,6 +76,7 @@ export class SignupPage implements OnInit {
   validEmail = /^.*[@].*\..*$/;
   validName  = /^([A-Za-z]|\p{Unified_Ideograph})([A-Za-z0-9_]|\p{Unified_Ideograph}){2,}$/u;
   duplicateUsername = false;
+  duplicateEmail = false;
 
   validatePassword(): string {
     if (this.signupData.password.length < 6) return NotMatch;
@@ -76,7 +89,13 @@ export class SignupPage implements OnInit {
     return (this.signupData.password === this.signupData.confirmPassword) ? MatchAll : NotMatch;
   }
   validateEmail(): string {
-    return this.validEmail.test(this.signupData.email) ? MatchAll : NotMatch;
+    this.duplicateEmail = false;
+    let r = this.accountService.hasEmail(this.signupData.email);
+    if (r) {
+      this.duplicateEmail = true;
+    }
+    r = !r && this.validEmail.test(this.signupData.email) 
+    return  r ? MatchAll : NotMatch;
   }
   validateName(): string {
     let valid = true;
@@ -113,6 +132,7 @@ export class SignupPage implements OnInit {
         this.router.navigateByUrl(StaticValue.URLS.SIGNIN);
         this.signupSuccess = false;
         this.signupData = new StaticValue.SignupDataModel();
+        this.slides.slideTo(0);
       }, 2000);
     } else {
       this.signupFail = true;
