@@ -3,6 +3,7 @@ import { LocalStorageService } from './local-storage.service';
 import { Router } from '@angular/router';
 import { StaticValue } from '../static-value/static-value.module';
 import * as MD5 from 'md5';
+import { assert } from 'console';
 
 const EMPTY_SIGNUP = new StaticValue.SignupDataModel();
 
@@ -32,19 +33,39 @@ export class AccountManageService {
      */
     public login(): boolean {
         let user = this.localstorage.get(StaticValue.LOGIN_KEY, new StaticValue.LoginInfo()) as StaticValue.LoginInfo;
-        let user_db = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
+        if (user.userid < 0) {
+            // TODO ???
+            console.warn("login fail");
+            return false;
+        }
 
+        let user_db = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
+        let new_login_record = new StaticValue.LoginRecord();
+
+        new_login_record.date = Date();
+        new_login_record.email = user.email;
+        new_login_record.phone = user.phone;
+        new_login_record.username = user.shopName;
+        new_login_record.userid = user.userid;
+        new_login_record.loginType = StaticValue.LoginType.Unkown;
+
+        let loginSuccess = false;
         if(user.shopName == null || user.password == null) {
             return false;
         }
         for(let u of user_db.users) {
             if(u.shopName == user.shopName) {
-                if(u.password == user.password) return true;
+                if(u.password == user.password) {
+                    new_login_record.loginType = StaticValue.LoginType.LoginByUsername;
+                    loginSuccess = true;
+                    break;
+                }
                 this.localstorage.remove(StaticValue.LOGIN_KEY);
             }
         }
 
-        return false;
+        new_login_record.success = loginSuccess;
+        return loginSuccess;
     }
 
     /**

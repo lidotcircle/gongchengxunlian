@@ -1,14 +1,44 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="container">
 
-<ion-content>
-    <ion-buttons>
-        <ion-button color="primary" expand="block" fill="solid" shape="round" [routerLink]="['/passport/signup']">
-          注册
+  <div class="ion-text-center">
+      <img class="logo" src="../../../assets/img/register/logo.png" alt="logo">
+  </div>
+
+  <div class="content">
+    <form #fs1="ngForm" class='login-form' novalidate>
+      <div class="login-account with-warning">
+          <ion-item>
+              <ion-label color="stable" position="floating">输入邮箱或者手机号</ion-label>
+              <ion-input name="userAccount" #userAccount="ngModel" type="text"
+                         required
+                         [(ngModel)]="mLoginInfo.shopName">
+              </ion-input>
+          </ion-item>
+          <div color="danger" class="warning" *ngIf="userAccount.errors?.required && userAccount.touched">请输入邮箱或者手机号</div>
+      </div>
+      <div class="login-password with-warning">
+          <ion-item>
+              <ion-label color="stable" position="floating">输入密码</ion-label>
+              <ion-input name="userPassword" #userPassword="ngModel" type="text"
+                         required
+                         [(ngModel)]="mLoginInfo.password">
+              </ion-input>
+          </ion-item>
+          <div color="danger" class="warning" *ngIf="userPassword.errors?.required && userPassword.touched">请输入密码</div>
+      </div>
+
+      <div class="buttons">
+        <ion-button class="confirm-login-button" color="primary" expand="block" fill="solid">
+          登录
         </ion-button>
-    </ion-buttons>
-</ion-content>
+        <ion-button class="new-account-button" color="primary" expand="block" fill="outline" [routerLink]="['/passport/signup']">
+          注册新账户
+        </ion-button>
+      </div>
 
+      <div class="forget-password">
+        <a>忘记密码?</a>
+      </div>
+   </form>
+ </div>
+</div>
