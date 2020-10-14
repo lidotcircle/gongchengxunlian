@@ -19,7 +19,7 @@
       <div class="login-password with-warning">
           <ion-item>
               <ion-label color="stable" position="floating">输入密码</ion-label>
-              <ion-input name="userPassword" #userPassword="ngModel" type="text"
+              <ion-input name="userPassword" #userPassword="ngModel" type="password"
                          required
                          [(ngModel)]="mLoginInfo.password">
               </ion-input>
@@ -28,13 +28,14 @@
       </div>
 
       <div class="buttons">
-        <ion-button class="confirm-login-button" color="primary" expand="block" fill="solid">
+        <ion-button (click)="try_login()" class="confirm-login-button" color="primary" expand="block" fill="solid">
           登录
         </ion-button>
         <ion-button class="new-account-button" color="primary" expand="block" fill="outline" [routerLink]="['/passport/signup']">
           注册新账户
         </ion-button>
       </div>
+      <div color="danger" class="warning" *ngIf="loginFail">登录失败，密码或者账户名错误</div>
 
       <div class="forget-password">
         <a>忘记密码?</a>

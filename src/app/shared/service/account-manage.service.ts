@@ -25,9 +25,16 @@ export class AccountManageService {
         this.localstorage.set(StaticValue.USERDB_KEY, user_db);
     }
 
+    private saveNewLoginRecord(record: StaticValue.LoginRecord) {
+        let records: StaticValue.LoginLog = 
+            this.localstorage.get(StaticValue.LOGIN_LOG, []) as StaticValue.LoginLog;
+        records.push(record);
+        this.localstorage.set(StaticValue.LOGIN_LOG, records);
+    }
+
     /**
-     * 尝试登录，检测是否有有效的用户信息
-     * 
+     * 尝试登录，检测是否有有效的用户信息, TODO decouple login with localStorage or say database
+     *
      * @return {*}  {boolean} 是否登录成功
      * @memberof AccountManageService
      */
@@ -50,20 +57,37 @@ export class AccountManageService {
         new_login_record.loginType = StaticValue.LoginType.Unkown;
 
         let loginSuccess = false;
-        if(user.shopName == null || user.password == null) {
-            return false;
-        }
+        let logininfo: StaticValue.LoginInfo = null;
         for(let u of user_db.users) {
             if(u.shopName == user.shopName) {
-                if(u.password == user.password) {
-                    new_login_record.loginType = StaticValue.LoginType.LoginByUsername;
+                new_login_record.loginType = StaticValue.LoginType.LoginByUsername;
+                if (u.password == user.password) {
                     loginSuccess = true;
+                    logininfo = u;
                     break;
                 }
                 this.localstorage.remove(StaticValue.LOGIN_KEY);
+            } else if (u.phone == user.phone) {
+                new_login_record.loginType = StaticValue.LoginType.LoginByPhone;
+                if (u.password == user.password) {
+                    loginSuccess = true;
+                    logininfo = u;
+                    break;
+                }
+            } else if (u.email == user.email) {
+                new_login_record.loginType = StaticValue.LoginType.LoginByEmail;
+                if (u.password == user.password) {
+                    loginSuccess = true;
+                    logininfo = u;
+                    break;
+                }
             }
         }
 
+        if(logininfo != null) {
+            this.localstorage.set(StaticValue.LOGIN_KEY, logininfo);
+        }
+        this.saveNewLoginRecord(new_login_record);
         new_login_record.success = loginSuccess;
         return loginSuccess;
     }
