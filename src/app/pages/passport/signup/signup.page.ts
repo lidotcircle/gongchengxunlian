@@ -8,9 +8,10 @@ import { SessionStorageService } from 'src/app/shared/service/session-storage.se
 import { LocalStorageService } from 'src/app/shared/service/local-storage.service';
 import { AuthenticationCodeService } from 'src/app/shared/service/authentication-code.service';
 import { Router } from '@angular/router';
+import * as utils from '../../../shared/utils/utils.module';
 
-const MatchAll: string = "^.*$";
-const NotMatch: string = "x{2000000}";
+const MatchAll: string = utils.validation.MatchAll;
+const NotMatch: string = utils.validation.NotMatch;
 const MessageTemplate =  '【生意专家】尊敬的用户，您的验证码: { code }.工作人员不会索取，请勿泄露。';
 
 @Component({
@@ -80,11 +81,11 @@ export class SignupPage implements OnInit {
   duplicateEmail = false;
 
   validatePassword(): string {
-    if (this.signupData.password.length < 6) return NotMatch;
-    if (!/[0-9]/.test(this.signupData.password)) return NotMatch;
-    if (!/[a-z]/.test(this.signupData.password)) return NotMatch;
-    if (!/[A-Z]/.test(this.signupData.password)) return NotMatch;
-    return MatchAll;
+    if (utils.validation.validPassword(this.signupData.password)) {
+      return MatchAll;
+    } else {
+      return NotMatch;
+    }
   }
   validateConfirmPassword(): string {
     return (this.signupData.password === this.signupData.confirmPassword) ? MatchAll : NotMatch;

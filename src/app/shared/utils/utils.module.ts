@@ -24,3 +24,16 @@ export function makeElement(htmlText: string): Element {
   div.innerHTML = htmlText;
   return div.children[0];
 }
+
+export module validation {
+  export function validPassword(password: string): boolean {
+    if (password.length < 6) return false;
+    if (!/[0-9]/.test(password)) return false;
+    if (!/[a-z]/.test(password)) return false;
+    if (!/[A-Z]/.test(password)) return false;
+    return true;
+  }
+
+  export const MatchAll: string = '^.*$';
+  export const NotMatch: string = '.^';
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AccountManageService, RESET_PASSWORD_AUTHCODE_TOKEN, RESET_PASSWORD_TOKEN } from 'src/app/shared/service/account-manage.service';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
+import * as utils from '../../../shared/utils/utils.module';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class RetrievePasswordPage implements OnInit {
   mError = {
     bad_phone: false,
     bad_code: false,
-    bad_password: false
+    bad_password: false,
+    reset_fail: false
   };
   private resetError() {
     this.mError.bad_phone = false;
@@ -27,7 +29,7 @@ export class RetrievePasswordPage implements OnInit {
   getVerificationCodeWait: number = 0;
   sendCode() {
     this.resetError();
-    this.mAuthCodeToken = this.accountService.resetPasswordRequest(this.mAccountInfo.phone);
+    this.mAuthCodeToken = this.accountService.resetPasswordRequest(this.mAccountInfo.shopName);
     if (this.mAuthCodeToken == null) {
       this.mError.bad_phone = true;
       return;
@@ -53,19 +55,34 @@ export class RetrievePasswordPage implements OnInit {
     this.mResetToken = this.accountService.resetPasswordAuthCodeCheck(this.mAuthCodeToken, this.mAccountInfo.code);
     if (this.mResetToken == null) {
       this.mError.bad_code = true;
+      console.log("asdf")
       return;
     }
     this.mAuthCodeToken = null;
     this.gotoReset = true;
   }
 
+  validatePassword(): string {
+    if (utils.validation.validPassword(this.mAccountInfo.password)) {
+      return utils.validation.MatchAll;
+    } else {
+      return utils.validation.NotMatch;
+    }
+  }
+
+  resetSuccess: boolean = false;
   resetPassword() {
     if (this.gotoReset == false || this.mResetToken == null) {
       this.gotoReset = false;
       return null;
     }
 
-    this.accountService.resetPasswordConfirm(this.mResetToken, this.mAccountInfo.password);
+    const rs = this.accountService.resetPasswordConfirm(this.mResetToken, this.mAccountInfo.password);
+    if (rs) {
+      this.resetSuccess = true;
+    } else {
+      this.mError.reset_fail = true;
+    }
   }
 
   constructor(private accountService: AccountManageService) { }

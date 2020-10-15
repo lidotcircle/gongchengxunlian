@@ -14,8 +14,8 @@ export type RESET_PASSWORD_AUTHCODE_TOKEN = string
 const RESET_PASSWORD_AUTHCODE_TOKENS: Map<RESET_PASSWORD_AUTHCODE_TOKEN, [number, string, string]> =
         new Map<RESET_PASSWORD_AUTHCODE_TOKEN, [number, string, string]>();
 export type RESET_PASSWORD_TOKEN = string;
-const RESET_PASSWORD_TOKENS: Map<RESET_PASSWORD_TOKEN, [string]> =
-        new Map<RESET_PASSWORD_TOKEN, [string]>();
+const RESET_PASSWORD_TOKENS: Map<RESET_PASSWORD_TOKEN, string> =
+        new Map<RESET_PASSWORD_TOKEN, string>();
 
 @Injectable({
   providedIn: 'root'
@@ -174,7 +174,7 @@ export class AccountManageService {
             return null;
         }
 
-        let [time, md5, phone] = RESET_PASSWORD_AUTHCODE_TOKENS[token];
+        let [time, phone, md5] = RESET_PASSWORD_AUTHCODE_TOKENS.get(token);
         if ((Date.now() - time) > MAX_VALID_TIME_SPAN_MS) {
             RESET_PASSWORD_AUTHCODE_TOKENS.delete(token);
             return null;
@@ -204,7 +204,7 @@ export class AccountManageService {
             return false;
         }
 
-        let phone = RESET_PASSWORD_TOKENS[token];
+        let phone = RESET_PASSWORD_TOKENS.get(token);
         RESET_PASSWORD_TOKENS.delete(token);
         let userdb: StaticValue.UserDB = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB());
         for(let u of userdb.users) {
@@ -292,6 +292,7 @@ export class AccountManageService {
             if (u.userid >= uid)
                 uid = u.userid + 1;
         }
+        new_user.confirmPassword = "";
         new_user.password = MD5(user.password);
         new_user.code = "";
         new_user.userid = uid;
