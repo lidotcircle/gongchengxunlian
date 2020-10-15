@@ -38,11 +38,13 @@ const template: string = `
         <div class="pop-message-phone">
             <span class="pop-message-phone-field"></span>:
         </div>
-        【生意专家】尊敬的用户，您的验证码: <span class="pop-message-code"></span>，
-        工作人员不会索取，请勿泄露。
-    </div>
+        <div class="pop-message-body">
+        </div>
+   </div>
   </div>
 `;
+
+ 
 
 @Injectable({
   providedIn: 'root'
@@ -50,31 +52,45 @@ const template: string = `
 export class AuthenticationCodeService {
   constructor() { }
 
-  private sendMsg(phone: string, code: string) {
+  private sendMsg(phone: string, __msg: string) {
     let msg = document.querySelector('#' + StaticValue.MSG.MSG_ID) as HTMLElement;
     if (msg != null)
       msg.remove();
     let node = makeElement(template);
 
-    let codeElem = node.querySelector(".pop-message-code");
-    codeElem.innerHTML = code;
+    let codeElem = node.querySelector(".pop-message-body");
+    codeElem.innerHTML = __msg;
 
     let phoneElem = node.querySelector(".pop-message-phone-field");
     phoneElem.innerHTML = phone;
 
     let buttonElem = node.querySelector(".pop-message-button");
     buttonElem.addEventListener("click", (event: CustomEvent) => {
-      console.log(`Recieve message code: ${code}`);
       node.remove();
     });
 
     document.body.appendChild(node);
   }
 
-  NewVerificode(phone: string): string {
+  /**
+   * 发送验证码
+   *
+   * @param {string} format 验证码的格式，需包含 '{code}' 用于替换验证码
+   * @param {string} phone  接收验证码的手机号
+   * @return {*}  {string}  验证码的 MD5 值
+   * @memberof AuthenticationCodeService
+   */
+  NewVerificode(format: string, phone: string): string {
+    const validString = /^(.*)(\{\s*code\s*\})(.*)$/;
+    let match = format.match(validString);
+    if (!match) {
+      throw new Error("bad message template");
+    }
+
     let code = makeCode(6);
     let md5 = MD5(code);
-    this.sendMsg(phone, code);
+    let msg = match[1] + `<span class="pop-message-code">${code}</span>` + match[3];
+    this.sendMsg(phone, msg);
     return md5;
   }
 }

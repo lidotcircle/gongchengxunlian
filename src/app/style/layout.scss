@@ -1,0 +1,77 @@
+/** common layout */
+
+@mixin vertical-form {
+.container {
+    height: 100%;
+    width: 100vw;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+
+    div {
+        flex-grow: 0;
+        flex-shrink: 1;
+    }
+
+    div.content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        ion-slides {
+            flex-grow: 1;
+            height: 100%;
+            width: 100%;
+
+        }
+
+        form {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 0.5em 0.8em;
+
+            .take-space {
+                flex-grow: 1;
+            }
+
+            ion-item {
+                ion-label {
+                    color: rgb(200,200,200) !important;
+                }
+                &.item-has-focus {
+                    ion-label {
+                        color: #3880ff !important;
+                    }
+                }
+            }
+
+            .with-warning {
+                padding-bottom: 1em;
+            }
+
+            .warning {
+                font-size: xx-small;
+                text-align: left;
+                padding: 0.2em 0.3em;
+                color: rgb(200, 30, 30);
+                position: absolute;
+            }
+
+            .validate-code-line {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                align-items: flex-end;
+
+                ion-button {
+                    width: 40%;
+                }
+            }
+        }
+    }
+}
+}

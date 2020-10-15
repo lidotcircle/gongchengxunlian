@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { SignupPageRoutingModule } from './signup-routing.module';
+import { RetrievePasswordPageRoutingModule } from './retrieve-password-routing.module';
 
-import { SignupPage } from './signup.page';
+import { RetrievePasswordPage } from './retrieve-password.page';
 import { LogoComponent } from 'src/app/components/logo/logo.component';
 
 @NgModule({
@@ -14,8 +14,8 @@ import { LogoComponent } from 'src/app/components/logo/logo.component';
     CommonModule,
     FormsModule,
     IonicModule,
-    SignupPageRoutingModule
+    RetrievePasswordPageRoutingModule
   ],
-  declarations: [SignupPage, LogoComponent]
+  declarations: [RetrievePasswordPage, LogoComponent]
 })
-export class SignupPageModule {}
+export class RetrievePasswordPageModule {}

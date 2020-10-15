@@ -1,8 +1,6 @@
 <div class="container">
 
-  <div class="ion-text-center">
-      <img class="logo" src="../../../assets/img/register/logo.png" alt="logo">
-  </div>
+  <app-logo></app-logo>
 
   <div class="content">
     <form #fs1="ngForm" class='login-form' novalidate>
@@ -38,7 +36,7 @@
       <div color="danger" class="warning" *ngIf="loginFail">登录失败，密码或者账户名错误</div>
 
       <div class="forget-password">
-        <a>忘记密码?</a>
+        <a [routerLink]="['/passport/retrieve-password']">忘记密码?</a>
       </div>
    </form>
  </div>

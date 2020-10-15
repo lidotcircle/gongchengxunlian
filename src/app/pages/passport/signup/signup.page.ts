@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 
 const MatchAll: string = "^.*$";
 const NotMatch: string = "x{2000000}";
+const MessageTemplate =  '【生意专家】尊敬的用户，您的验证码: { code }.工作人员不会索取，请勿泄露。';
 
 @Component({
   selector: 'app-signup',
@@ -46,7 +47,7 @@ export class SignupPage implements OnInit {
   NewVerification(): void {
     if(this.getVerificationCodeWait>0) return;
 
-    this.VerificationCodeMd5 = this.authenticationCode.NewVerificode(this.signupData.phone);
+    this.VerificationCodeMd5 = this.authenticationCode.NewVerificode(MessageTemplate, this.signupData.phone);
     this.storeState();
 
     this.getVerificationCodeWait=StaticValue.VerificationCodeWait;

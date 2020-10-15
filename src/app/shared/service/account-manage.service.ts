@@ -3,15 +3,28 @@ import { LocalStorageService } from './local-storage.service';
 import { Router } from '@angular/router';
 import { StaticValue } from '../static-value/static-value.module';
 import * as MD5 from 'md5';
-import { assert } from 'console';
+import { makeid } from '../utils/utils.module';
+import { AuthenticationCodeService } from './authentication-code.service';
 
 const EMPTY_SIGNUP = new StaticValue.SignupDataModel();
+
+const retrieve_message = "【生意专家】验证码: {code}, 5分钟有效";
+const MAX_VALID_TIME_SPAN_MS: number = 5 * 60 * 1000;
+export type RESET_PASSWORD_AUTHCODE_TOKEN = string
+const RESET_PASSWORD_AUTHCODE_TOKENS: Map<RESET_PASSWORD_AUTHCODE_TOKEN, [number, string, string]> =
+        new Map<RESET_PASSWORD_AUTHCODE_TOKEN, [number, string, string]>();
+export type RESET_PASSWORD_TOKEN = string;
+const RESET_PASSWORD_TOKENS: Map<RESET_PASSWORD_TOKEN, [string]> =
+        new Map<RESET_PASSWORD_TOKEN, [string]>();
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountManageService {
-    constructor(private localstorage: LocalStorageService, private router: Router) {}
+    constructor(private localstorage: LocalStorageService,
+                private authCodeService: AuthenticationCodeService,
+                private router: Router) {}
+
     private update_user_password(user: StaticValue.LoginInfo) {
         let user_db = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
         for(let i in user_db.users) {
@@ -126,6 +139,84 @@ export class AccountManageService {
             this.localstorage.set(StaticValue.LOGIN_KEY, user);
             this.update_user_password(user);
         }
+    }
+
+    /**
+     * 发送用于重置密码的验证码到指定手机号码, 
+     * 并返回用于重置该手机号码的验证 Token
+     *
+     * @param {string} phone
+     * @return {*}  {RESET_PASSWORD_AUTHCODE_TOKEN}
+     * @memberof AccountManageService
+     */
+    public resetPasswordRequest(phone: string): RESET_PASSWORD_AUTHCODE_TOKEN {
+        if (!this.hasPhone(phone)) {
+            return null;
+        }
+        const token = makeid(30);
+        const now = Date.now();
+        const md5 = this.authCodeService.NewVerificode(retrieve_message, phone);
+
+        RESET_PASSWORD_AUTHCODE_TOKENS.set(token, [now, phone, md5]);
+        return token;
+    }
+
+    /**
+     * 验证用户输入的验证码，如果正确返回一个重置该手机号账户密码的 Token
+     *
+     * @param {RESET_PASSWORD_AUTHCODE_TOKEN} token
+     * @param {string} authcode
+     * @return {*}  {RESET_PASSWORD_TOKEN}
+     * @memberof AccountManageService
+     */
+    public resetPasswordAuthCodeCheck(token: RESET_PASSWORD_AUTHCODE_TOKEN, authcode: string): RESET_PASSWORD_TOKEN {
+        if (!RESET_PASSWORD_AUTHCODE_TOKENS.has(token)) {
+            return null;
+        }
+
+        let [time, md5, phone] = RESET_PASSWORD_AUTHCODE_TOKENS[token];
+        if ((Date.now() - time) > MAX_VALID_TIME_SPAN_MS) {
+            RESET_PASSWORD_AUTHCODE_TOKENS.delete(token);
+            return null;
+        }
+
+        let newmd5 = MD5(authcode);
+        if (newmd5 != md5) {
+            return null;
+        }
+
+        RESET_PASSWORD_AUTHCODE_TOKENS.delete(token);
+        let new_token = makeid(20);
+
+        RESET_PASSWORD_TOKENS.set(new_token, phone);
+        return new_token;
+    }
+
+    /**
+     * 利用之前返回的 Token 重置密码
+     *
+     * @param {RESET_PASSWORD_TOKEN} token
+     * @param {string} password
+     * @memberof AccountManageService
+     */
+    public resetPasswordConfirm(token: RESET_PASSWORD_TOKEN, password: string): boolean {
+        if (!RESET_PASSWORD_TOKENS.has(token)) {
+            return false;
+        }
+
+        let phone = RESET_PASSWORD_TOKENS[token];
+        RESET_PASSWORD_TOKENS.delete(token);
+        let userdb: StaticValue.UserDB = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB());
+        for(let u of userdb.users) {
+            if(u.phone == phone) {
+                u.password = MD5(password);
+                this.localstorage.set(StaticValue.USERDB_KEY, userdb);
+                return true;
+            }
+        }
+
+        console.warn("unknow error");
+        return false;
     }
 
     /**

@@ -1,58 +1,10 @@
+@use '../../../style/layout.scss' as layout;
+
 
 app-signup {
-   .container {
-        height: 100%;
-        width: 100vw;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
+    @include layout.vertical-form();
 
-        div {
-            flex-grow: 0;
-            flex-shrink: 1;
-        }
-
-        div.content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-
-            ion-slides {
-                flex-grow: 1;
-                height: 100%;
-                width: 100%;
-
-                form {
-                    box-sizing: border-box;
-                    display: flex;
-                    flex-direction: column;
-                    width: 100%;
-                    height: 100%;
-                    padding: 0.5em 0.8em;
-
-                    .take-space {
-                        flex-grow: 1;
-                    }
-                }
-            }
-        }
-    }
-
-    .input-form {
-        ion-item {
-            ion-label {
-                color: rgb(200,200,200) !important;
-            }
-            &.item-has-focus {
-                ion-label {
-                    color: #3880ff !important;
-                }
-            }
-        }
-    }
-
-    .confirm-form {
+   .confirm-form {
         .confirm {
             color: rgb(0,0,0);
         }
@@ -66,33 +18,6 @@ app-signup {
         .confirm-signup {
             margin: 2em 0em;
         }
-    }
-
-    .with-warning {
-        padding-bottom: 1em;
-    }
-    .warning {
-        font-size: xx-small;
-        text-align: left;
-        padding: 0.2em 0.3em;
-        color: rgb(200, 30, 30);
-        position: absolute;
-    }
-
-    .validate-code-line {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        align-items: flex-end;
-
-        ion-button {
-            width: 40%;
-        }
-    }
-
-    .logo {
-        padding: 0.8em 0em;
-        width: 33%;
     }
 
     .signup-process {
