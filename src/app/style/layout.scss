@@ -1,3 +1,6 @@
+@use './var.scss';
+
+
 /** common layout */
 
 @mixin vertical-form {
@@ -40,11 +43,11 @@
 
             ion-item {
                 ion-label {
-                    color: rgb(200,200,200) !important;
+                    color: var(--ldy-color-grey-a) !important;
                 }
                 &.item-has-focus {
                     ion-label {
-                        color: #3880ff !important;
+                        color: var(--ldy-color-primary) !important;
                     }
                 }
             }
@@ -57,7 +60,7 @@
                 font-size: xx-small;
                 text-align: left;
                 padding: 0.2em 0.3em;
-                color: rgb(200, 30, 30);
+                color: var(--ldy-color-warn);
                 position: absolute;
             }
 
@@ -66,7 +69,7 @@
                 width: 100%;
                 text-align: center;
                 padding: 0.2em 0.3em;
-                color: rgb(30, 30, 200);
+                color: var(--ldy-color-info);
                 position: absolute;
             }
 

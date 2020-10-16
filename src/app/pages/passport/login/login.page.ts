@@ -3,6 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AccountManageService } from 'src/app/shared/service/account-manage.service';
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'src/app/shared/service/local-storage.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
     selector: 'app-login',
@@ -15,25 +16,36 @@ export class LoginPage implements OnInit {
 
     constructor(private accountService: AccountManageService,
                 private localstorage: LocalStorageService,
-                private router: Router) {}
+                private router: Router,
+                private toast: ToastController) {}
 
     ngOnInit() {
     }
 
     loginFail: boolean = false;
     loginSuccess: boolean = false;
-    login_with_account(): boolean {
+    inToast: boolean = false;
+    async login_with_account(): Promise<boolean> {
+        if(this.inToast || this.loginSuccess) return false;
+
         this.loginFail = false;
         let token = this.accountService.login(this.mLoginInfo.shopName, this.mLoginInfo.password);
         if (!token) {
-            this.loginFail = true;
+            // this.loginFail = true;
+            this.inToast = true;
+            let r = await this.toast.create({
+                message: "登录失败，密码或者用户名错误",
+                duration: 2000,
+                position: 'top'
+            });
+            r.present().then(() => this.inToast = false);
             return false;
         }
         this.localstorage.set(StaticValue.LOGIN_TOKEN, token);
         this.loginSuccess = true;
         window.setTimeout(() => {
             this.router.navigateByUrl(StaticValue.URLS.HOME);
-        }, 2000);
+        }, 1000);
         return true;
     }
 }
