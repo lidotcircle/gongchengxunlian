@@ -46,9 +46,11 @@ export class UserDomainGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree 
     {
-        if(this.accountService.login())
-            return true;
-        this.router.navigateByUrl(StaticValue.URLS.WELCOME);
-        return false;
+        const token = this.localstorage.get(StaticValue.LOGIN_TOKEN, null);
+        if(!token) {
+            this.router.navigateByUrl(StaticValue.URLS.WELCOME);
+            return false;
+        }
+        return true;
     }
 }

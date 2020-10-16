@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
-import { Router } from '@angular/router';
 import { StaticValue } from '../static-value/static-value.module';
 import * as MD5 from 'md5';
 import { makeid } from '../utils/utils.module';
 import { AuthenticationCodeService } from './authentication-code.service';
+import * as utils from '../utils/utils.module';
 
 const EMPTY_SIGNUP = new StaticValue.SignupDataModel();
 
@@ -22,21 +22,8 @@ const RESET_PASSWORD_TOKENS: Map<RESET_PASSWORD_TOKEN, string> =
 })
 export class AccountManageService {
     constructor(private localstorage: LocalStorageService,
-                private authCodeService: AuthenticationCodeService,
-                private router: Router) {}
-
-    private update_user_password(user: StaticValue.LoginInfo) {
-        let user_db = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
-        for(let i in user_db.users) {
-            if(user_db.users[i].shopName == user.shopName) {
-                user_db.users[i].password = user.password;
-                this.localstorage.set(StaticValue.USERDB_KEY, user_db);
-                return;
-            }
-        }
-        user_db.users.push(user);
-        this.localstorage.set(StaticValue.USERDB_KEY, user_db);
-    }
+                private sessionStorage: LocalStorageService,
+                private authCodeService: AuthenticationCodeService) {}
 
     private saveNewLoginRecord(record: StaticValue.LoginRecord) {
         let records: StaticValue.LoginLog = 
@@ -46,50 +33,45 @@ export class AccountManageService {
     }
 
     /**
-     * 尝试登录，检测是否有有效的用户信息, TODO decouple login with localStorage or say database
+     * 利用账户登陆, 唯一生成 LoginToken 的 API
      *
-     * @return {*}  {boolean} 是否登录成功
+     * @param {string} user 用户名
+     * @param {string} password 密码
+     * @return {LoginToken} 用于向服务获取对应用户的信息
      * @memberof AccountManageService
      */
-    public login(): boolean {
-        let user = this.localstorage.get(StaticValue.LOGIN_KEY, new StaticValue.LoginInfo()) as StaticValue.LoginInfo;
-        if (user.userid < 0) {
-            // TODO ???
-            console.warn("login fail");
-            return false;
-        }
-
+    public login(user: string, password: string): StaticValue.LoginToken {
         let user_db = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
         let new_login_record = new StaticValue.LoginRecord();
 
         new_login_record.date = Date();
-        new_login_record.email = user.email;
-        new_login_record.phone = user.phone;
-        new_login_record.username = user.shopName;
-        new_login_record.userid = user.userid;
+        new_login_record.email = user;
+        new_login_record.phone = user;
+        new_login_record.username = user;
+        new_login_record.userid = 0;
         new_login_record.loginType = StaticValue.LoginType.Unkown;
+        password = MD5(password);
 
         let loginSuccess = false;
         let logininfo: StaticValue.LoginInfo = null;
         for(let u of user_db.users) {
-            if(u.shopName == user.shopName) {
+            if(u.shopName == user) {
                 new_login_record.loginType = StaticValue.LoginType.LoginByUsername;
-                if (u.password == user.password) {
+                if (u.password == password) {
                     loginSuccess = true;
                     logininfo = u;
                     break;
                 }
-                this.localstorage.remove(StaticValue.LOGIN_KEY);
-            } else if (u.phone == user.phone) {
+            } else if (u.phone == user) {
                 new_login_record.loginType = StaticValue.LoginType.LoginByPhone;
-                if (u.password == user.password) {
+                if (u.password == password) {
                     loginSuccess = true;
                     logininfo = u;
                     break;
                 }
-            } else if (u.email == user.email) {
+            } else if (u.email == user) {
                 new_login_record.loginType = StaticValue.LoginType.LoginByEmail;
-                if (u.password == user.password) {
+                if (u.password == password) {
                     loginSuccess = true;
                     logininfo = u;
                     break;
@@ -97,48 +79,86 @@ export class AccountManageService {
             }
         }
 
-        if(logininfo != null) {
-            this.localstorage.set(StaticValue.LOGIN_KEY, logininfo);
-        }
-        this.saveNewLoginRecord(new_login_record);
         new_login_record.success = loginSuccess;
-        return loginSuccess;
+        this.saveNewLoginRecord(new_login_record);
+        if (loginSuccess) {
+            const newToken = StaticValue.LOGIN_TOKEN + makeid(20);
+            let tokens = this.localstorage.get(StaticValue.LOGIN_TOKENS, new StaticValue.LoginTokens());
+            tokens[newToken] = [Date.now(), logininfo.userid, logininfo.password];
+            this.localstorage.set(StaticValue.LOGIN_TOKENS, tokens);
+
+            logininfo.password = "";
+            return newToken;
+        } else {
+            return null;
+        }
     }
 
     /**
-     * 当前登录用户的用户名
+     * 获取当前登录用户的用户基本信息
      *
-     * @return {*}  {string}
+     * @param  {LoginToken} loginToken
+     * @return {UserBasicInfo}  用户的基本信息
      * @memberof AccountManageService
      */
-    public username(): string {
-        let user = this.localstorage.get(StaticValue.LOGIN_KEY, new StaticValue.LoginInfo()) as StaticValue.LoginInfo;
-        return user.shopName;
+    public userBasicInfo(loginToken: StaticValue.LoginToken): StaticValue.UserBasicInfo {
+        let tokens = this.localstorage.get(StaticValue.LOGIN_TOKENS, new StaticValue.LoginTokens()) as StaticValue.LoginTokens;
+        if (tokens[loginToken] == null)
+            return null;
+
+        const [time, uid] = tokens[loginToken];
+        if ((Date.now()-time) > StaticValue.LoginKeepTimeSpan) {
+            delete tokens[loginToken];
+            this.localstorage.set(StaticValue.LOGIN_TOKENS, tokens);
+            return null;
+        }
+
+        tokens[loginToken] = [Date.now(), uid];
+        this.localstorage.set(StaticValue.LOGIN_TOKENS, tokens);
+
+        let info: StaticValue.LoginInfo = null;
+        const users = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
+        for(let u of users.users) {
+            if( u.userid == uid) {
+                info = u;
+            }
+        }
+        if(info == null) {
+            console.warn("database error");
+            return null;
+        }
+
+        let ans = new StaticValue.UserBasicInfo();
+        utils.assignTargetEnumProp(info, ans);
+        return ans;
     }
 
     /**
      * 更改当前用户密码
      *
+     * @param {UserId} userid Identify
      * @param {string} __old 旧密码
      * @param {string} __new 新密码
      * @return {*}
      * @memberof AccountManageService
      */
-    public changePassword(__old: string, __new: string): any {
-        if(!this.login()) return;
+    public changePassword(userid: StaticValue.UserId, __old: string, __new: string): any {
         let oldmd5 = MD5(__old);
         let newmd5 = MD5(__new);
-        let user = this.localstorage.get(StaticValue.LOGIN_KEY, new StaticValue.LoginInfo()) as StaticValue.LoginInfo;
-        if(user.shopName == null) {
-            /** require debug */
-            console.warn("need debug");
-            return;
+
+        let user_db = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
+        for(let u of user_db.users) {
+            if(u.userid == userid) {
+                if(u.password == oldmd5) {
+                    u.password = newmd5;
+                    this.localstorage.set(StaticValue.USERDB_KEY, user_db);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
-        if(user.password == oldmd5) {
-            user.password = newmd5;
-            this.localstorage.set(StaticValue.LOGIN_KEY, user);
-            this.update_user_password(user);
-        }
+        return false;
     }
 
     /**
@@ -280,21 +300,21 @@ export class AccountManageService {
      * @return {*}  {boolean} 是否成功
      * @memberof AccountManageService
      */
-    public addUser(user: StaticValue.LoginInfo): boolean {
+    public addUser(user: StaticValue.SignupDataModel): boolean {
         if(this.hasName(user.shopName)) return false;
         if(this.hasEmail(user.email)) return false;
         if(this.hasPhone(user.phone)) return false;
 
         let userdb = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB) as StaticValue.UserDB;
-        let new_user = Object.assign({}, user);
+        let new_user = new StaticValue.LoginInfo();
+        utils.assignTargetEnumProp(user, new_user);
+
         let uid = 0;
         for(let u of userdb.users) {
             if (u.userid >= uid)
                 uid = u.userid + 1;
         }
-        new_user.confirmPassword = "";
         new_user.password = MD5(user.password);
-        new_user.code = "";
         new_user.userid = uid;
         new_user.createTime = window.Date();
         userdb.users.push(new_user);
@@ -303,13 +323,16 @@ export class AccountManageService {
     }
 
     /**
-     * 登出当前用户, 引导至首页
+     * 删除登录 Token
+     *
+     * @param {LoginToken} token
      *
      * @memberof AccountManageService
      */
-    public removeLoginInfo() {
-        this.localstorage.remove(StaticValue.LOGIN_KEY);
-        this.router.navigateByUrl('');
+    public removeLoginToken(token: StaticValue.LoginToken) {
+        let tokens = this.localstorage.get(StaticValue.LOGIN_TOKENS, new StaticValue.LoginTokens()) as StaticValue.LoginTokens;
+        if(tokens[token] != null)
+            delete tokens[token];
     }
 }
 

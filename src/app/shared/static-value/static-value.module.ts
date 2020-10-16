@@ -1,16 +1,26 @@
 /** constants string and symbol */
 
 export module StaticValue {
-
+    /** local storage keys */
     export const APP_KEY = 'APP';
-    export const LOGIN_KEY = 'LOGIN_INFO';
-    export const USERDB_KEY = 'USER_DATABASE';
     export const APP_VERSION = '1.0.0';
+    export const LOGIN_TOKEN = "LOGIN_TOKEN";
+
+    /** database keys */
+    export const LOGIN_LOG = "LOGIN_LOG";
+    export const USERDB_KEY = 'USER_DATABASE';
+    export const LOGIN_TOKENS = "LOGIN_TOKENS";
+
+    /** session storage keys */
     export const SIGNUP_INFO = 'SIGNUP_INFO';
     export const SIGNUP_MD5 = 'SIGNUP_MD5';
-    export const LOGIN_LOG = "LOGIN_LOG";
 
+
+    /** time to wait for a new verificatioin code */
     export const VerificationCodeWait = 5;
+
+    /** time to valid login */
+    export const LoginKeepTimeSpan = (5 * 24 * 60 * 60 * 1000);
 
     export class AppConfig {
         isLaunched: boolean = false;
@@ -22,33 +32,36 @@ export module StaticValue {
     }
 
    export module URLS {
-        export const HOME = 'home';
+        export const HOME    = 'default';
         export const WELCOME = 'welcome';
-        export const SIGNIN = 'passport/login';
-        export const SIGNUP = 'passport/signup';
+        export const SIGNIN  = 'passport/login';
+        export const SIGNUP  = 'passport/signup';
     }
 
-    export class SignupDataModel {
-        phone: string = '';
-        email: string = '';
+    export class UserBasicInfo {
+        phone: string    = '';
+        email: string    = '';
         shopName: string = '';
+    }
+
+    export class SignupDataModel extends UserBasicInfo {
         password: string = '';
         confirmPassword: string = '';
         code: string = '';
-        userid: number = -1;
-        createTime: string = '';
     }
 
+    /** login log */
     export enum LoginType {
         LoginByUsername = "LOGIN_BY_USERNAME",
         LoginByPhone = "LOGIN_BY_PHONE",
         LoginByEmail = "LOGIN_BY_EMAIL",
         Unkown = "LOGIN_UNKONW"
     }
+    export type UserId = number;
     export class LoginRecord {
         loginType: LoginType = LoginType.Unkown;
 
-        userid: number = -1;
+        userid: UserId = -1;
         email: string = '';
         phone: string = '';
         username: string = '';
@@ -56,13 +69,21 @@ export module StaticValue {
         date: string = '';
         success: boolean = false;
     }
-
     export type LoginLog = LoginRecord[];
 
-    export class LoginInfo extends SignupDataModel {
+    /** user infomation saved in database */
+    export class LoginInfo extends UserBasicInfo {
+        userid: number = -1;
+        password: string = '';
+        createTime: string = '';
     }
-
     export class UserDB {
         users: LoginInfo[] = [];
     };
+
+    export type LoginToken  = string;
+    export class LoginTokens {
+        [token: string]: [number, UserId]
+    }
 }
+

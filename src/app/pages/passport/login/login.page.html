@@ -1,43 +1,47 @@
 <div class="container">
 
-  <app-logo></app-logo>
+    <app-logo></app-logo>
 
-  <div class="content">
-    <form #fs1="ngForm" class='login-form' novalidate>
-      <div class="login-account with-warning">
-          <ion-item>
-              <ion-label color="stable" position="floating">输入邮箱或者手机号</ion-label>
-              <ion-input name="userAccount" #userAccount="ngModel" type="text"
-                         required
-                         [(ngModel)]="mLoginInfo.shopName">
-              </ion-input>
-          </ion-item>
-          <div color="danger" class="warning" *ngIf="userAccount.errors?.required && userAccount.touched">请输入邮箱或者手机号</div>
-      </div>
-      <div class="login-password with-warning">
-          <ion-item>
-              <ion-label color="stable" position="floating">输入密码</ion-label>
-              <ion-input name="userPassword" #userPassword="ngModel" type="password"
-                         required
-                         [(ngModel)]="mLoginInfo.password">
-              </ion-input>
-          </ion-item>
-          <div color="danger" class="warning" *ngIf="userPassword.errors?.required && userPassword.touched">请输入密码</div>
-      </div>
+    <div class="content">
+        <form #fs1="ngForm" class='login-form' novalidate>
+            <div class="login-account with-warning">
+                <ion-item>
+                    <ion-label color="stable" position="floating">输入邮箱或者手机号</ion-label>
+                    <ion-input name="userAccount" #userAccount="ngModel" type="text"
+                                                                         required
+                                                                         [(ngModel)]="mLoginInfo.shopName">
+                    </ion-input>
+                </ion-item>
+                <div color="danger" class="warning" *ngIf="userAccount.errors?.required && userAccount.touched">请输入邮箱或者手机号</div>
+            </div>
+            <div class="login-password with-warning">
+                <ion-item>
+                    <ion-label color="stable" position="floating">输入密码</ion-label>
+                    <ion-input name="userPassword" #userPassword="ngModel" type="password"
+                                                                           required
+                                                                           [(ngModel)]="mLoginInfo.password">
+                    </ion-input>
+                </ion-item>
+                <div color="danger" class="warning" *ngIf="userPassword.errors?.required && userPassword.touched">请输入密码</div>
+            </div>
 
-      <div class="buttons">
-        <ion-button (click)="try_login()" class="confirm-login-button" color="primary" expand="block" fill="solid">
-          登录
-        </ion-button>
-        <ion-button class="new-account-button" color="primary" expand="block" fill="outline" [routerLink]="['/passport/signup']">
-          注册新账户
-        </ion-button>
-      </div>
-      <div color="danger" class="warning" *ngIf="loginFail">登录失败，密码或者账户名错误</div>
+            <div class="with-warning">
+                <div class="buttons">
+                    <ion-button (click)="login_with_account()" class="confirm-login-button" color="primary" expand="block" fill="solid">
+                        登录
+                    </ion-button>
+                    <ion-button class="new-account-button" color="primary" expand="block" 
+                                fill="outline" [routerLink]="['/passport/signup']">
+                        注册新账户
+                    </ion-button>
+                </div>
+                <div color="info"   class="info"    *ngIf="loginSuccess">登录成功，即将跳转到用户首页</div>
+                <div color="danger" class="warning" *ngIf="loginFail">登录失败，密码或者账户名错误</div>
+            </div>
 
-      <div class="forget-password">
-        <a [routerLink]="['/passport/retrieve-password']">忘记密码?</a>
-      </div>
-   </form>
- </div>
+            <div class="forget-password">
+                <a [routerLink]="['/passport/retrieve-password']">忘记密码?</a>
+            </div>
+        </form>
+    </div>
 </div>

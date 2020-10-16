@@ -61,6 +61,15 @@
                 position: absolute;
             }
 
+            .info {
+                font-size: x-small;
+                width: 100%;
+                text-align: center;
+                padding: 0.2em 0.3em;
+                color: rgb(30, 30, 200);
+                position: absolute;
+            }
+
             .validate-code-line {
                 display: flex;
                 flex-direction: row;

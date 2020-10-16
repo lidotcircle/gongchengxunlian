@@ -1,89 +1,21 @@
+@use '../../../style/layout.scss' as layout;
 
 app-login {
-   .container {
-        height: 100%;
-        width: 100vw;
+    @include layout.vertical-form();
+
+    .buttons {
         box-sizing: border-box;
+        width: 100%;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
 
-        div {
-            flex-grow: 0;
-            flex-shrink: 1;
-        }
-
-        div.content {
+        ion-button {
+            flex-basis: 0em;
             flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-
-            .login-form {
-                box-sizing: border-box;
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-                height: 100%;
-                padding: 0.5em 0.8em;
-
-                .take-space {
-                    flex-grow: 1;
-                }
-
-                ion-item {
-                    ion-label {
-                        color: rgb(200,200,200) !important;
-                    }
-                    &.item-has-focus {
-                        ion-label {
-                            color: #3880ff !important;
-                        }
-                    }
-                }
-
-                .buttons {
-                    padding: 1.5em 0.5em;
-                    box-sizing: border-box;
-                    width: 100%;
-                    display: flex;
-                    flex-direction: row;
-
-                    ion-button {
-                        flex-basis: 0em;
-                        flex-grow: 1;
-                    }
-
-                    .confirm-login-button {
-                        margin-right: 0.5em;
-                    }
-
-                    .new-account-button {
-                        margin-left: 0.5em;
-                    }
-                }
-            }
         }
     }
 
     .with-warning {
-        padding-bottom: 1em;
-    }
-    .warning {
-        font-size: xx-small;
-        text-align: left;
-        padding: 0.2em 0.3em;
-        color: rgb(200, 30, 30);
-        position: absolute;
-    }
-
-    .validate-code-line {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        align-items: flex-end;
-
-        ion-button {
-            width: 40%;
-        }
+        padding: 0em 0em 2em 0em !important;
     }
 }
