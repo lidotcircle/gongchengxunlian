@@ -5,12 +5,12 @@
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: ldy.$color-primary;
-  --ion-color-primary-rgb: ldy.$color-primary-rgb;
+  --ion-color-primary: #{ldy.$color-primary};
+  --ion-color-primary-rgb: #{ldy.$color-primary-rgb};
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: ldy.$color-primary-shade;
-  --ion-color-primary-tint:  ldy.$color-primary-tint;
+  --ion-color-primary-shade: #{ldy.$color-primary-shade};
+  --ion-color-primary-tint:  #{ldy.$color-primary-tint};
 
   /** secondary **/
   --ion-color-secondary: #3dc2ff;

@@ -11,12 +11,12 @@ $color-secondary: #3DC2FF;
     --ldy-color-warn: #F11;
     --ldy-color-info: #11F;
 
-    --ldy-color-primary:   $color-primary;
-    --ldy-color-primary-rgb:   $color-primary-rgb;
-    --ldy-color-primary-shade: $color-primary-shade;
-    --ldy-color-primary-tint: $color-primary-tint;
+    --ldy-color-primary:   #{$color-primary};
+    --ldy-color-primary-rgb:   #{$color-primary-rgb};
+    --ldy-color-primary-shade: #{$color-primary-shade};
+    --ldy-color-primary-tint: #{$color-primary-tint};
 
-    --ldy-color-secondary: $color-secondary;
+    --ldy-color-secondary: #{$color-secondary};
 
     --ldy-color-grey-a: #AAA;
     --ldy-color-grey-b: #BBB;
