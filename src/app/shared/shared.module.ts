@@ -7,15 +7,11 @@ import { CopyrightComponent } from '../components/copyright/copyright.component'
 
 
 @NgModule({
-    declarations: [CopyrightComponent],
+    declarations: [],
     imports: [
-        NgForm,
-        LocalStorageService,
+        CommonModule
     ],
     exports: [
-        NgForm,
-        LocalStorageService,
-        CopyrightComponent
     ]
 })
 export class SharedModule { }
