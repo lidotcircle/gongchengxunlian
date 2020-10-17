@@ -1,10 +1,5 @@
-import { LocalStorageService } from './service/local-storage.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SessionStorageService } from './service/session-storage.service';
-import { AccountManageService } from './service/account-manage.service';
-import { AuthenticationCodeService } from './service/authentication-code.service';
-
 
 
 @NgModule({
@@ -15,10 +10,6 @@ import { AuthenticationCodeService } from './service/authentication-code.service
     exports: [
     ],
     providers: [
-        LocalStorageService,
-        SessionStorageService,
-        AccountManageService,
-        AuthenticationCodeService
     ]
 })
 export class SharedModule { }
