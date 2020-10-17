@@ -9,7 +9,10 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 export class CopyrightComponent implements OnInit {
 
     company: string = "生意专家";
-    constructor() { }
+    year:    number = 0;
+    constructor() {
+        this.year = (new Date()).getFullYear();
+    }
 
     ngOnInit() {}
 }

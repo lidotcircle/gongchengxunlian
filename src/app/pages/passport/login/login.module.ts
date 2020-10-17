@@ -8,7 +8,7 @@ import { LoginPageRoutingModule } from './login-routing.module';
 
 import { SharedModule } from '../../../shared/shared.module';
 import { LoginPage } from './login.page';
-import { LogoComponent } from 'src/app/components/logo/logo.component';
+import { LdyComponentsModule } from 'src/app/components/ldy-components.module';
 
 @NgModule({
     imports: [
@@ -16,8 +16,9 @@ import { LogoComponent } from 'src/app/components/logo/logo.component';
         FormsModule,
         IonicModule,
         SharedModule,
+        LdyComponentsModule,
         LoginPageRoutingModule,
     ],
-    declarations: [LoginPage, LogoComponent]
+    declarations: [LoginPage]
 })
 export class LoginPageModule {}

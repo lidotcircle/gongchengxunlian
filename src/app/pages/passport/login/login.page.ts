@@ -12,7 +12,7 @@ import { ToastController, MenuController } from '@ionic/angular';
     encapsulation: ViewEncapsulation.None
 })
 export class LoginPage implements OnInit {
-    private mLoginInfo: StaticValue.SignupDataModel = new StaticValue.SignupDataModel();
+    public mLoginInfo: StaticValue.SignupDataModel = new StaticValue.SignupDataModel();
 
     constructor(private accountService: AccountManageService,
                 private localstorage: LocalStorageService,

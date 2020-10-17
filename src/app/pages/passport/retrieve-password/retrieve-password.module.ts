@@ -7,15 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { RetrievePasswordPageRoutingModule } from './retrieve-password-routing.module';
 
 import { RetrievePasswordPage } from './retrieve-password.page';
-import { LogoComponent } from 'src/app/components/logo/logo.component';
+import { LdyComponentsModule } from 'src/app/components/ldy-components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RetrievePasswordPageRoutingModule
+    RetrievePasswordPageRoutingModule,
+    LdyComponentsModule
   ],
-  declarations: [RetrievePasswordPage, LogoComponent]
+  declarations: [RetrievePasswordPage]
 })
 export class RetrievePasswordPageModule {}

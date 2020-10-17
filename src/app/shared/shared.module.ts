@@ -1,8 +1,9 @@
 import { LocalStorageService } from './service/local-storage.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgForm } from '@angular/forms';
-import { CopyrightComponent } from '../components/copyright/copyright.component';
+import { SessionStorageService } from './service/session-storage.service';
+import { AccountManageService } from './service/account-manage.service';
+import { AuthenticationCodeService } from './service/authentication-code.service';
 
 
 
@@ -12,6 +13,12 @@ import { CopyrightComponent } from '../components/copyright/copyright.component'
         CommonModule
     ],
     exports: [
+    ],
+    providers: [
+        LocalStorageService,
+        SessionStorageService,
+        AccountManageService,
+        AuthenticationCodeService
     ]
 })
 export class SharedModule { }

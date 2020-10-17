@@ -8,14 +8,16 @@ import { SignupPageRoutingModule } from './signup-routing.module';
 
 import { SignupPage } from './signup.page';
 import { LogoComponent } from 'src/app/components/logo/logo.component';
+import { LdyComponentsModule } from 'src/app/components/ldy-components.module';
 
 @NgModule({
   imports: [
+    SignupPageRoutingModule,
     CommonModule,
     FormsModule,
     IonicModule,
-    SignupPageRoutingModule
+    LdyComponentsModule
   ],
-  declarations: [SignupPage, LogoComponent]
+  declarations: [SignupPage]
 })
 export class SignupPageModule {}
