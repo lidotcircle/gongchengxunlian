@@ -1,0 +1,87 @@
+
+app-default {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+
+    .container {
+        width: 100%;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+
+        div {
+            width: 100%;
+        }
+
+        .image {
+            img {
+                width: 100%;
+            }
+        }
+        .compare {
+            display: flex;;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 0.8em;
+            background-color: #f6f5fa;
+
+            .compare-item {
+                flex-basis: 0;
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+
+                .title {
+                    font-size: small;
+                    padding-bottom: 0.9em;
+                    color: #9d9ca1;
+                }
+                .money {
+                    font-size: medium;
+                    padding-bottom: 0.5em;
+                    color: #626166;
+
+                    .money-unit {
+                        margin-left: 0.2em;
+                        font-size: smaller;
+                    }
+                }
+                .compare-with {
+                    font-size: small;
+                    color: #9d9ca1;
+
+                    .compare-value {
+                        margin-left: 0.2em;
+                        font-size: smaller;
+                    }
+
+                    .less-than {
+                        color: #10dc60;
+                    }
+                    .greater-than {
+                        color: #f04141;
+                    }
+
+                    .arrow {
+                        padding-left: 0.2em;
+                    }
+
+                    .less-than+.arrow::after {
+                        content: '\2193';
+                        color: #10dc60;
+                    }
+                    .greater-than+.arrow::after {
+                        content: '\2191';
+                        color: #f04141;
+                    }
+                }
+            }
+        }
+
+        .tools {
+        }
+    }
+}

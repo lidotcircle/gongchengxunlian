@@ -43,3 +43,6 @@ export function assignTargetEnumProp(src: Object, target: Object) {
         target[prop] = src[prop];
 }
 
+export function randomInt(max: number = Math.max()): number {
+  return Math.floor(Math.random() * Math.floor(Math.floor(max)));
+}

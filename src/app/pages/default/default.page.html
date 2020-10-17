@@ -17,10 +17,54 @@
     </ion-toolbar>
 </ion-header>
 
+<div class="container">
+    <div class="image">
+        <img src="../../../assets/img/default/androidbanner.png" alt="invite" [routerLink]="[ '/default/invite' ]">
+    </div>
 
-<ion-content>
+    <div class="compare">
+        <div class="compare-item">
+            <div class="title">今日</div>
+            <div class="money">
+                {{ saleData.Today }}<span class="money-unit">元</span>
+            </div>
+            <div class="compare-with">
+                比昨日
+                <span [class]="'compare-value ' + (saleData.Today>saleData.Yesterday ? 'greater-than' : 'less-than')">
+                    {{ saleData.Today - saleData.Yesterday }}
+                </span>
+                <span class="arrow"></span>
+            </div>
+        </div>
+        <div class="compare-item">
+            <div class="title">七日</div>
+            <div class="money">
+                {{ saleData.LastSevenDay }}<span class="money-unit">元</span>
+            </div>
+            <div class="compare-with">
+                比同期
+                <span [class]="'compare-value ' + (saleData.LastSevenDay>saleData.LastYearSevenDay ? 'greater-than' : 'less-than')">
+                    {{ saleData.LastSevenDay - saleData.LastYearSevenDay }}
+                </span>
+                <span class="arrow"></span>
+            </div>
+        </div>
+         <div class="compare-item">
+            <div class="title">本月</div>
+            <div class="money">
+                {{ saleData.LastMonth }}<span class="money-unit">元</span>
+            </div>
+            <div class="compare-with">
+                比同期
+                <span [class]="'compare-value ' + (saleData.LastMonth>saleData.LastYearMonth ? 'greater-than' : 'less-than')">
+                    {{ saleData.LastMonth - saleData.LastYearMonth }}
+                </span>
+                <span class="arrow"></span>
+            </div>
+        </div>
+    </div>
 
-    <ion-button (click)="logout()" fill="clear">Logout</ion-button>
-
-</ion-content>
-
+    <div class="tools">
+        <ion-button (click)="logout()" fill="clear">Logout</ion-button>
+    </div>
+</div>
