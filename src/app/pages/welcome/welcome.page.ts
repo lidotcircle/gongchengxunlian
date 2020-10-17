@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
+import { MenuController } from '@ionic/angular';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class WelcomePage implements OnInit {
             this.showSkip = !end;
         });
     }
-    
+
     /** on skip */
     onSkip() {
         this.gotoLogin();
@@ -35,7 +36,17 @@ export class WelcomePage implements OnInit {
         this.router.navigateByUrl(StaticValue.URLS.SIGNUP);
     }
 
-    constructor(private localstorage: LocalStorageService, private router: Router) {}
+    constructor(private localstorage: LocalStorageService,
+                private router: Router,
+                private menu: MenuController) {}
+
+    ionViewWillEnter() {
+        this.menu.enable(false);
+    }
+
+    ionViewDidLeave() {
+        this.menu.enable(true);
+    }
 
     ngOnInit() {}
 }

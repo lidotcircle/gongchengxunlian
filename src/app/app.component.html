@@ -1,29 +1,37 @@
 <ion-app>
-  <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
-      <ion-content>
-        <ion-list id="inbox-list">
-          <ion-list-header>Inbox</ion-list-header>
-          <ion-note>hi@ionicframework.com</ion-note>
+    <ion-split-pane contentId="main-content">
+        <ion-menu contentId="main-content" type="overlay">
+            <div class="app-menu">
+                <div class="box-title">
+                    <div class="box-user-info">
+                        <div class="username">未登录</div>
+                        <div class="phone">用户手机</div>
+                    </div>
+                    <div class="badge" color="primary">高级版</div>
+                </div>
 
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
-              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
+                <div class="menu-items-container">
+                    <div class="divide-line"></div>
+                    <div class="menu-items" *ngFor="let p of appPages; let i = index">
+                        <div [class]="'menu-item ' + (selectedIndex==i ? 'selected-menu-item' : '')" 
+                            (click)="selectedIndex=i" routerDirection="root" [routerLink]="[p.url]">
+                            <div class="i1"><ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon></div>
+                            <ion-label class="i2">{{ p.title }}</ion-label>
+                            <div class="i3"><ion-icon name="chevron-forward-outline"></ion-icon></div>
+                        </div>
+                        <div class="divide-line"></div>
+                    </div>
+                </div>
 
-        <ion-list id="labels-list">
-          <ion-list-header>Labels</ion-list-header>
+                <div class="take-space"></div>
 
-          <ion-item *ngFor="let label of labels" lines="none">
-            <ion-icon slot="start" ios="bookmark-outline" md="bookmark-sharp"></ion-icon>
-            <ion-label>{{ label }}</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-    </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
-  </ion-split-pane>
+                <div class="settings">
+                    <ion-icon name="settings-outline"></ion-icon>
+                    <ion-label>设置</ion-label>
+                </div>
+            </div>
+        </ion-menu>
+
+        <ion-router-outlet id="main-content"></ion-router-outlet>
+    </ion-split-pane>
 </ion-app>
