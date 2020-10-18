@@ -82,6 +82,13 @@ app-default {
         }
 
         .tools {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            app-tool {
+                width: 25%;
+            }
         }
     }
 }

@@ -17,6 +17,7 @@
     </ion-toolbar>
 </ion-header>
 
+<app-copyright></app-copyright>
 <div class="container">
     <div class="image">
         <img src="../../../assets/img/default/androidbanner.png" alt="invite" [routerLink]="[ '/default/invite' ]">
@@ -65,6 +66,6 @@
     </div>
 
     <div class="tools">
-        <ion-button (click)="logout()" fill="clear">Logout</ion-button>
+            <app-tool *ngFor="let tool of tools" [url]='tool.url' [img]='tool.img' [title]='tool.title'></app-tool>
     </div>
 </div>

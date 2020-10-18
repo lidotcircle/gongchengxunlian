@@ -1,0 +1,40 @@
+
+app-tool {
+    /** TODO fixing overlapped outline */
+    outline: #ECECEC solid 0.2pt;
+    outline-offset: -0.1pt;
+
+    .tool-container {
+        width: 100%;
+        padding-top: 100%;
+        position: relative;
+
+        .tool {
+            position: absolute;
+            top: 0em;
+            left: 0em;
+            bottom: 0em;
+            right: 0em;
+
+            width: 100%;
+            padding: 0.8em;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            img {
+                width: 40%;
+            }
+
+            .take-space {
+                flex-grow: 1;
+            }
+
+            .title {
+                font-size: small;
+                text-align: center;
+            }
+        }
+    }
+}

@@ -7,14 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { DefaultPageRoutingModule } from './default-routing.module';
 
 import { DefaultPage } from './default.page';
+import { ToolComponent } from './tool/tool.component';
+import { LdyComponentsModule } from 'src/app/components/ldy-components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    LdyComponentsModule,
     DefaultPageRoutingModule
   ],
-  declarations: [DefaultPage]
+  declarations: [DefaultPage, ToolComponent]
 })
 export class DefaultPageModule {}
