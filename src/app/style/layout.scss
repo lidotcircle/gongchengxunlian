@@ -4,86 +4,148 @@
 /** common layout */
 
 @mixin vertical-form {
-.container {
-    height: 100%;
-    width: 100vw;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-
-    div {
-        flex-grow: 0;
-        flex-shrink: 1;
-    }
-
-    div.content {
-        flex-grow: 1;
+    .container {
+        height: 100%;
+        width: 100vw;
+        box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        width: 100%;
 
-        ion-slides {
-            flex-grow: 1;
-            height: 100%;
-            width: 100%;
-
+        div {
+            flex-grow: 0;
+            flex-shrink: 1;
         }
 
-        form {
-            box-sizing: border-box;
+        div.content {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             width: 100%;
-            height: 100%;
-            padding: 0.5em 0.8em;
 
-            .take-space {
+            ion-slides {
                 flex-grow: 1;
+                height: 100%;
+                width: 100%;
+
             }
 
-            ion-item {
-                ion-label {
-                    color: var(--ldy-color-grey-a) !important;
+            form {
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+                padding: 0.5em 0.8em;
+
+                .take-space {
+                    flex-grow: 1;
                 }
-                &.item-has-focus {
+
+                ion-item {
                     ion-label {
-                        color: var(--ldy-color-primary) !important;
+                        color: var(--ldy-color-grey-a) !important;
+                    }
+                    &.item-has-focus {
+                        ion-label {
+                            color: var(--ldy-color-primary) !important;
+                        }
                     }
                 }
-            }
 
-            .with-warning {
-                padding-bottom: 1em;
-            }
+                .with-warning {
+                    padding-bottom: 1em;
+                }
 
-            .warning {
-                font-size: xx-small;
-                text-align: left;
-                padding: 0.2em 0.3em;
-                color: var(--ldy-color-warn);
-                position: absolute;
-            }
+                .warning {
+                    font-size: xx-small;
+                    text-align: left;
+                    padding: 0.2em 0.3em;
+                    color: var(--ldy-color-warn);
+                    position: absolute;
+                }
 
-            .info {
-                font-size: x-small;
-                width: 100%;
-                text-align: center;
-                padding: 0.2em 0.3em;
-                color: var(--ldy-color-info);
-                position: absolute;
-            }
+                .info {
+                    font-size: x-small;
+                    width: 100%;
+                    text-align: center;
+                    padding: 0.2em 0.3em;
+                    color: var(--ldy-color-info);
+                    position: absolute;
+                }
 
-            .validate-code-line {
-                display: flex;
-                flex-direction: row;
-                width: 100%;
-                align-items: flex-end;
+                .validate-code-line {
+                    display: flex;
+                    flex-direction: row;
+                    width: 100%;
+                    align-items: flex-end;
 
-                ion-button {
-                    width: 40%;
+                    ion-button {
+                        width: 40%;
+                    }
                 }
             }
         }
     }
 }
+
+@mixin settings-vertical {
+    .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .content {
+            flex-grow: 1;
+            width: 100%;
+            background-color: #E4E4E4;
+            box-sizing: border-box;
+            padding: 0em 1em;
+
+            .items {
+                width: 100%;
+                margin-top: 1em;
+                background-color: var(--ion-color-primary-contrast);;
+                border-radius: 0.3em;
+                display: flex;
+                flex-direction: column;
+
+                .item {
+                    padding: 0.9em 0em;
+                    padding-right: 1em;
+                    margin: 0em 0em 0em 1em;
+                    color: #777;
+                    display: flex;
+                    flex-direction: row;
+                    border-bottom: #E4E4E4 solid 1pt;
+
+                    .item-title {
+                        font-weight: normal;
+                        font-size: medium;
+
+                        .version {
+                            font-weight: bold;
+                        }
+                    }
+
+                    a {
+                        color: #11E;
+                    }
+
+                    .take-space {
+                        flex-grow: 1;
+                    }
+
+                    .right-arrow {
+                        flex-grow: 1;
+                        text-align: right;
+                    }
+
+                    .right-arrow::after {
+                        content: "\3009";
+                    }
+                }
+            }
+        }
+    }
 }

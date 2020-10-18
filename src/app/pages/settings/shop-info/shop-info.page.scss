@@ -1,0 +1,5 @@
+@use '../../../style/layout.scss' as layout;
+
+app-shop-info {
+    @include layout.settings-vertical();
+}

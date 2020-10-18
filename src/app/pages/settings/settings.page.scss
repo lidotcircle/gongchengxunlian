@@ -1,0 +1,5 @@
+@use '../../style/layout.scss' as layout;
+
+app-settings {
+    @include layout.settings-vertical();
+}

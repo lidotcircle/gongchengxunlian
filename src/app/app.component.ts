@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { MenuController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
@@ -42,7 +42,8 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private router: Router,
         private accountManager: ClientAccountManagerService,
-        private localstorage: LocalStorageService
+        private localstorage: LocalStorageService,
+        private menu: MenuController
     ) {
         this.initializeApp();
         this.update_menu_state();
@@ -51,11 +52,13 @@ export class AppComponent implements OnInit {
         let updateUserInfo = () => {
             this.userInfo.name = "未登录";
             this.userInfo.phone = "00000000000";
-            let info = this.accountManager.userinfo();
-            if (info != null) {
-                this.userInfo.name = info.shopName;
-                this.userInfo.phone = info.phone;
-            }
+
+            this.accountManager.userinfo().then(info => {
+                if (info != null) {
+                    this.userInfo.name = info.shopName;
+                    this.userInfo.phone = info.phone;
+                }
+            });
         };
 
         updateUserInfo();
@@ -70,6 +73,12 @@ export class AppComponent implements OnInit {
                 updateUserInfo();
             }
         });
+    }
+
+    goto(url: string) {
+        this.menu.close().then(() => {
+            this.router.navigateByUrl(url);
+        })
     }
 
     initializeApp() {

@@ -5,10 +5,11 @@ import { LogoComponent } from './logo/logo.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { HeaderComponent } from './header/header.component';
 
 
 @NgModule({
-  declarations: [CopyrightComponent, LogoComponent],
+  declarations: [CopyrightComponent, LogoComponent, HeaderComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -16,7 +17,7 @@ import { IonicModule } from '@ionic/angular';
     IonicModule
   ],
   exports: [
-    CopyrightComponent, LogoComponent
+    CopyrightComponent, LogoComponent, HeaderComponent
   ]
 })
 export class LdyComponentsModule { }

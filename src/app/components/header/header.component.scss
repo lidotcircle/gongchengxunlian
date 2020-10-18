@@ -1,0 +1,18 @@
+
+.left-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    button {
+        font-size: larger;
+        font-weight: bolder;
+        padding-right: 1em;
+        background-color: transparent;
+        color: var(--ion-color-primary-contrast);
+    }
+
+    span {
+        font-size: medium;
+    }
+}

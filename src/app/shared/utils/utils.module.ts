@@ -34,12 +34,34 @@ export module validation {
     return true;
   }
 
+  const __validName  = /^([A-Za-z]|\p{Unified_Ideograph})([A-Za-z0-9_]|\p{Unified_Ideograph}){2,}$/u;
+  export function validName(name: string): boolean {
+    return __validName.test(name);
+  }
+  const __validPhone = /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,3,5-9]))\d{8}$/;
+  export function validPhone(phone: string): boolean {
+    return __validPhone.test(phone);
+  }
+  const __validEmail = /^.*[@].*\..*$/;
+  export function validEmail(email: string): boolean {
+    return __validEmail.test(email);
+  }
+
   export const MatchAll: string = '^.*$';
   export const NotMatch: string = '.^';
+
+  export const validationMap: Map<string, (val: string) => boolean> = new Map<string, (val: string) => boolean>([
+    ["password", validPassword],
+  ]);
 }
 
 export function assignTargetEnumProp(src: Object, target: Object) {
     for(const prop in target)
+        target[prop] = src[prop];
+}
+
+export function CopySourceEnumProp(src: Object, target: Object) {
+    for(const prop in src)
         target[prop] = src[prop];
 }
 

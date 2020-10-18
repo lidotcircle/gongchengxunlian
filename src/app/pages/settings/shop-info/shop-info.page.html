@@ -1,0 +1,62 @@
+
+<app-copyright></app-copyright>
+<div class="container">
+  <ion-header>
+    <app-header leftText='返回' title='店铺信息'></app-header>
+  </ion-header>
+
+  <div class="content">
+   <div class="items">
+      <div class="item" [routerLink]="['shop-name']">
+        <div class="item-title">店铺名称</div>
+        <div class="take-space"></div>
+        <div class="take-space"></div>
+        <div class="take-space"></div>
+        <div class="take-space"></div>
+        <div class="take-space"></div>
+        <div class="take-space"></div>
+        <div class="">{{ userinfo.shopName }}</div>
+        <div class="right-arrow"></div>
+      </div>
+      <div class="item" [routerLink]="['abbreviation']">
+        <div class="item-title">店铺简称</div>
+        <div class="take-space"></div>
+        <div class="take-space"></div>
+        <div class="take-space"></div>
+        <div class="take-space"></div>
+        <div class="take-space"></div>
+        <div class="take-space"></div>
+        <div class="">{{ userinfo.nickname }}</div>
+        <div class="right-arrow"></div>
+      </div>
+      <div class="item">
+        <div class="item-title">注册时间</div>
+        <div class="take-space"></div>
+        <div class="signup-date">{{ createTime }}</div>
+      </div>
+      <div class="item" [routerLink]="['phone']">
+        <div class="item-title">手机号码</div>
+        <div class="take-space"></div>
+        <div class="signup-date">{{ userinfo.phone }}</div>
+      </div>
+    </div>
+
+    <div class="items">
+      <div class="item" [routerLink]="['email']">
+        <div class="item-title">电子邮件</div>
+      </div>
+      <div class="item" [routerLink]="['truename']">
+        <div class="item-title">店主姓名</div>
+        <div class="right-arrow"></div>
+      </div>
+       <div class="item" [routerLink]="['shop-phone']">
+        <div class="item-title">店铺电话</div>
+        <div class="right-arrow"></div>
+      </div>
+       <div class="item" [routerLink]="['work-type']">
+        <div class="item-title">行业类型</div>
+        <div class="right-arrow"></div>
+      </div>
+    </div>
+  </div>
+</div>

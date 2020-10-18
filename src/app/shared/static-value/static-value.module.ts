@@ -36,12 +36,18 @@ export module StaticValue {
         export const WELCOME = 'welcome';
         export const SIGNIN  = 'passport/login';
         export const SIGNUP  = 'passport/signup';
+        export const SETTING = 'settings';
     }
 
     export class UserBasicInfo {
         phone: string    = '';
         email: string    = '';
         shopName: string = '';
+        nickname: string = '';
+        shopOwnerName: string = '';
+        shopPhone: string = '';
+        shopType: string = '';
+        createTime: number = 0;
     }
 
     export class SignupDataModel extends UserBasicInfo {
@@ -75,7 +81,6 @@ export module StaticValue {
     export class LoginInfo extends UserBasicInfo {
         userid: number = -1;
         password: string = '';
-        createTime: string = '';
     }
     export class UserDB {
         users: LoginInfo[] = [];

@@ -20,7 +20,7 @@ export class ClientAccountManagerService {
     this.token = this.localstorage.get(StaticValue.LOGIN_TOKEN, null);
   }
 
-  logout() {
+  async logout() {
     this.update();
     this.remoteAccountManagerWrapper.removeLoginToken(this.token);
     this.localstorage.remove(StaticValue.LOGIN_TOKEN);
@@ -29,12 +29,16 @@ export class ClientAccountManagerService {
     this.router.navigateByUrl('/');
   }
 
-  userinfo(): StaticValue.UserBasicInfo {
+  async userinfo(): Promise<StaticValue.UserBasicInfo> {
     this.update();
     if (this.token != null) {
       const ans = this.remoteAccountManagerWrapper.userBasicInfo(this.token);
       return ans;
     }
     return null;
+  }
+
+  async updateUserInfo(info: StaticValue.UserBasicInfo): Promise<boolean> {
+    return false;
   }
 }

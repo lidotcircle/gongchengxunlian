@@ -1,9 +1,14 @@
+/** 
+ * 这个服务用于替代服务器数据库的作用，应该只被 Client Side 的用户管理调用
+ */
+
+
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
 import { StaticValue } from '../static-value/static-value.module';
-import * as MD5 from 'md5';
 import { makeid } from '../utils/utils.module';
 import { AuthenticationCodeService } from './authentication-code.service';
+import * as MD5 from 'md5';
 import * as utils from '../utils/utils.module';
 
 const EMPTY_SIGNUP = new StaticValue.SignupDataModel();
@@ -22,7 +27,6 @@ const RESET_PASSWORD_TOKENS: Map<RESET_PASSWORD_TOKEN, string> =
 })
 export class AccountManageService {
     constructor(private localstorage: LocalStorageService,
-                private sessionStorage: LocalStorageService,
                 private authCodeService: AuthenticationCodeService) {}
 
     private saveNewLoginRecord(record: StaticValue.LoginRecord) {
@@ -94,6 +98,23 @@ export class AccountManageService {
         }
     }
 
+    private checkLoginToken(loginToken: StaticValue.LoginToken): StaticValue.UserId {
+        let tokens = this.localstorage.get(StaticValue.LOGIN_TOKENS, new StaticValue.LoginTokens()) as StaticValue.LoginTokens;
+        if (tokens[loginToken] == null)
+            return -1;
+
+        const [time, uid] = tokens[loginToken];
+        if ((Date.now() - time) > StaticValue.LoginKeepTimeSpan) {
+            delete tokens[loginToken];
+            this.localstorage.set(StaticValue.LOGIN_TOKENS, tokens);
+            return -1;
+        }
+
+        tokens[loginToken] = [Date.now(), uid];
+        this.localstorage.set(StaticValue.LOGIN_TOKENS, tokens);
+        return uid;
+    }
+
     /**
      * 获取当前登录用户的用户基本信息
      *
@@ -102,19 +123,8 @@ export class AccountManageService {
      * @memberof AccountManageService
      */
     public userBasicInfo(loginToken: StaticValue.LoginToken): StaticValue.UserBasicInfo {
-        let tokens = this.localstorage.get(StaticValue.LOGIN_TOKENS, new StaticValue.LoginTokens()) as StaticValue.LoginTokens;
-        if (tokens[loginToken] == null)
-            return null;
-
-        const [time, uid] = tokens[loginToken];
-        if ((Date.now()-time) > StaticValue.LoginKeepTimeSpan) {
-            delete tokens[loginToken];
-            this.localstorage.set(StaticValue.LOGIN_TOKENS, tokens);
-            return null;
-        }
-
-        tokens[loginToken] = [Date.now(), uid];
-        this.localstorage.set(StaticValue.LOGIN_TOKENS, tokens);
+        const uid = this.checkLoginToken(loginToken);
+        if (uid < 0) return null;
 
         let info: StaticValue.LoginInfo = null;
         const users = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
@@ -131,6 +141,42 @@ export class AccountManageService {
         let ans = new StaticValue.UserBasicInfo();
         utils.assignTargetEnumProp(info, ans);
         return ans;
+    }
+
+    /**
+     * 不可用 ChangeUserInfo() 更改的属性
+     *
+     * @private
+     * @memberof AccountManageService
+     */
+    private priviledgeProperties = ['phone', 'email', 'createTime'];
+
+    /**
+     * 更改用户的信息
+     *
+     * @param {StaticValue.LoginToken} token
+     * @param {StaticValue.UserBasicInfo} info
+     * @return {*}  {boolean}
+     * @memberof AccountManageService
+     */
+    public ChangeUserInfo(token: StaticValue.LoginToken, info: StaticValue.UserBasicInfo): boolean {
+        const uid = this.checkLoginToken(token);
+        if (uid < 0) return null;
+
+        const db = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
+        for(let u of db.users) {
+            if(u.userid == uid) {
+                for (let prop of this.priviledgeProperties) {
+                    if (info[prop] != u[prop]) {
+                        return false;
+                    }
+                }
+                utils.CopySourceEnumProp(info, u);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -268,7 +314,7 @@ export class AccountManageService {
      * @return {*} 
      * @memberof AccountManageService
      */
-    public hasName(name: string) {
+    public hasName(name: string): boolean {
         // TODO
         return this.testOccupy("shopName", name);
     }
@@ -279,7 +325,7 @@ export class AccountManageService {
      * @param {string} email
      * @memberof AccountManageService
      */
-    public hasEmail(email: string) {
+    public hasEmail(email: string): boolean {
         return this.testOccupy("email", email);
     }
 
@@ -289,7 +335,7 @@ export class AccountManageService {
      * @param {string} phone
      * @memberof AccountManageService
      */
-    public hasPhone(phone: string) {
+    public hasPhone(phone: string): boolean {
         return this.testOccupy("phone", phone);
     }
 
@@ -316,7 +362,7 @@ export class AccountManageService {
         }
         new_user.password = MD5(user.password);
         new_user.userid = uid;
-        new_user.createTime = window.Date();
+        new_user.createTime = Date.now();
         userdb.users.push(new_user);
         this.localstorage.set(StaticValue.USERDB_KEY, userdb);
         return true;
@@ -329,10 +375,14 @@ export class AccountManageService {
      *
      * @memberof AccountManageService
      */
-    public removeLoginToken(token: StaticValue.LoginToken) {
+    public removeLoginToken(token: StaticValue.LoginToken): void {
         let tokens = this.localstorage.get(StaticValue.LOGIN_TOKENS, new StaticValue.LoginTokens()) as StaticValue.LoginTokens;
-        if(tokens[token] != null)
+        if(tokens[token] != null) {
             delete tokens[token];
+            this.localstorage.set(StaticValue.LOGIN_TOKENS, tokens);
+        } else {
+            return;
+        }
     }
 }
 

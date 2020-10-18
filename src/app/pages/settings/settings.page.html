@@ -1,0 +1,40 @@
+<div class="container">
+  <ion-header>
+    <app-header leftText='首页' title='设置'></app-header>
+  </ion-header>
+
+  <div class="content">
+    <div class="items">
+      <div class="item" *ngFor="let item of items1" [routerLink]='[item.url]'>
+        <div class="item-title">{{item.title}}</div>
+        <div class="right-arrow"></div>
+      </div>
+    </div>
+
+    <div class="items">
+      <div class="item" [routerLink]="['about']">
+        <div class="item-title">关于我们</div>
+        <div class="right-arrow"></div>
+      </div>
+      <div class="item" (click)="dial()">
+        <div class="item-title">联系客服</div>
+        <div class="take-space"></div>
+        <a>{{ kefudianhua }}</a>
+      </div>
+      <div class="item" (click)="checkUpdate()">
+        <div class="item-title">版本号: <span class="version"> {{version}} </span></div>
+        <div class="take-space"></div>
+        <div class="update">检查更新</div>
+        <div class="right-arrow"></div>
+      </div>
+    </div>
+
+    <div class="items">
+      <div class="item" (click)="logout()">
+        <div class="item-title">安全退出</div>
+        <div class="right-arrow"></div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,15 @@
+
+<ion-toolbar color="primary">
+  <div *ngIf='!!url || leftText' slot="start" class="left-bar">
+    <button *ngIf='!!url' slot="start" [routerLink]="[url]">
+      {{ leftIcon }}
+    </button>
+    <button *ngIf='!url' slot="start" (click)="goBack()">
+      {{ leftIcon }}
+    </button>
+    <span> {{ leftText }} </span>
+  </div>
+  <ion-title>
+    {{ title }}
+  </ion-title>
+</ion-toolbar>

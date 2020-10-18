@@ -29,6 +29,10 @@ const routes: Routes = [
       {
         path: 'default',
         loadChildren: () => import('./pages/default/default.module').then(m => m.DefaultPageModule)
+      },
+      {
+        path: 'settings',
+        loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
       }
     ]
   },
@@ -38,7 +42,7 @@ const routes: Routes = [
     path: 'passport',
     pathMatch: 'prefix',
     loadChildren: () => import('./pages/passport/passport.module').then(m => m.PassportPageModule)
-  }
+  },
 ];
 
 @NgModule({
