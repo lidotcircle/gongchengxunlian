@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { AccountManageService, RESET_PASSWORD_AUTHCODE_TOKEN, RESET_PASSWORD_TOKEN } from 'src/app/shared/service/account-manage.service';
+import { ClientAccountManagerService } from 'src/app/shared/service/client-account-manager.service';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
 import * as utils from '../../../shared/utils/utils.module';
 
@@ -12,8 +12,6 @@ import * as utils from '../../../shared/utils/utils.module';
 })
 export class RetrievePasswordPage implements OnInit {
     mAccountInfo: StaticValue.SignupDataModel = new StaticValue.SignupDataModel();
-    mAuthCodeToken: RESET_PASSWORD_AUTHCODE_TOKEN = null;
-    mResetToken: RESET_PASSWORD_TOKEN = null;
     mError = {
         bad_phone: false,
         bad_code: false,
@@ -27,13 +25,8 @@ export class RetrievePasswordPage implements OnInit {
     }
 
     getVerificationCodeWait: number = 0;
-    sendCode() {
+    async sendCode() {
         this.resetError();
-        this.mAuthCodeToken = this.accountService.resetPasswordRequest(this.mAccountInfo.shopName);
-        if (this.mAuthCodeToken == null) {
-            this.mError.bad_phone = true;
-            return;
-        }
 
         this.getVerificationCodeWait = StaticValue.VerificationCodeWait;
         this.getVerificationCodeWait++;
@@ -43,22 +36,22 @@ export class RetrievePasswordPage implements OnInit {
             this.getVerificationCodeWait--;
             window.setTimeout(wait, 1000);
         }
-        wait();
-    }
 
-    gotoReset: boolean = false;
-    checkVerifyCode() {
-        if (this.mAuthCodeToken == null) {
+        const ans = await this.accountManager.resetPasswordRequest(this.mAccountInfo.shopName);
+        wait();
+        if (!ans) {
             this.mError.bad_phone = true;
             return;
         }
-        this.mResetToken = this.accountService.resetPasswordAuthCodeCheck(this.mAuthCodeToken, this.mAccountInfo.code);
-        if (this.mResetToken == null) {
+    }
+
+    gotoReset: boolean = false;
+    async checkVerifyCode() {
+        const ans = await this.accountManager.resetPasswordAuthCodeCheck(this.mAccountInfo.code);
+        if (!ans) {
             this.mError.bad_code = true;
-            console.log("asdf")
             return;
         }
-        this.mAuthCodeToken = null;
         this.gotoReset = true;
     }
 
@@ -71,21 +64,21 @@ export class RetrievePasswordPage implements OnInit {
     }
 
     resetSuccess: boolean = false;
-    resetPassword() {
-        if (this.gotoReset == false || this.mResetToken == null) {
+    async resetPassword() {
+        if (this.gotoReset == false) {
             this.gotoReset = false;
-            return null;
+            return false;
         }
 
-        const rs = this.accountService.resetPasswordConfirm(this.mResetToken, this.mAccountInfo.password);
-        if (rs) {
+        const ans = this.accountManager.resetPasswordConfirm(this.mAccountInfo.password);
+        if (ans) {
             this.resetSuccess = true;
         } else {
             this.mError.reset_fail = true;
         }
     }
 
-    constructor(private accountService: AccountManageService) { }
+    constructor(private accountManager: ClientAccountManagerService) { }
 
     ngOnInit() {
     }

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { StaticValue } from '../shared/static-value/static-value.module';
-import { AccountManageService } from '../shared/service/account-manage.service';
+import { ClientAccountManagerService } from '../shared/service/client-account-manager.service';
 
 
 /** 检查是否第一次启动，如果否 redirect to 'login' */
@@ -13,7 +13,8 @@ import { AccountManageService } from '../shared/service/account-manage.service';
   providedIn: 'root'
 })
 export class StartAppGuard implements CanActivate {
-    constructor(private localstorage: LocalStorageService, private router: Router) {}
+    constructor(private localstorage: LocalStorageService,
+                private router: Router) {}
 
     canActivate(
         next: ActivatedRouteSnapshot,
@@ -40,25 +41,22 @@ export class StartAppGuard implements CanActivate {
   providedIn: 'root'
 })
 export class UserDomainGuard implements CanActivate {
-    constructor(private localstorage: LocalStorageService,
-                private accountService: AccountManageService,
+    constructor(private accountService: ClientAccountManagerService,
                 private router: Router) {}
 
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree 
     {
-        let token = this.localstorage.get(StaticValue.LOGIN_TOKEN, null);
-        if (token) {
-            if (!this.accountService.userBasicInfo(token)) {
-                this.localstorage.remove(StaticValue.LOGIN_TOKENS);
-                token = null;
-            }
-        }
-        if(!token) {
-            this.router.navigateByUrl(StaticValue.URLS.WELCOME);
-            return false;
-        }
-        return true;
+        return new Promise((resolve) => {
+            this.accountService.userinfo().then((info) => {
+                if (info) {
+                    resolve(true);
+                } else {
+                    this.router.navigateByUrl(StaticValue.URLS.WELCOME);
+                    resolve(false);
+                }
+            });
+        });
     }
 }

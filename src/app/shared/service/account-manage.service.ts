@@ -22,6 +22,12 @@ export type RESET_PASSWORD_TOKEN = string;
 const RESET_PASSWORD_TOKENS: Map<RESET_PASSWORD_TOKEN, string> =
         new Map<RESET_PASSWORD_TOKEN, string>();
 
+const NewUserMessage =  '【生意专家】尊敬的用户，您的验证码: { code }.工作人员不会索取，请勿泄露。';
+export type NEW_USER_AUTHCODE_TOKEN = string;
+/**                                                           MD5     PHONE   TIME */
+const NEW_USER_AUTHCODE_TOKENS: Map<NEW_USER_AUTHCODE_TOKEN, [string, string, number]> = new
+    Map<NEW_USER_AUTHCODE_TOKEN, [string, string, number]>();
+
 @Injectable({
   providedIn: 'root'
 })
@@ -207,7 +213,7 @@ export class AccountManageService {
         return false;
     }
 
-    /**
+   /**
      * 发送用于重置密码的验证码到指定手机号码, 
      * 并返回用于重置该手机号码的验证 Token
      *
@@ -340,13 +346,41 @@ export class AccountManageService {
     }
 
     /**
-     * 增加新用户, 唯一添加新用户的 API
+     * 请求注册新用户的验证码
      *
-     * @param {StaticValue.LoginInfo} user 用户信息
-     * @return {*}  {boolean} 是否成功
+     * @param {string} phone
+     * @return {*}  {[NEW_USER_AUTHCODE_TOKEN, string]}
      * @memberof AccountManageService
      */
-    public addUser(user: StaticValue.SignupDataModel): boolean {
+    public newUserRequest(phone: string): [NEW_USER_AUTHCODE_TOKEN, string] {
+        if (this.hasPhone(phone)) {
+            return null;
+        }
+        const md5 = this.authCodeService.NewVerificode(NewUserMessage, phone);
+        const token = "NEW_USER_TOKEN-" + makeid(20);
+        const current = Date.now();
+        NEW_USER_AUTHCODE_TOKENS.set(token, [md5, phone, current]);
+        return [token, md5];
+    }
+
+   /**
+     * 增加新用户, 唯一添加新用户的 API
+     *
+     * @param {NEW_USER_AUTHCODE_TOKEN} token
+     * @param {StaticValue.SignupDataModel} user
+     * @return {*}  {boolean}
+     * @memberof AccountManageService
+     */
+    public addUser(token: NEW_USER_AUTHCODE_TOKEN, user: StaticValue.SignupDataModel): boolean {
+        const entry = NEW_USER_AUTHCODE_TOKENS.get(token);
+        if (!entry || (Date.now() - entry[2]) > MAX_VALID_TIME_SPAN_MS
+                   || MD5(user.code) != entry[0]
+                   || (entry[1] != user.phone && entry[1] != user.email)) {
+            NEW_USER_AUTHCODE_TOKENS.delete(token);
+            return false;
+        }
+        NEW_USER_AUTHCODE_TOKENS.delete(token);
+
         if(this.hasName(user.shopName)) return false;
         if(this.hasEmail(user.email)) return false;
         if(this.hasPhone(user.phone)) return false;

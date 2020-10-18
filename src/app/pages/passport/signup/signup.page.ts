@@ -1,18 +1,15 @@
-import { ElementRef, ViewEncapsulation } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSlides } from '@ionic/angular';
-import { AccountManageService } from 'src/app/shared/service/account-manage.service';
+import { IonSlides, ToastController } from '@ionic/angular';
 import { StaticValue } from './../../../shared/static-value/static-value.module';
 import * as MD5 from 'md5';
 import { SessionStorageService } from 'src/app/shared/service/session-storage.service';
-import { LocalStorageService } from 'src/app/shared/service/local-storage.service';
-import { AuthenticationCodeService } from 'src/app/shared/service/authentication-code.service';
 import { Router } from '@angular/router';
 import * as utils from '../../../shared/utils/utils.module';
+import { ClientAccountManagerService } from 'src/app/shared/service/client-account-manager.service';
 
 const MatchAll: string = utils.validation.MatchAll;
 const NotMatch: string = utils.validation.NotMatch;
-const MessageTemplate =  '【生意专家】尊敬的用户，您的验证码: { code }.工作人员不会索取，请勿泄露。';
 
 @Component({
     selector: 'app-signup',
@@ -27,38 +24,52 @@ export class SignupPage implements OnInit {
     signupData: StaticValue.SignupDataModel = new StaticValue.SignupDataModel();
     slideIndex: number = 0;
 
+    constructor(private accountManager: ClientAccountManagerService, 
+                private router: Router,
+                private toast: ToastController,
+                private sessionStorage: SessionStorageService) {
+    }
+
+
     /** Slide 1 */
     validPhone = /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,3,5-9]))\d{8}$/;
     duplicatePhone = false;
     validatePhone(): string {
-        let valid = true;
-        if (!this.validPhone.test(this.signupData.phone))
-            valid = false;
-        this.duplicatePhone = false;
-        if (this.accountService.hasPhone(this.signupData.phone)) {
-            valid = false;
-            this.duplicatePhone = true;
-        }
+        let valid = this.validPhone.test(this.signupData.phone) && !this.duplicatePhone;
         return valid ? MatchAll : NotMatch;
+    }
+    phoneChanged(newval) {
+        this.duplicatePhone = false;
+        this.accountManager.hasPhone(newval).then(has => {
+            if (has && newval == this.signupData.phone)
+                this.duplicatePhone = true;
+        });
     }
 
     /** slide 2 */
     VerificationCodeMd5: string="";
     getVerificationCodeWait: number=0;
-    NewVerification(): void {
-        if(this.getVerificationCodeWait>0) return;
+    async NewVerification(): Promise<void> {
+        if (this.getVerificationCodeWait > 0) return;
 
-        this.VerificationCodeMd5 = this.authenticationCode.NewVerificode(MessageTemplate, this.signupData.phone);
-        this.storeState();
-
-        this.getVerificationCodeWait=StaticValue.VerificationCodeWait;
+        this.getVerificationCodeWait = StaticValue.VerificationCodeWait;
         this.getVerificationCodeWait++;
         let wait = () => {
             this.getVerificationCodeWait -= 1;
-            if (this.getVerificationCodeWait == 0) 
+            if (this.getVerificationCodeWait == 0)
                 return;
             setTimeout(() => wait(), 1000);
         };
+
+        this.VerificationCodeMd5 = await this.accountManager.newUserRequest(this.signupData.phone);
+        this.storeState();
+        if (!this.VerificationCodeMd5) {
+            this.toast.create({
+                message: "获取验证码失败",
+                duration: 2000,
+            }).then(tt => tt.present());
+        }
+
         wait();
     }
     testVerifyCode(): string {
@@ -91,24 +102,26 @@ export class SignupPage implements OnInit {
         return (this.signupData.password === this.signupData.confirmPassword) ? MatchAll : NotMatch;
     }
     validateEmail(): string {
+        const valid = this.validEmail.test(this.signupData.email) && !this.duplicateEmail;
+        return valid ? MatchAll : NotMatch;
+    }
+    emailChanged(newval) {
         this.duplicateEmail = false;
-        let r = this.accountService.hasEmail(this.signupData.email);
-        if (r) {
-            this.duplicateEmail = true;
-        }
-        r = !r && this.validEmail.test(this.signupData.email) 
-        return  r ? MatchAll : NotMatch;
+        this.accountManager.hasEmail(this.signupData.email).then(has => {
+            if(has && newval == this.signupData.email)
+                this.duplicateEmail = true;
+        });
     }
     validateName(): string {
-        let valid = true;
-        if (!this.validName.test(this.signupData.shopName))
-            valid = false;
-        this.duplicateUsername = false;
-        if (this.accountService.hasName(this.signupData.shopName)) {
-            valid = false;
-            this.duplicateUsername = true;
-        }
+        let valid = this.validName.test(this.signupData.shopName) && !this.duplicateUsername;
         return valid ? MatchAll : NotMatch;
+    }
+    usernameChanged(newval) {
+        this.duplicateUsername = false;
+        this.accountManager.hasUsername(newval).then(has => {
+            if(has && newval == this.signupData.shopName)
+                this.duplicateUsername = true;
+        });
     }
     slide3Acceptable(): boolean {
         return (this.validateName() === MatchAll &&  this.validateEmail() === MatchAll &&
@@ -118,15 +131,16 @@ export class SignupPage implements OnInit {
     /** Slide 4 */
     signupFail: boolean = false;
     signupSuccess: boolean = false;
-    confirmSignup() {
+    async confirmSignup() {
         this.signupFail = false;
         this.signupSuccess = false;
         if (!this.slide2Acceptable() || !this.slide3Acceptable()) {
             this.signupFail = true;
             return;
         }
-        let r = this.accountService.addUser(this.signupData);
-        if (r) {
+
+        const success = await this.accountManager.newUserConfirm(this.signupData);
+        if (success) {
             this.signupSuccess = true;
             this.sessionStorage.remove(StaticValue.SIGNUP_INFO);
             this.sessionStorage.remove(StaticValue.SIGNUP_MD5);
@@ -139,7 +153,7 @@ export class SignupPage implements OnInit {
         } else {
             this.signupFail = true;
         }
-        return r;
+        return success;
     }
 
     onSlideWillChange(event) {
@@ -166,13 +180,10 @@ export class SignupPage implements OnInit {
         this.slides.slidePrev();
     }
 
-    constructor(private accountService: AccountManageService, 
-                private router: Router,
-                private authenticationCode: AuthenticationCodeService,
-                private sessionStorage: SessionStorageService) {
-    }
-
     ngOnInit() {
         this.recoverState();
+        this.phoneChanged(this.signupData.phone);
+        this.emailChanged(this.signupData.email);
+        this.usernameChanged(this.signupData.shopName);
     }
 }

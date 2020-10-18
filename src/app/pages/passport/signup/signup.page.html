@@ -33,11 +33,11 @@
                         <ion-label color="stable" position="floating">输入手机号</ion-label>
                         <ion-input name="phone" #phone="ngModel" type="text"
                                    required [pattern]="validatePhone()" [tabindex]="slideIndex==0 ? 0 : -1"
-                                   [(ngModel)]="signupData.phone">
+                                   [(ngModel)]="signupData.phone" (ngModelChange)="phoneChanged($event)">
                         </ion-input>
                     </ion-item>
                     <div color="danger" class="warning" *ngIf="duplicatePhone">手机号已经注册</div>
-                    <div color="danger" class="warning" *ngIf="phone.errors?.required && phone.touched">手机号是必选</div>
+                    <div color="danger" class="warning" *ngIf="!duplicatePhone && phone.errors?.required && phone.touched">手机号是必选</div>
                     <div color="danger" class="warning" *ngIf="!duplicatePhone && phone.errors?.pattern">输入正确的手机号</div>
                 </div>
                 <div class="take-space"></div>
@@ -48,7 +48,7 @@
             </form>
         </ion-slide>
         <ion-slide>
-            <form #fs1="ngForm" class='input-form' novalidate>
+            <form #fs2="ngForm" class='input-form' novalidate>
                 <div class="validate-code-line">
                     <ion-item>
                         <ion-label position="floating">验证码</ion-label>
@@ -76,17 +76,17 @@
             </form>
         </ion-slide>
         <ion-slide>
-            <form #fs1="ngForm" class='input-form' novalidate>
+            <form #fs3="ngForm" class='input-form' novalidate>
                 <div class="user-line with-warning">
                     <ion-item>
                         <ion-label position="floating">输入用户名</ion-label>
                         <ion-input name="username" #username="ngModel" type="text"
                                    required [pattern]="validateName()" [tabindex]="slideIndex==2 ? 0 : -1"
-                                   [(ngModel)]="signupData.shopName">
+                                   [(ngModel)]="signupData.shopName" (ngModelChange)="usernameChanged($event)">
                         </ion-input>
                     </ion-item>
-                    <div color="danger" class="warning" *ngIf="username.errors?.required && username.touched">用户名是必选</div>
                     <div color="danger" class="warning" *ngIf="duplicateUsername">用户名已被占用</div>
+                    <div color="danger" class="warning" *ngIf="!duplicateUsername && username.errors?.required && username.touched">用户名是必选</div>
                     <div color="danger" class="warning" *ngIf="!duplicateUsername && username.errors?.pattern">
                         用户名长度不小于3，不含特殊符号，首字为字母或汉字
                     </div>
@@ -96,11 +96,11 @@
                         <ion-label position="floating">输入邮箱</ion-label>
                         <ion-input name="email" #email="ngModel" type="text"
                                    required [pattern]="validateEmail()" [tabindex]="slideIndex==2 ? 1 : -1"
-                                   [(ngModel)]="signupData.email">
+                                   [(ngModel)]="signupData.email" (ngModelChange)="emailChanged($event)">
                         </ion-input>
                     </ion-item>
                     <div color="danger" class="warning" *ngIf="duplicateEmail">邮箱被占用</div>
-                    <div color="danger" class="warning" *ngIf="email.errors?.required && email.touched">邮箱是必选</div>
+                    <div color="danger" class="warning" *ngIf="!duplicateEmail && email.errors?.required && email.touched">邮箱是必选</div>
                     <div color="danger" class="warning" *ngIf="!duplicateEmail && email.errors?.pattern">输入正确的邮箱</div>
                 </div>
                 <div class="password-line with-warning">
@@ -139,7 +139,7 @@
             </form>
         </ion-slide>
         <ion-slide>
-            <form #fs1="ngForm" class='confirm-form' novalidate>
+            <form #fs4="ngForm" class='confirm-form' novalidate>
                 <ion-list lines="none">
                     <ion-item>
                         <ion-label class="confirm">请确认注册信息</ion-label>

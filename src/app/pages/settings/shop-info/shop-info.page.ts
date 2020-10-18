@@ -13,9 +13,11 @@ export class ShopInfoPage implements OnInit {
 
   createTime: string;
   constructor(private accountManager: ClientAccountManagerService) {
-    this.userinfo = accountManager.userinfo();
-    const date = new Date(this.userinfo.createTime);
-    this.createTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
+    accountManager.userinfo().then(info => {
+      this.userinfo = info;
+      const date = new Date(this.userinfo.createTime);
+      this.createTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
+    });
   }
 
   ngOnInit() {

@@ -1,9 +1,8 @@
 import { StaticValue } from './../../../shared/static-value/static-value.module';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { AccountManageService } from 'src/app/shared/service/account-manage.service';
 import { Router } from '@angular/router';
-import { LocalStorageService } from 'src/app/shared/service/local-storage.service';
 import { ToastController } from '@ionic/angular';
+import { ClientAccountManagerService } from 'src/app/shared/service/client-account-manager.service';
 
 @Component({
     selector: 'app-login',
@@ -14,8 +13,7 @@ import { ToastController } from '@ionic/angular';
 export class LoginPage implements OnInit {
     public mLoginInfo: StaticValue.SignupDataModel = new StaticValue.SignupDataModel();
 
-    constructor(private accountService: AccountManageService,
-                private localstorage: LocalStorageService,
+    constructor(private accountManager: ClientAccountManagerService,
                 private router: Router,
                 private toast: ToastController) {}
 
@@ -29,7 +27,7 @@ export class LoginPage implements OnInit {
         if(this.inToast || this.loginSuccess) return false;
 
         this.loginFail = false;
-        let token = this.accountService.login(this.mLoginInfo.shopName, this.mLoginInfo.password);
+        const token = await this.accountManager.login(this.mLoginInfo.shopName, this.mLoginInfo.password);
         if (!token) {
             // this.loginFail = true;
             this.inToast = true;
@@ -41,7 +39,6 @@ export class LoginPage implements OnInit {
             r.present().then(() => this.inToast = false);
             return false;
         }
-        this.localstorage.set(StaticValue.LOGIN_TOKEN, token);
         this.loginSuccess = true;
         window.setTimeout(() => {
             this.router.navigateByUrl(StaticValue.URLS.HOME);
