@@ -61,6 +61,7 @@ export class AppComponent implements OnInit {
             });
         };
 
+        this.accountManager.subscribeAccountChange(updateUserInfo);
         updateUserInfo();
         this.router.events.subscribe(e => {
             if(e instanceof NavigationEnd) {

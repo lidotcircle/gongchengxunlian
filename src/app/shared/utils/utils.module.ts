@@ -52,6 +52,13 @@ export module validation {
 
   export const validationMap: Map<string, (val: string) => boolean> = new Map<string, (val: string) => boolean>([
     ["password", validPassword],
+    ["shopName", validName],
+    ["shopOwnerName", validName],
+    ["nickname", validName],
+    ["shopType", validName],
+    ["phone", validPhone],
+    ["shopPhone", validPhone],
+    ["email", validEmail],
   ]);
 }
 

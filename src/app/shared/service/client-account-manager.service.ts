@@ -24,6 +24,7 @@ export class ClientAccountManagerService {
     const token = this.remoteAccountManagerWrapper.login(account, password);
     if (token) {
       this.localstorage.set(StaticValue.LOGIN_TOKEN, token);
+      this.invokeChangeHook();
     }
     return token;
   }
@@ -33,6 +34,7 @@ export class ClientAccountManagerService {
     this.remoteAccountManagerWrapper.removeLoginToken(this.token);
     this.localstorage.remove(StaticValue.LOGIN_TOKEN);
     this.token = null;
+    this.invokeChangeHook();
 
     this.router.navigateByUrl('/');
   }
@@ -103,6 +105,25 @@ export class ClientAccountManagerService {
   }
 
   async updateUserInfo(info: StaticValue.UserBasicInfo): Promise<boolean> {
-    return false;
+    this.update();
+    const ans: boolean = this.remoteAccountManagerWrapper.ChangeUserInfo(this.token, info);
+    if (ans) {
+      this.invokeChangeHook();
+    }
+    return ans;
+  }
+
+  private changeHooks = [];
+  subscribeAccountChange(func: () => void) {
+    this.changeHooks.push(func);
+  }
+  private invokeChangeHook() {
+    for (let f of this.changeHooks) {
+      try {
+        f();
+      } catch (err) {
+        console.warn(err);
+      }
+    }
   }
 }

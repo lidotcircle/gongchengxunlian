@@ -1,5 +1,5 @@
 
-<app-copyright></app-copyright>
+<ldy-copyright></ldy-copyright>
 <div class="container">
   <ion-header>
     <app-header leftText='返回' title='店铺信息'></app-header>
@@ -7,26 +7,16 @@
 
   <div class="content">
    <div class="items">
-      <div class="item" [routerLink]="['shop-name']">
+      <div class="item" [routerLink]="['change-info']" [queryParams]="{headerTitle: '店铺名称', field: 'shopName'}">
         <div class="item-title">店铺名称</div>
         <div class="take-space"></div>
-        <div class="take-space"></div>
-        <div class="take-space"></div>
-        <div class="take-space"></div>
-        <div class="take-space"></div>
-        <div class="take-space"></div>
-        <div class="">{{ userinfo.shopName }}</div>
+        <div>{{ userinfo.shopName }}</div>
         <div class="right-arrow"></div>
       </div>
-      <div class="item" [routerLink]="['abbreviation']">
+      <div class="item" [routerLink]="['change-info']" [queryParams]="{headerTitle: '店铺简称', field: 'nickname'}">
         <div class="item-title">店铺简称</div>
         <div class="take-space"></div>
-        <div class="take-space"></div>
-        <div class="take-space"></div>
-        <div class="take-space"></div>
-        <div class="take-space"></div>
-        <div class="take-space"></div>
-        <div class="">{{ userinfo.nickname }}</div>
+        <div>{{ userinfo.nickname }}</div>
         <div class="right-arrow"></div>
       </div>
       <div class="item">
@@ -44,17 +34,25 @@
     <div class="items">
       <div class="item" [routerLink]="['email']">
         <div class="item-title">电子邮件</div>
+        <div class="take-space"></div>
+        <div>{{ userinfo.email }}</div>
       </div>
-      <div class="item" [routerLink]="['truename']">
+      <div class="item" [routerLink]="['change-info']" [queryParams]="{headerTitle: '店主姓名', field: 'shopOwnerName'}">
         <div class="item-title">店主姓名</div>
+        <div class="take-space"></div>
+        <div>{{ userinfo.shopOwnerName }}</div>
         <div class="right-arrow"></div>
       </div>
-       <div class="item" [routerLink]="['shop-phone']">
+       <div class="item" [routerLink]="['change-info']" [queryParams]="{headerTitle: '店铺电话', field: 'shopPhone'}">
         <div class="item-title">店铺电话</div>
+        <div class="take-space"></div>
+        <div>{{ userinfo.shopPhone }}</div>
         <div class="right-arrow"></div>
       </div>
-       <div class="item" [routerLink]="['work-type']">
+       <div class="item" [routerLink]="['change-info']" [queryParams]="{headerTitle: '行业类型', field: 'shopType'}">
         <div class="item-title">行业类型</div>
+        <div class="take-space"></div>
+        <div>{{ userinfo.shopType }}</div>
         <div class="right-arrow"></div>
       </div>
     </div>

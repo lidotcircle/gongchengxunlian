@@ -13,11 +13,18 @@ export class ShopInfoPage implements OnInit {
 
   createTime: string;
   constructor(private accountManager: ClientAccountManagerService) {
-    accountManager.userinfo().then(info => {
-      this.userinfo = info;
-      const date = new Date(this.userinfo.createTime);
-      this.createTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
-    });
+    this.userinfo = new StaticValue.UserBasicInfo();
+
+    const update__ = () => {
+      this.accountManager.userinfo().then(info => {
+        this.userinfo = info;
+        const date = new Date(this.userinfo.createTime);
+        this.createTime = date.toLocaleDateString() + " " + date.toLocaleTimeString();
+      });
+    };
+
+    this.accountManager.subscribeAccountChange(update__);
+    update__();
   }
 
   ngOnInit() {

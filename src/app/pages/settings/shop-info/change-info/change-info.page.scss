@@ -1,0 +1,22 @@
+@use '../../../../style/layout.scss' as layout;
+
+app-change-info {
+    height: 100%;
+
+    @include layout.settings-vertical();
+
+    .container {
+        .content {
+            ion-input {
+                margin-top: 1.8em;
+                padding: 0.3em 0.5em !important;
+                border-radius: 0.3em;
+                background-color: white;
+            }
+
+            ion-button {
+                margin-top: 2em;
+            }
+        }
+    }
+}

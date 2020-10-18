@@ -1,9 +1,17 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>ChangeInfo</ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content>
+<ldy-copyright></ldy-copyright>
+<div class="container">
+  <ion-header>
+    <app-header leftText='返回' [title]='headerTitle'></app-header>
+  </ion-header>
 
-</ion-content>
+  <div class="content">
+    <ion-input  class="input" type="text" [placeholder]="headerTitle"
+                [(ngModel)]="value" (ngModelChange)="valueChanged($event)"
+                required [pattern]='validate()' name="kvalue" #kvalue='ngModel'></ion-input>
+    <ion-button class="submit" (click)="submit()" color="primary" expand="block" fill="solid"
+                [disabled]='kvalue.invalid'>
+      保存
+    </ion-button>
+  </div>
+</div>

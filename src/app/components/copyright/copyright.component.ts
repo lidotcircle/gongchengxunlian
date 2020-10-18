@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
-    selector: 'app-copyright',
+    selector: 'ldy-copyright',
     templateUrl: './copyright.component.html',
     styleUrls: ['./copyright.component.scss'],
     encapsulation: ViewEncapsulation.None

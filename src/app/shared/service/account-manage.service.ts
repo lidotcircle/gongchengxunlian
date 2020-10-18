@@ -177,7 +177,11 @@ export class AccountManageService {
                         return false;
                     }
                 }
+                if (u.shopName != info.shopName && this.hasName(info.shopName)) {
+                    return false;
+                }
                 utils.CopySourceEnumProp(info, u);
+                this.localstorage.set(StaticValue.USERDB_KEY, db);
                 return true;
             }
         }
