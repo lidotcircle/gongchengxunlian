@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AccountManageService, RESET_PASSWORD_AUTHCODE_TOKEN, RESET_PASSWORD_TOKEN } from 'src/app/shared/service/account-manage.service';
-import { MenuController } from '@ionic/angular';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
 import * as utils from '../../../shared/utils/utils.module';
 
@@ -86,16 +85,7 @@ export class RetrievePasswordPage implements OnInit {
         }
     }
 
-    constructor(private accountService: AccountManageService,
-                private menu: MenuController) { }
-
-    ionViewWillEnter() {
-        this.menu.enable(false);
-    }
-
-    ionViewDidLeave() {
-        this.menu.enable(true);
-    }
+    constructor(private accountService: AccountManageService) { }
 
     ngOnInit() {
     }

@@ -6,6 +6,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { StaticValue } from './shared/static-value/static-value.module';
 import { ClientAccountManagerService } from './shared/service/client-account-manager.service';
+import { LocalStorageService } from './shared/service/local-storage.service';
+import { StorageEvent } from './shared/service/Storage';
 
 @Component({
     selector: 'app-root',
@@ -28,14 +30,23 @@ export class AppComponent implements OnInit {
         name: "未登录",
         phone: "00000000000"
     };
+
+    disable_menu: boolean = true;
+    private update_menu_state() {
+        this.disable_menu = !this.accountManager.userinfo();
+    }
+
     constructor(
         private platform: Platform,
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private router: Router,
-        private accountManager: ClientAccountManagerService
+        private accountManager: ClientAccountManagerService,
+        private localstorage: LocalStorageService
     ) {
         this.initializeApp();
+        this.update_menu_state();
+        this.localstorage.subscribe(StaticValue.LOGIN_TOKEN, StorageEvent.Change, () => this.update_menu_state());
 
         let updateUserInfo = () => {
             this.userInfo.name = "未登录";

@@ -3,7 +3,6 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
-import { MenuController } from '@ionic/angular';
 
 
 @Component({
@@ -14,7 +13,7 @@ import { MenuController } from '@ionic/angular';
 })
 export class WelcomePage implements OnInit {
     showSkip = true;
-    @ViewChild('slides', {static: true}) slides: IonSlides;
+    @ViewChild('slides', { static: true }) slides: IonSlides;
 
     /** slides change */
     onSlideWillChange(event) {
@@ -37,16 +36,6 @@ export class WelcomePage implements OnInit {
     }
 
     constructor(private localstorage: LocalStorageService,
-                private router: Router,
-                private menu: MenuController) {}
-
-    ionViewWillEnter() {
-        this.menu.enable(false);
-    }
-
-    ionViewDidLeave() {
-        this.menu.enable(true);
-    }
-
-    ngOnInit() {}
+        private router: Router) { }
+    ngOnInit() { }
 }

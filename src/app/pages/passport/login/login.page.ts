@@ -3,7 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AccountManageService } from 'src/app/shared/service/account-manage.service';
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'src/app/shared/service/local-storage.service';
-import { ToastController, MenuController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 
 @Component({
     selector: 'app-login',
@@ -17,18 +17,9 @@ export class LoginPage implements OnInit {
     constructor(private accountService: AccountManageService,
                 private localstorage: LocalStorageService,
                 private router: Router,
-                private toast: ToastController,
-                private menu: MenuController) {}
+                private toast: ToastController) {}
 
     ngOnInit() {
-    }
-
-    ionViewWillEnter() {
-        this.menu.enable(false);
-    }
-
-    ionViewDidLeave() {
-        this.menu.enable(true);
     }
 
     loginFail: boolean = false;

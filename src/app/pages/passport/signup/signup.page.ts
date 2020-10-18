@@ -1,6 +1,6 @@
 import { ElementRef, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSlides, MenuController } from '@ionic/angular';
+import { IonSlides } from '@ionic/angular';
 import { AccountManageService } from 'src/app/shared/service/account-manage.service';
 import { StaticValue } from './../../../shared/static-value/static-value.module';
 import * as MD5 from 'md5';
@@ -169,16 +169,7 @@ export class SignupPage implements OnInit {
     constructor(private accountService: AccountManageService, 
                 private router: Router,
                 private authenticationCode: AuthenticationCodeService,
-                private sessionStorage: SessionStorageService,
-                private menu: MenuController) {
-    }
-
-    ionViewWillEnter() {
-        this.menu.enable(false);
-    }
-
-    ionViewDidLeave() {
-        this.menu.enable(true);
+                private sessionStorage: SessionStorageService) {
     }
 
     ngOnInit() {
