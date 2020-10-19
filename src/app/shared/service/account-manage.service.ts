@@ -14,19 +14,39 @@ import * as utils from '../utils/utils.module';
 const EMPTY_SIGNUP = new StaticValue.SignupDataModel();
 
 const retrieve_message = "【生意专家】验证码: {code}, 5分钟有效";
-const MAX_VALID_TIME_SPAN_MS: number = 5 * 60 * 1000;
-export type RESET_PASSWORD_AUTHCODE_TOKEN = string
-const RESET_PASSWORD_AUTHCODE_TOKENS: Map<RESET_PASSWORD_AUTHCODE_TOKEN, [number, string, string]> =
-        new Map<RESET_PASSWORD_AUTHCODE_TOKEN, [number, string, string]>();
-export type RESET_PASSWORD_TOKEN = string;
-const RESET_PASSWORD_TOKENS: Map<RESET_PASSWORD_TOKEN, string> =
-        new Map<RESET_PASSWORD_TOKEN, string>();
-
 const NewUserMessage =  '【生意专家】尊敬的用户，您的验证码: { code }.工作人员不会索取，请勿泄露。';
-export type NEW_USER_AUTHCODE_TOKEN = string;
-/**                                                           MD5     PHONE   TIME */
-const NEW_USER_AUTHCODE_TOKENS: Map<NEW_USER_AUTHCODE_TOKEN, [string, string, number]> = new
-    Map<NEW_USER_AUTHCODE_TOKEN, [string, string, number]>();
+
+/** Authentication Code */
+export type AUTHCODE_TOKEN = string;
+type HASH    = string;
+type ACCOUNT = string;
+type TIME    = number;
+class AuthCode {
+    private static TOKENS: Map<AUTHCODE_TOKEN, [HASH, ACCOUNT, TIME]> = new
+    Map<AUTHCODE_TOKEN, [HASH, ACCOUNT, TIME]>();
+    private static MAX_VALID_TIME_SPAN_MS: number = 5 * 60 * 1000;
+    private static TokenLength = 64;
+
+    static newToken(): AUTHCODE_TOKEN {
+        return makeid(AuthCode.TokenLength);
+    }
+
+    static add(token: AUTHCODE_TOKEN, hash: HASH, account: ACCOUNT): boolean {
+        if(AuthCode.TOKENS.has(token)) return false;
+        AuthCode.TOKENS.set(token, [hash, account, Date.now()]);
+        return true;
+    }
+
+    static check(token: AUTHCODE_TOKEN, hash: HASH): ACCOUNT {
+        if (!AuthCode.TOKENS.has(token))
+            return null;
+        const [prev_hash, account, time] = AuthCode.TOKENS.get(token);
+        if (hash != prev_hash || (Date.now() - time) > AuthCode.MAX_VALID_TIME_SPAN_MS)
+            return null;
+        return account;
+    }
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -219,72 +239,42 @@ export class AccountManageService {
 
    /**
      * 发送用于重置密码的验证码到指定手机号码, 
-     * 并返回用于重置该手机号码的验证 Token
+     * 并返回用于重置该手机号码的验证 Token 以及验证码的 Hash 值
      *
      * @param {string} phone
-     * @return {*}  {RESET_PASSWORD_AUTHCODE_TOKEN}
+     * @return {*}  {[AUTHCODE_TOKEN, HASH]}
      * @memberof AccountManageService
      */
-    public resetPasswordRequest(phone: string): RESET_PASSWORD_AUTHCODE_TOKEN {
+    public resetPasswordRequest(phone: string): [AUTHCODE_TOKEN, HASH] {
         if (!this.hasPhone(phone)) {
             return null;
         }
-        const token = makeid(30);
-        const now = Date.now();
+
+        const token = AuthCode.newToken();
         const md5 = this.authCodeService.NewVerificode(retrieve_message, phone);
+        AuthCode.add(token, md5, phone);
 
-        RESET_PASSWORD_AUTHCODE_TOKENS.set(token, [now, phone, md5]);
-        return token;
-    }
-
-    /**
-     * 验证用户输入的验证码，如果正确返回一个重置该手机号账户密码的 Token
-     *
-     * @param {RESET_PASSWORD_AUTHCODE_TOKEN} token
-     * @param {string} authcode
-     * @return {*}  {RESET_PASSWORD_TOKEN}
-     * @memberof AccountManageService
-     */
-    public resetPasswordAuthCodeCheck(token: RESET_PASSWORD_AUTHCODE_TOKEN, authcode: string): RESET_PASSWORD_TOKEN {
-        if (!RESET_PASSWORD_AUTHCODE_TOKENS.has(token)) {
-            return null;
-        }
-
-        let [time, phone, md5] = RESET_PASSWORD_AUTHCODE_TOKENS.get(token);
-        if ((Date.now() - time) > MAX_VALID_TIME_SPAN_MS) {
-            RESET_PASSWORD_AUTHCODE_TOKENS.delete(token);
-            return null;
-        }
-
-        let newmd5 = MD5(authcode);
-        if (newmd5 != md5) {
-            return null;
-        }
-
-        RESET_PASSWORD_AUTHCODE_TOKENS.delete(token);
-        let new_token = makeid(20);
-
-        RESET_PASSWORD_TOKENS.set(new_token, phone);
-        return new_token;
+        return [token, md5];
     }
 
     /**
      * 利用之前返回的 Token 重置密码
      *
-     * @param {RESET_PASSWORD_TOKEN} token
-     * @param {string} password
+     * @param {AUTHCODE_TOKEN} token
+     * @param {ACCOUNT} account 发送验证码的账户
+     * @param {string} code     验证码
+     * @param {string} password 重置的密码
      * @memberof AccountManageService
      */
-    public resetPasswordConfirm(token: RESET_PASSWORD_TOKEN, password: string): boolean {
-        if (!RESET_PASSWORD_TOKENS.has(token)) {
+    public resetPasswordConfirm(token: AUTHCODE_TOKEN, account: ACCOUNT, code: string, password: string): boolean {
+        const prev_account = AuthCode.check(token, MD5(code));
+        if (!account || prev_account != account) {
             return false;
         }
 
-        let phone = RESET_PASSWORD_TOKENS.get(token);
-        RESET_PASSWORD_TOKENS.delete(token);
         let userdb: StaticValue.UserDB = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB());
         for(let u of userdb.users) {
-            if(u.phone == phone) {
+            if(u.phone == account) {
                 u.password = MD5(password);
                 this.localstorage.set(StaticValue.USERDB_KEY, userdb);
                 return true;
@@ -353,39 +343,34 @@ export class AccountManageService {
      * 请求注册新用户的验证码
      *
      * @param {string} phone
-     * @return {*}  {[NEW_USER_AUTHCODE_TOKEN, string]}
+     * @return {*}  {[AUTHCODE_TOKEN, HASH]}
      * @memberof AccountManageService
      */
-    public newUserRequest(phone: string): [NEW_USER_AUTHCODE_TOKEN, string] {
+    public newUserRequest(phone: string): [AUTHCODE_TOKEN, HASH] {
         if (this.hasPhone(phone)) {
             return null;
         }
         const md5 = this.authCodeService.NewVerificode(NewUserMessage, phone);
-        const token = "NEW_USER_TOKEN-" + makeid(20);
-        const current = Date.now();
-        NEW_USER_AUTHCODE_TOKENS.set(token, [md5, phone, current]);
+        const token = AuthCode.newToken();
+        AuthCode.add(token, md5, phone);
         return [token, md5];
     }
 
    /**
      * 增加新用户, 唯一添加新用户的 API
      *
-     * @param {NEW_USER_AUTHCODE_TOKEN} token
+     * @param {AUTHCODE_TOKEN} token
      * @param {StaticValue.SignupDataModel} user
      * @return {*}  {boolean}
      * @memberof AccountManageService
      */
-    public addUser(token: NEW_USER_AUTHCODE_TOKEN, user: StaticValue.SignupDataModel): boolean {
-        const entry = NEW_USER_AUTHCODE_TOKENS.get(token);
-        if (!entry || (Date.now() - entry[2]) > MAX_VALID_TIME_SPAN_MS
-                   || MD5(user.code) != entry[0]
-                   || (entry[1] != user.phone && entry[1] != user.email)) {
-            NEW_USER_AUTHCODE_TOKENS.delete(token);
+    public addUser(token: AUTHCODE_TOKEN, user: StaticValue.SignupDataModel): boolean {
+        const account = AuthCode.check(token, MD5(user.code));
+        if (!account || (account != user.phone && account != user.email)) {
             return false;
         }
-        NEW_USER_AUTHCODE_TOKENS.delete(token);
 
-        if(this.hasName(user.shopName)) return false;
+        if(this.hasName (user.shopName)) return false;
         if(this.hasEmail(user.email)) return false;
         if(this.hasPhone(user.phone)) return false;
 

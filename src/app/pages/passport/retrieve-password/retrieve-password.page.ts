@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ClientAccountManagerService } from 'src/app/shared/service/client-account-manager.service';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
+import * as MD5 from 'md5';
 import * as utils from '../../../shared/utils/utils.module';
 
 
@@ -24,6 +25,7 @@ export class RetrievePasswordPage implements OnInit {
         this.mError.bad_password = false;
     }
 
+    private md5Hash: string = null;
     getVerificationCodeWait: number = 0;
     async sendCode() {
         this.resetError();
@@ -37,18 +39,17 @@ export class RetrievePasswordPage implements OnInit {
             window.setTimeout(wait, 1000);
         }
 
-        const ans = await this.accountManager.resetPasswordRequest(this.mAccountInfo.shopName);
+        this.md5Hash = await this.accountManager.resetPasswordRequest(this.mAccountInfo.shopName);
         wait();
-        if (!ans) {
+        if (!this.md5Hash) {
             this.mError.bad_phone = true;
             return;
         }
     }
 
     gotoReset: boolean = false;
-    async checkVerifyCode() {
-        const ans = await this.accountManager.resetPasswordAuthCodeCheck(this.mAccountInfo.code);
-        if (!ans) {
+    checkVerifyCode() {
+        if(MD5(this.mAccountInfo.code) != this.md5Hash) {
             this.mError.bad_code = true;
             return;
         }
@@ -70,7 +71,7 @@ export class RetrievePasswordPage implements OnInit {
             return false;
         }
 
-        const ans = this.accountManager.resetPasswordConfirm(this.mAccountInfo.password);
+        const ans = await this.accountManager.resetPasswordConfirm(this.mAccountInfo.code, this.mAccountInfo.password);
         if (ans) {
             this.resetSuccess = true;
         } else {
