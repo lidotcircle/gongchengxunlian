@@ -14,7 +14,7 @@ import * as utils from '../../utils/utils.module';
 export class NameDirective implements Validators {
   constructor() { }
 
-  vlaidate(control: AbstractControl): ValidationErrors {
+  validate(control: AbstractControl): ValidationErrors {
     return utils.validation.validName(control.value) ? null : {name: true};
   }
 }

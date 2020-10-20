@@ -14,7 +14,7 @@ import * as utils from '../../utils/utils.module';
 export class PhoneDirective implements Validators {
   constructor() { }
 
-  vlaidate(control: AbstractControl): ValidationErrors {
+  validate(control: AbstractControl): ValidationErrors {
     return utils.validation.validPhone(control.value) ? null : {phone: true};
   }
 }

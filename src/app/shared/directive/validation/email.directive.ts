@@ -14,7 +14,7 @@ import * as utils from '../../utils/utils.module';
 export class EmailDirective implements Validators {
   constructor() { }
 
-  vlaidate(control: AbstractControl): ValidationErrors {
+  validate(control: AbstractControl): ValidationErrors {
     return utils.validation.validEmail(control.value) ? null : {email: true};
   }
 }
