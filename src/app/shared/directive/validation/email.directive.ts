@@ -15,6 +15,6 @@ export class EmailDirective implements Validators {
   constructor() { }
 
   validate(control: AbstractControl): ValidationErrors {
-    return utils.validation.validEmail(control.value) ? null : {email: true};
+    return (!control.value || control.value.length ==0 || utils.validation.validEmail(control.value)) ? null : {email: true};
   }
 }

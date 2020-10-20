@@ -15,6 +15,6 @@ export class NameDirective implements Validators {
   constructor() { }
 
   validate(control: AbstractControl): ValidationErrors {
-    return utils.validation.validName(control.value) ? null : {name: true};
+    return (!control.value || control.value.length == 0 || utils.validation.validName(control.value)) ? null : {name: true};
   }
 }

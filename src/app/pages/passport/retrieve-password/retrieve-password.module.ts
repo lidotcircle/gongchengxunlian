@@ -8,6 +8,7 @@ import { RetrievePasswordPageRoutingModule } from './retrieve-password-routing.m
 
 import { RetrievePasswordPage } from './retrieve-password.page';
 import { LdyComponentsModule } from 'src/app/components/ldy-components.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { LdyComponentsModule } from 'src/app/components/ldy-components.module';
     FormsModule,
     IonicModule,
     RetrievePasswordPageRoutingModule,
+    SharedModule,
     LdyComponentsModule
   ],
   declarations: [RetrievePasswordPage]

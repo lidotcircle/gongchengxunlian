@@ -76,45 +76,20 @@ export class SignupPage implements OnInit {
         let xmd5 = MD5(this.signupData.code);
         return (this.VerificationCodeMd5 == xmd5) ? MatchAll : NotMatch;
     }
-    slide2Acceptable(): boolean {
-        let xmd5 = MD5(this.signupData.code);
-        return this.validPhone.test(this.signupData.phone) && this.VerificationCodeMd5 == xmd5;
-    }
 
     /** Slide 3 */
-    // 支持汉字的正则表达式
-    // /\p{Script=Han}/u        经测试能匹配标点
-    // /\p{Unified_Ideograph}/u 不匹配标点
-
-    validEmail = /^.*[@].*\..*$/;
-    validName  = /^([A-Za-z]|\p{Unified_Ideograph})([A-Za-z0-9_]|\p{Unified_Ideograph}){2,}$/u;
     duplicateUsername = false;
     duplicateEmail = false;
 
-    validatePassword(): string {
-        if (utils.validation.validPassword(this.signupData.password)) {
-            return MatchAll;
-        } else {
-            return NotMatch;
-        }
-    }
-    validateConfirmPassword(): string {
+   validateConfirmPassword(): string {
         return (this.signupData.password === this.signupData.confirmPassword) ? MatchAll : NotMatch;
     }
-    validateEmail(): string {
-        const valid = this.validEmail.test(this.signupData.email) && !this.duplicateEmail;
-        return valid ? MatchAll : NotMatch;
-    }
-    emailChanged(newval) {
+   emailChanged(newval) {
         this.duplicateEmail = false;
         this.accountManager.hasEmail(this.signupData.email).then(has => {
             if(has && newval == this.signupData.email)
                 this.duplicateEmail = true;
         });
-    }
-    validateName(): string {
-        let valid = this.validName.test(this.signupData.shopName) && !this.duplicateUsername;
-        return valid ? MatchAll : NotMatch;
     }
     usernameChanged(newval) {
         this.duplicateUsername = false;
@@ -123,10 +98,6 @@ export class SignupPage implements OnInit {
                 this.duplicateUsername = true;
         });
     }
-    slide3Acceptable(): boolean {
-        return (this.validateName() === MatchAll &&  this.validateEmail() === MatchAll &&
-            this.validatePassword() === MatchAll && this.validateConfirmPassword() === MatchAll);
-    }
 
     /** Slide 4 */
     signupFail: boolean = false;
@@ -134,10 +105,6 @@ export class SignupPage implements OnInit {
     async confirmSignup() {
         this.signupFail = false;
         this.signupSuccess = false;
-        if (!this.slide2Acceptable() || !this.slide3Acceptable()) {
-            this.signupFail = true;
-            return;
-        }
 
         const success = await this.accountManager.newUserConfirm(this.signupData);
         if (success) {

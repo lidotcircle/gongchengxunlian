@@ -15,6 +15,6 @@ export class PasswordDirective implements Validators {
   constructor() { }
 
   validate(control: AbstractControl): ValidationErrors {
-    return utils.validation.validPassword(control.value) ? null : {password: true};
+    return (!control.value || control.value.length == 0 || utils.validation.validPassword(control.value)) ? null : {password: true};
   }
 }

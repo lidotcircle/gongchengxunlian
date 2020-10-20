@@ -15,6 +15,6 @@ export class PhoneDirective implements Validators {
   constructor() { }
 
   validate(control: AbstractControl): ValidationErrors {
-    return utils.validation.validPhone(control.value) ? null : {phone: true};
+    return (!control.value || control.value.length == 0 || utils.validation.validPhone(control.value)) ? null : {phone: true};
   }
 }
