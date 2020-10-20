@@ -1,3 +1,4 @@
+import { LdyComponentsModule } from './../../../components/ldy-components.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +14,7 @@ import { ChangePasswordPage } from './change-password.page';
     CommonModule,
     FormsModule,
     IonicModule,
+    LdyComponentsModule,
     ChangePasswordPageRoutingModule
   ],
   declarations: [ChangePasswordPage]

@@ -110,6 +110,14 @@ export class ClientAccountManagerService {
         return ans;
     }
 
+    async changePassword(__old: string, __new: string): Promise<boolean> {
+        this.update();
+        if(this.token == null) {
+            return false;
+        }
+        return this.remoteAccountManagerWrapper.changePassword(this.token, __old, __new);
+    }
+
     private changeHooks = [];
     subscribeAccountChange(func: () => void) {
         this.changeHooks.push(func);

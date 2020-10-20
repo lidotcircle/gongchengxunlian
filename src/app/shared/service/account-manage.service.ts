@@ -212,19 +212,22 @@ export class AccountManageService {
     /**
      * 更改当前用户密码
      *
-     * @param {UserId} userid Identify
+     * @param {UserId} token Identify
      * @param {string} __old 旧密码
      * @param {string} __new 新密码
      * @return {*}
      * @memberof AccountManageService
      */
-    public changePassword(userid: StaticValue.UserId, __old: string, __new: string): any {
+    public changePassword(token: StaticValue.LoginToken, __old: string, __new: string): boolean {
+        const uid = this.checkLoginToken(token);
+        if(uid < 0) return false;
+
         let oldmd5 = MD5(__old);
         let newmd5 = MD5(__new);
 
         let user_db = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
         for(let u of user_db.users) {
-            if(u.userid == userid) {
+            if(u.userid == uid) {
                 if(u.password == oldmd5) {
                     u.password = newmd5;
                     this.localstorage.set(StaticValue.USERDB_KEY, user_db);

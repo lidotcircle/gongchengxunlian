@@ -1,0 +1,14 @@
+@use '../../../style/layout.scss' as layout;
+
+app-about {
+    @include layout.settings-vertical();
+    font-size: x-small;
+
+    .bold-text {
+        font-weight: bolder !important;
+    }
+
+    .width-2em {
+        width: 2em;
+    }
+}
