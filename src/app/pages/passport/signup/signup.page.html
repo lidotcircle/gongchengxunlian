@@ -32,7 +32,7 @@
                     <ion-item>
                         <ion-label color="stable" position="floating">输入手机号</ion-label>
                         <ion-input name="phone" #phone="ngModel" type="text"
-                                   required [pattern]="validatePhone()" [tabindex]="slideIndex==0 ? 0 : -1"
+                                   required [pattern]="validatePhone()" ldyPhone [tabindex]="slideIndex==0 ? 0 : -1"
                                    [(ngModel)]="signupData.phone" (ngModelChange)="phoneChanged($event)">
                         </ion-input>
                     </ion-item>
