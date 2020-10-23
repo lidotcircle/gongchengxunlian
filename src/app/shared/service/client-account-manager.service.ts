@@ -101,6 +101,16 @@ export class ClientAccountManagerService {
         return null;
     }
 
+    async getCategories(): Promise<StaticValue.Category> {
+        this.update();
+        return this.remoteAccountManagerWrapper.getCategory(this.token);
+    }
+
+    async setCategories(cats: StaticValue.Category): Promise<boolean> {
+        this.update();
+        return this.remoteAccountManagerWrapper.setCategory(this.token, cats);
+    }
+
     async updateUserInfo(info: StaticValue.UserBasicInfo): Promise<boolean> {
         this.update();
         const ans: boolean = this.remoteAccountManagerWrapper.ChangeUserInfo(this.token, info);

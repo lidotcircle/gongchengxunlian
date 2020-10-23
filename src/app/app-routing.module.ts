@@ -1,7 +1,6 @@
 import { StartAppGuard, UserDomainGuard } from './core/start-app.guard';
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { PrefixNot } from '@angular/compiler';
 
 const routes: Routes = [
   {
@@ -42,6 +41,10 @@ const routes: Routes = [
     path: 'passport',
     pathMatch: 'prefix',
     loadChildren: () => import('./pages/passport/passport.module').then(m => m.PassportPageModule)
+  },
+  {
+    path: 'category-list',
+    loadChildren: () => import('./pages/category-list/category-list.module').then( m => m.CategoryListPageModule)
   },
 ];
 

@@ -1,18 +1,44 @@
+app-header {
+    ion-toolbar {
+        padding: 0.5em 0em 0.3em 0em;
 
-.left-bar {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+        .left-bar {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
 
-    button {
-        font-size: larger;
-        font-weight: bolder;
-        padding-right: 1em;
-        background-color: transparent;
-        color: var(--ion-color-primary-contrast);
-    }
+            button {
+                font-size: larger;
+                font-weight: bold;
+                padding: 0.4em 1em 0.4em 0.4em;
+                background-color: transparent;
+                color: var(--ion-color-primary-contrast);
+            }
 
-    span {
-        font-size: medium;
+            span {
+                font-size: medium;
+            }
+        }
+
+        .header-tools {
+            display: flex;
+            flex-direction: row;
+            width: 30%;
+            box-sizing: border-box;
+            padding-right: 0.8em;
+
+            .take-space {
+                flex-grow: 1;
+            }
+
+            .header-tool {
+                button {
+                    font-size: larger;
+                    padding: 0.4em;
+                    background-color: transparent;
+                    color: var(--ion-color-primary-contrast);
+                }
+            }
+        }
     }
 }

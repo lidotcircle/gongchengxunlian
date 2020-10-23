@@ -10,6 +10,7 @@ export module StaticValue {
     export const LOGIN_LOG = "LOGIN_LOG";
     export const USERDB_KEY = 'USER_DATABASE';
     export const LOGIN_TOKENS = "LOGIN_TOKENS";
+    export const KEY_USER_CATEGORIES = "USER_CATEGORIES";
 
     /** session storage keys */
     export const SIGNUP_INFO = 'SIGNUP_INFO';
@@ -89,6 +90,16 @@ export module StaticValue {
     export type LoginToken  = string;
     export class LoginTokens {
         [token: string]: [number, UserId]
+    }
+
+    export class Category {
+        id: number = -1;
+        name: string = '';
+        children: Category[] = [];
+    }
+
+    export class UsersCategories {
+        [key: number]: Category;
     }
 }
 

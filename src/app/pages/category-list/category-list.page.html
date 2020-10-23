@@ -1,0 +1,21 @@
+<div class="container">
+  <ion-header>
+    <app-header leftText='商品列表' title='商品分类' [tools]='["🞢"]' (toolClick)='onAddClick($event)'></app-header>
+  </ion-header>
+
+  <div class="content">
+    <div class="column1">
+      <div [class]="'main-category ' + (selectA ? 'selected' : '')" (click)="onClickA()">
+        大分类
+      </div>
+      <div [class]="'sub-category ' + (selectB ? 'selected' : '')" (click)="onClickB()">
+        小分类
+      </div>
+      <div [class]="'default-category ' + (selectC ? 'selected' : '')" (click)="onClickC()">
+        默认分类
+      </div>
+    </div>
+    <div class="column2">
+    </div>
+  </div>
+</div>

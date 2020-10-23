@@ -170,6 +170,39 @@ export class AccountManageService {
     }
 
     /**
+     * 用于获取用户的商品分类信息
+     *
+     * @param {StaticValue.LoginToken} token
+     * @return {*}  {StaticValue.Category}
+     * @memberof AccountManageService
+     */
+    public getCategory(token: StaticValue.LoginToken): StaticValue.Category {
+        const uid = this.checkLoginToken(token);
+        if (uid < 0) return null;
+
+        const cats = this.localstorage.get(StaticValue.KEY_USER_CATEGORIES, new StaticValue.UsersCategories());
+        return cats[uid] || new StaticValue.Category();
+    }
+
+    /**
+     * 用于更新用户的商品信息
+     *
+     * @param {StaticValue.LoginToken} token
+     * @param {StaticValue.Category} cat
+     * @return {*}  {boolean}
+     * @memberof AccountManageService
+     */
+    public setCategory(token: StaticValue.LoginToken, cat: StaticValue.Category): boolean {
+        const uid = this.checkLoginToken(token);
+        if (uid < 0) return false;
+
+        let cats = this.localstorage.get(StaticValue.KEY_USER_CATEGORIES, new StaticValue.UsersCategories());
+        cats[uid] = cat;
+        this.localstorage.set(StaticValue.KEY_USER_CATEGORIES, cats);
+        return true;
+    }
+
+    /**
      * 不可用 ChangeUserInfo() 更改的属性
      *
      * @private

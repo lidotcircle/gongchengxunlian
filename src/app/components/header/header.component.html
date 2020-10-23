@@ -1,7 +1,10 @@
 
 <ion-toolbar color="primary">
   <div *ngIf='!!url || leftText' slot="start" class="left-bar">
-    <button *ngIf='!!url' slot="start" [routerLink]="[url]">
+    <button *ngIf='!!url && url!="."' slot="start" [routerLink]="[url]">
+      {{ leftIcon }}
+    </button>
+    <button *ngIf='!!url && url=="."' slot="start" (click)="onLeftClick()">
       {{ leftIcon }}
     </button>
     <button *ngIf='!url' slot="start" (click)="goBack()">
@@ -9,7 +12,17 @@
     </button>
     <span> {{ leftText }} </span>
   </div>
+
   <ion-title>
     {{ title }}
   </ion-title>
+
+  <div slot="end" *ngIf='!!tools' class='header-tools'>
+    <div class="take-space"></div>
+    <div *ngFor="let tool of tools; let i = index;" class='header-tool'>
+      <button (click)='onToolClick(i)'>
+        {{ tool }}
+      </button>
+    </div>
+  </div>
 </ion-toolbar>
