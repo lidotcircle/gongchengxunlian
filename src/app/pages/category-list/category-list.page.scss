@@ -7,21 +7,32 @@ app-category-list {
         display: flex;
         flex-direction: row;
         box-sizing: border-box;
+        overflow-y: auto;
 
         .column1 {
             width: 38%;
             box-sizing: border-box;
             padding-top: 0.5em;
             background-color: #EEE;
+            overflow-y: auto;
+            overflow-x: hidden;
+            &::-webkit-scrollbar {
+                display: none;
+            }
 
             display: flex;
             flex-direction: column;
-        }
+       }
         .column2 {
             width: 62%;
             box-sizing: border-box;
             padding-top: 0.5em;
             background-color: var(--ion-color-primary-contrast);
+            overflow-y: auto;
+            overflow-x: hidden;
+            &::-webkit-scrollbar {
+                display: none;
+            }
 
             display: flex;
             flex-direction: column;
