@@ -1,0 +1,55 @@
+@use '../../../style/layout.scss' as layout;
+
+app-add-item {
+    @include layout.header-content();
+    background-color: #EEE;
+
+    .content {
+        display: flex;
+        flex-direction: column;
+
+        .main-category {
+            font-size: larger;
+            padding: 1em 0.8em;
+            color: grey;
+        }
+
+        .new-subcategory {
+            display: flex;
+            flex-direction: row;
+            padding: 0.8em 0.5em;
+            border: none;
+            align-items: center;
+            color: var(--ion-color-primary);
+
+            ion-icon {
+                padding: 0em 0.5em 0em 0em;
+                font-size: larger;
+            }
+        }
+
+        .itemx {
+            margin-bottom: 1.2em;
+            padding: 1em 0.8em;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: large;
+            background-color: var(--ion-color-primary-contrast);
+
+            .text {
+                padding-right: 0.8em;
+            }
+
+            input {
+                border: none;
+                outline: none;
+                background-color: transparent;
+            }
+        }
+
+        ion-button {
+            margin-top: 2em;
+        }
+    }
+}

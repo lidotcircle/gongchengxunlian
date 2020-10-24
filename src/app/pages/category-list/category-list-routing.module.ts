@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: CategoryListPage
+  },
+  {
+    path: 'add-item',
+    loadChildren: () => import('./add-item/add-item.module').then( m => m.AddItemPageModule)
   }
 ];
 

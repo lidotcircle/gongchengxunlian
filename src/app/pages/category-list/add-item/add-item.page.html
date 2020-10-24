@@ -1,0 +1,35 @@
+
+<ldy-copyright></ldy-copyright>
+<div class="container">
+  <ion-header>
+    <app-header leftText='返回' [title]='title'></app-header>
+  </ion-header>
+
+  <form #form='ngForm' class="content">
+    <div *ngIf='mainIndex>=0' class='main-category'>{{mainName}}</div>
+
+    <div *ngIf='mainIndex<0' class='itemx'>
+      <div class='text'>大分类</div>
+      <input class="input" type="text" placeholder="商品大分类名称"
+             [(ngModel)]="mainName" name="mvalue" #mvalue='ngModel'
+             required ldyName>
+    </div>
+
+    <div *ngFor="let name of subNames; let i = index;" class='itemx'>
+      <div class='text'>小分类</div>
+      <input class="input" type="text" placeholder="商品小分类名称"
+             [(ngModel)]="subNames_DUP[i]" name="nvalue-{{i}}"
+             ldyName>
+    </div>
+
+    <div class="new-subcategory" (click)="addSubCat()">
+      <ion-icon name="add-circle"></ion-icon>
+      <div class='text'>新增小分类</div>
+    </div>
+
+    <ion-button class="submit" (click)="onConfirm()" color="primary" expand="block" fill="solid"
+      [disabled]='form.invalid'>
+      保存
+    </ion-button>
+  </form>
+</div>

@@ -5,6 +5,11 @@ import { StaticValue } from '../static-value/static-value.module';
 import { AccountManageService, AUTHCODE_TOKEN } from './account-manage.service';
 import { LocalStorageService } from './local-storage.service';
 
+export enum HookType {
+    UserInfoChange,
+    CategoriesChange
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,7 +31,7 @@ export class ClientAccountManagerService {
         const token = this.remoteAccountManagerWrapper.login(account, password);
         if (token) {
             this.localstorage.set(StaticValue.LOGIN_TOKEN, token);
-            this.invokeChangeHook();
+            this.invokeHook(HookType.UserInfoChange);
         }
         return token;
     }
@@ -36,10 +41,11 @@ export class ClientAccountManagerService {
         this.remoteAccountManagerWrapper.removeLoginToken(this.token);
         this.localstorage.remove(StaticValue.LOGIN_TOKEN);
         this.token = null;
-        this.invokeChangeHook();
+        this.invokeHook(HookType.UserInfoChange);
 
         this.location.go('/');
         location.reload();
+        this.all_hooks = new Map();
     }
 
     private authcode_token: AUTHCODE_TOKEN;
@@ -108,14 +114,16 @@ export class ClientAccountManagerService {
 
     async setCategories(cats: StaticValue.Category): Promise<boolean> {
         this.update();
-        return this.remoteAccountManagerWrapper.setCategory(this.token, cats);
+        const ans =  this.remoteAccountManagerWrapper.setCategory(this.token, cats);
+        if(ans) this.invokeHook(HookType.CategoriesChange);
+        return ans;
     }
 
     async updateUserInfo(info: StaticValue.UserBasicInfo): Promise<boolean> {
         this.update();
         const ans: boolean = this.remoteAccountManagerWrapper.ChangeUserInfo(this.token, info);
         if (ans) {
-            this.invokeChangeHook();
+            this.invokeHook(HookType.UserInfoChange);
         }
         return ans;
     }
@@ -128,12 +136,20 @@ export class ClientAccountManagerService {
         return this.remoteAccountManagerWrapper.changePassword(this.token, __old, __new);
     }
 
-    private changeHooks = [];
     subscribeAccountChange(func: () => void) {
-        this.changeHooks.push(func);
+        this.subscribe(HookType.UserInfoChange, func);
     }
-    private invokeChangeHook() {
-        for (let f of this.changeHooks) {
+
+    private all_hooks = new Map<HookType, Array<{():void}>>();
+    public subscribe(ht: HookType, func: () => void) {
+        let hooks = this.all_hooks.get(ht) || [];
+        hooks.push(func);
+        this.all_hooks.set(ht, hooks);
+    }
+
+    private invokeHook(ht: HookType) {
+        let hooks = this.all_hooks.get(ht) || [];
+        for (let f of hooks) {
             try {
                 f();
             } catch (err) {

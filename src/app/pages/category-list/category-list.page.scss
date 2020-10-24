@@ -1,0 +1,115 @@
+@use '../../style/layout.scss' as layout;
+
+app-category-list {
+    @include layout.header-content();
+
+    .content {
+        display: flex;
+        flex-direction: row;
+        box-sizing: border-box;
+
+        .column1 {
+            width: 38%;
+            box-sizing: border-box;
+            padding-top: 0.5em;
+            background-color: #EEE;
+
+            display: flex;
+            flex-direction: column;
+        }
+        .column2 {
+            width: 62%;
+            box-sizing: border-box;
+            padding-top: 0.5em;
+            background-color: var(--ion-color-primary-contrast);
+
+            display: flex;
+            flex-direction: column;
+
+            .sub-category-list {
+                display: flex;
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+        }
+
+        .column1 {
+            .selected {
+                background-color: var(--ion-color-primary-contrast);
+            }
+        }
+
+        .main-category {
+            border-bottom: 1pt solid #DDD;
+        }
+        .category-item {
+            border-bottom: 1pt solid #DDD;
+        }
+
+        .main-category, .category-item {
+            font-size: large;
+            width: 100%;
+
+            display: flex;
+            flex-direction: row;
+
+            .select-prefiex, .item-prefix {
+                width: 2pt;
+
+                background-color: transparent;
+            }
+
+            &.selected {
+                .select-prefiex {
+                    background-color: var(--ion-color-primary);
+                }
+                .item-prefix {
+                    background-color: #BBB;
+                }
+            }
+
+            .item-text {
+                padding: 0.8em 0.5em;
+            }
+
+            .take-space {
+                flex-grow: 20;
+            }
+        }
+
+        .new-subcategory {
+            padding: 0.8em 0.5em;
+            border: none;
+            align-items: center;
+            color: var(--ion-color-primary);
+
+            ion-icon {
+                padding: 0em 0.5em 0em 0em;
+                font-size: larger;
+            }
+        }
+
+        .summary-actions {
+            display: flex;
+            flex-direction: row;
+            padding: 0.5em 1em;
+            border: 1pt solid #DDD;
+            justify-content: space-between;
+
+            .action {
+                color: var(--ion-color-primary);
+            }
+        }
+
+        .column2 {
+            .take-space {
+                flex-grow: 20;
+            }
+            .actions {
+                display: flex;
+                flex-direction: row;
+            }
+        }
+    }
+}

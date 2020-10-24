@@ -5,17 +5,49 @@
 
   <div class="content">
     <div class="column1">
-      <div [class]="'main-category ' + (selectA ? 'selected' : '')" (click)="onClickA()">
-        大分类
+      <div class="main-category">
+        <div class='item-text'>大分类</div>
       </div>
-      <div [class]="'sub-category ' + (selectB ? 'selected' : '')" (click)="onClickB()">
-        小分类
-      </div>
-      <div [class]="'default-category ' + (selectC ? 'selected' : '')" (click)="onClickC()">
-        默认分类
+
+      <div class='main-category' [class]="mainIndex==i ? 'selected' : ''"
+        *ngFor="let item of this.category.children; let i = index;" (click)="onMainClick(i)">
+        <div class="select-prefiex"></div>
+        <div class='item-text'>{{item.name}}</div>
       </div>
     </div>
     <div class="column2">
+      <div class="sub-category-list">
+        <div class="category-item">
+          <div class='item-text'>小分类</div>
+        </div>
+        <div class="category-item" [class]="subIndex == -1 ? 'selected' : ''"
+          (click)="onSubClick(-1, category.children[mainIndex])">
+          <div class='item-prefix'></div>
+          <div class='item-text'>无小分类进入大分类</div>
+          <div class='take-space'></div>
+          <div class='item-postfix'></div>
+        </div>
+
+        <div class="category-item" [class]="subIndex ==  i ? 'selected' : ''"
+          (click)="onSubClick(i, category.children[mainIndex].children[i])"
+          *ngFor="let item of this.category.children[mainIndex]?.children; let i = index;">
+          <div class='item-prefix'></div>
+          <div class='item-text'>{{item.name}}</div>
+          <div class='take-space'></div>
+          <div class='item-postfix'></div>
+        </div>
+
+        <div class="category-item new-subcategory" (click)="onAddSubClick()">
+          <ion-icon name="add-circle"></ion-icon>
+          <div class='text'>新增小分类</div>
+        </div>
+      </div>
+
+      <div class='take-space'></div>
+      <div class='summary-actions'>
+        <div class='summary'>{{getCurrentSummary()}}</div>
+        <div class='action' (click)="onPresentActionSheet()">&#9783;</div>
+      </div>
     </div>
   </div>
 </div>
