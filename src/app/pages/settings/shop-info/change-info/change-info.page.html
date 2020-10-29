@@ -1,4 +1,3 @@
-
 <ldy-copyright></ldy-copyright>
 <div class="container">
   <ion-header>
@@ -6,12 +5,31 @@
   </ion-header>
 
   <div class="content">
-    <ion-input  class="input" type="text" [placeholder]="headerTitle"
-                [(ngModel)]="value" (ngModelChange)="valueChanged($event)"
-                required [pattern]='validate()' name="kvalue" #kvalue='ngModel'></ion-input>
-    <ion-button class="submit" (click)="submit()" color="primary" expand="block" fill="solid"
-                [disabled]='kvalue.invalid'>
-      保存
-    </ion-button>
+    <form #mf='ngForm'>
+      <div *ngIf='auth' class='h2h'></div>
+      <div *ngIf='auth' class='auth-code'>
+        <ion-item>
+          <ion-label position="floating">验证码</ion-label>
+          <ion-input name="verifyCode" #verifyCode="ngModel" type="text" required [pattern]="testVerifyCode()"
+                     [(ngModel)]="code"></ion-input>
+        </ion-item>
+        <ion-button (click)="newVerification()" expand="block" fill="solid"
+          [disabled]="getVerificationCodeWait!=0">
+          <div *ngIf="getVerificationCodeWait==0">获取验证码</div>
+          <div *ngIf="getVerificationCodeWait!=0">{{getVerificationCodeWait}}s可获取验证码</div>
+        </ion-button>
+      </div>
+
+      <div class='h2h'></div>
+      <ion-input class="input" type="text" [placeholder]="headerTitle" [(ngModel)]="value"
+        (ngModelChange)="valueChanged($event)" required [pattern]='validate()' name="kvalue" #kvalue='ngModel'>
+      </ion-input>
+
+      <div class='h2h'></div>
+      <ion-button class="submit" (click)="submit()" color="primary" expand="block" fill="solid"
+        [disabled]='mf.invalid'>
+        保存
+      </ion-button>
+    </form>
   </div>
 </div>

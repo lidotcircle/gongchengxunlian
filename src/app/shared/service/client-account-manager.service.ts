@@ -50,9 +50,9 @@ export class ClientAccountManagerService {
 
     private authcode_token: AUTHCODE_TOKEN;
     private reset_account: string;
-    async resetPasswordRequest(phone: string): Promise<string> {
+    async authticationCodeRequest(phone: string): Promise<string> {
         let md5 = null;
-        [this.authcode_token, md5] = this.remoteAccountManagerWrapper.resetPasswordRequest(phone) || [null, null];
+        [this.authcode_token, md5] = this.remoteAccountManagerWrapper.authenticationCodeRequest(phone) || [null, null];
         this.reset_account = phone;
         return md5;
     }
@@ -119,9 +119,9 @@ export class ClientAccountManagerService {
         return ans;
     }
 
-    async updateUserInfo(info: StaticValue.UserBasicInfo): Promise<boolean> {
+    async updateUserInfo(info: StaticValue.UserBasicInfo, authCode: string = null): Promise<boolean> {
         this.update();
-        const ans: boolean = this.remoteAccountManagerWrapper.ChangeUserInfo(this.token, info);
+        const ans: boolean = this.remoteAccountManagerWrapper.ChangeUserInfo(this.token, info, this.authcode_token, authCode);
         if (ans) {
             this.invokeHook(HookType.UserInfoChange);
         }

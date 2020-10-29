@@ -36,9 +36,6 @@ export class SettingsPage implements OnInit {
     this.accountManager.logout();
   }
 
-  dial() {
-  }
-
   inUpdate: boolean = false;
   checkUpdate() {
     if (this.inUpdate) return;

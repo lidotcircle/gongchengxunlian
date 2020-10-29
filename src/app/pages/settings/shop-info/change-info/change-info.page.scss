@@ -7,15 +7,39 @@ app-change-info {
 
     .container {
         .content {
-            ion-input {
-                margin-top: 1.8em;
-                padding: 0.3em 0.5em !important;
-                border-radius: 0.3em;
-                background-color: white;
+            .auth-code {
+                display: flex;
+                flex-direction: row;
+                align-items: flex-end;
+
+                ion-item {
+                    --background: transparent;
+
+                    &.item-has-focus {
+                        ion-label {
+                            color: var(--ldy-color-primary) !important;
+                        }
+                    }
+
+                    ion-label {
+                        color: #777;
+                    }
+
+                    ion-input {
+                        background-color: transparent;
+                    }
+                }
             }
 
-            ion-button {
-                margin-top: 2em;
+            .h2h {
+                width: 100%;
+                height: 2em;
+            }
+
+            ion-input {
+                padding-left: 0.5em !important;
+                border-radius: 0.3em;
+                background-color: white;
             }
         }
     }

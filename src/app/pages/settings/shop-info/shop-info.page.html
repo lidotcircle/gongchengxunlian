@@ -24,7 +24,7 @@
         <div class="take-space"></div>
         <div class="signup-date">{{ createTime }}</div>
       </div>
-      <div class="item" [routerLink]="['phone']">
+      <div class="item" [routerLink]="['change-info']" [queryParams]="{headerTitle: '手机号码', field: 'phone', auth: true}">
         <div class="item-title">手机号码</div>
         <div class="take-space"></div>
         <div class="signup-date">{{ userinfo.phone }}</div>
@@ -32,7 +32,7 @@
     </div>
 
     <div class="items">
-      <div class="item" [routerLink]="['email']">
+      <div class="item" [routerLink]="['change-info']" [queryParams]="{headerTitle: '电子邮箱', field: 'email', auth: true}">
         <div class="item-title">电子邮件</div>
         <div class="take-space"></div>
         <div>{{ userinfo.email }}</div>

@@ -203,7 +203,7 @@ export class AccountManageService {
     }
 
     /**
-     * 不可用 ChangeUserInfo() 更改的属性
+     * 不可用 ChangeUserInfo() 更改的属性, 在没有验证码的情况下
      *
      * @private
      * @memberof AccountManageService
@@ -218,19 +218,27 @@ export class AccountManageService {
      * @return {*}  {boolean}
      * @memberof AccountManageService
      */
-    public ChangeUserInfo(token: StaticValue.LoginToken, info: StaticValue.UserBasicInfo): boolean {
+    public ChangeUserInfo(token: StaticValue.LoginToken, info: StaticValue.UserBasicInfo, authCodeToken: AUTHCODE_TOKEN = null, authCode: string = null): boolean {
         const uid = this.checkLoginToken(token);
         if (uid < 0) return null;
+        const prev_account = authCodeToken && authCode && AuthCode.check(authCodeToken, MD5(authCode));
 
         const db = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
         for(let u of db.users) {
             if(u.userid == uid) {
+                info.createTime = u.createTime;
                 for (let prop of this.priviledgeProperties) {
-                    if (info[prop] != u[prop]) {
+                    if (info[prop] != u[prop] && prev_account != u.phone && prev_account != u.email) {
                         return false;
                     }
                 }
                 if (u.shopName != info.shopName && this.hasName(info.shopName)) {
+                    return false;
+                }
+                if(info.phone != u.phone && this.hasPhone(info.phone)) {
+                    return false;
+                }
+                if(info.email != u.email && this.hasEmail(info.email)) {
                     return false;
                 }
                 utils.CopySourceEnumProp(info, u);
@@ -274,14 +282,13 @@ export class AccountManageService {
     }
 
    /**
-     * 发送用于重置密码的验证码到指定手机号码, 
-     * 并返回用于重置该手机号码的验证 Token 以及验证码的 Hash 值
-     *
+     * 请求短信验证码，该验证码可以用于后面的要求权限的操作
+     * 
      * @param {string} phone
      * @return {*}  {[AUTHCODE_TOKEN, HASH]}
      * @memberof AccountManageService
      */
-    public resetPasswordRequest(phone: string): [AUTHCODE_TOKEN, HASH] {
+    public authenticationCodeRequest(phone: string): [AUTHCODE_TOKEN, HASH] {
         if (!this.hasPhone(phone)) {
             return null;
         }
@@ -291,6 +298,18 @@ export class AccountManageService {
         AuthCode.add(token, md5, phone);
 
         return [token, md5];
+    }
+
+   /**
+     * 发送用于重置密码的验证码到指定手机号码, 
+     * 并返回用于重置该手机号码的验证 Token 以及验证码的 Hash 值
+     *
+     * @param {string} phone
+     * @return {*}  {[AUTHCODE_TOKEN, HASH]}
+     * @memberof AccountManageService
+     */
+    public resetPasswordRequest(phone: string): [AUTHCODE_TOKEN, HASH] {
+        return this.authenticationCodeRequest(phone);
     }
 
     /**

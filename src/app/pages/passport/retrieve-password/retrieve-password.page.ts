@@ -39,7 +39,7 @@ export class RetrievePasswordPage implements OnInit {
             window.setTimeout(wait, 1000);
         }
 
-        this.md5Hash = await this.accountManager.resetPasswordRequest(this.mAccountInfo.shopName);
+        this.md5Hash = await this.accountManager.authticationCodeRequest(this.mAccountInfo.shopName);
         wait();
         if (!this.md5Hash) {
             this.mError.bad_phone = true;
