@@ -32,6 +32,14 @@ const routes: Routes = [
       {
         path: 'settings',
         loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
+      },
+      {
+        path: 'category-list',
+        loadChildren: () => import('./pages/category-list/category-list.module').then(m => m.CategoryListPageModule)
+      },
+      {
+        path: 'product-add',
+        loadChildren: () => import('./pages/product-add/product-add.module').then(m => m.ProductAddPageModule)
       }
     ]
   },
@@ -41,10 +49,6 @@ const routes: Routes = [
     path: 'passport',
     pathMatch: 'prefix',
     loadChildren: () => import('./pages/passport/passport.module').then(m => m.PassportPageModule)
-  },
-  {
-    path: 'category-list',
-    loadChildren: () => import('./pages/category-list/category-list.module').then( m => m.CategoryListPageModule)
   },
 ];
 

@@ -15,7 +15,7 @@ import { StaticValue } from '../../shared/static-value/static-value.module';
 export class DefaultPage implements OnInit {
     saleData: ISaleData;
     tools: Array<{title: string, url: string, img: string}> = [
-        {title: '新增商品', url: '/category-list',    img: '../../../assets/img/default/add_salse.png'},
+        {title: '新增商品', url: '/product-add',    img: '../../../assets/img/default/add_salse.png'},
         {title: '新增会员', url: '/default/add-user', img: '../../../assets/img/default/add_user.png'},
         {title: '收银记账', url: '/default/account' , img: '../../../assets/img/default/sales_account.png'},
         {title: '支出管理', url: '/default/add-mech', img: '../../../assets/img/default/a_note.png'},

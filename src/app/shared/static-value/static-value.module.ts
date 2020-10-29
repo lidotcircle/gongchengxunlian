@@ -11,6 +11,7 @@ export module StaticValue {
     export const USERDB_KEY = 'USER_DATABASE';
     export const LOGIN_TOKENS = "LOGIN_TOKENS";
     export const KEY_USER_CATEGORIES = "USER_CATEGORIES";
+    export const KEY_UESR_PRODUCTS = "USER_PRODUCSTS";
 
     /** session storage keys */
     export const SIGNUP_INFO = 'SIGNUP_INFO';
@@ -100,6 +101,24 @@ export module StaticValue {
 
     export class UsersCategories {
         [key: number]: Category;
+    }
+
+    export class Product {
+        productId: number = -1;
+        productName: string = '';
+        categoryId: number = 0; // DEFAULT
+        barCode: string = '';
+        photos: string[] = [];
+        class: string = '';
+        salePrice: number = 0;
+        originalPrice: number = 0;
+        remainCount: number = 0;
+        specification: string = '';
+        remarks: string = '';
+    }
+
+    export class UserProducts {
+        [key: number]: Product;
     }
 }
 

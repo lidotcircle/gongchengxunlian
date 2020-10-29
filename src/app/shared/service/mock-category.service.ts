@@ -205,6 +205,7 @@ export class MockCategoryService {
     const dfs_changeName = (parent: StaticValue.Category) => {
       if(parent.id == id) {
         parent.name = name;
+        return true;
       } else {
         for (let c of parent.children) {
           const ans = dfs_changeName(c);
@@ -220,6 +221,25 @@ export class MockCategoryService {
     } else {
       return false;
     };
+  }
+
+  getCategoryNameById(id: number): string {
+    let name: string;
+
+    const dfs_getName = (parent: StaticValue.Category) => {
+      if(parent.id == id) {
+        name = parent.name;
+        return true;
+      } else {
+        for (let c of parent.children) {
+          const ans = dfs_getName(c);
+          if(ans) return ans;
+        }
+      }
+      return false;
+    }
+    dfs_getName(this.category)
+    return name;
   }
 
   async save(): Promise<void> {

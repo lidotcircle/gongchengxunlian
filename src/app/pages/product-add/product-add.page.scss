@@ -1,0 +1,70 @@
+@use '../../style/layout.scss' as layout;
+
+$greyA: #555;
+$greyB: #AAA;
+$greyC: #EEE;
+
+app-product-add {
+    @include layout.header-content();
+
+    .content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        background-color: #EEE;
+
+        .take-space {flex-grow: 20;}
+
+        .take-photos {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 1em 1.2em;
+
+            .add-photo {
+                font-size: xx-large;
+                color: $greyB;
+                border: dashed 2pt;
+                border-radius: 0.15em;
+                padding: 0.24em 0.3em 0.1em 0.3em;
+            }
+
+            .thumbnails {
+                display: flex;
+                flex-direction: row;
+
+                .thumbnail {
+                    padding-right: 0.3em;
+                    position: relative;
+
+                    .delete-photo {
+                        padding: 0.1em 0.3em;
+                        border-radius: 1em;
+                        color: #777;
+                        background-color: rgba(200, 200, 200, 0.3);
+                        position: absolute;
+                        top: -0.3em;
+                        right: -0.1em;
+                    }
+                }
+            }
+
+            .grey-text {
+                color: $greyA;
+            }
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            padding: 0.5em 0em 1em 0em;
+
+            ion-button {
+                flex-grow: 1;
+                flex-basis: 0em;
+                margin: 0em 0.1em;
+            }
+        }
+    }
+}

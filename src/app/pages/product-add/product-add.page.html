@@ -1,0 +1,34 @@
+
+<div class='container'>
+  <ion-header>
+    <app-header leftText='返回' title='新增商品'></app-header>
+  </ion-header>
+
+  <form #productForm="ngForm" class='content'>
+    <div class='take-photos'>
+      <div class='thumbnails'>
+        <div class='thumbnail' *ngFor="let img of photoURLs; let i = index">
+          <ion-thumbnail>
+            <img [src]="img">
+          </ion-thumbnail>
+          <div class='delete-photo' (click)="onCancelAddPhoto(i)">
+            X
+          </div>
+        </div>
+      </div>
+    
+      <div class='add-photo' (click)="onAddPhotoClick()">
+        <ion-icon name="add-outline"></ion-icon>
+      </div>
+      <div class='take-space'></div>
+      <div class='grey-text'>上传图片</div>
+    </div>
+    
+    <div class='take-space'></div>
+    
+    <div class='buttons'>
+      <ion-button color="primary" fill="solid" expand="full">保存</ion-button>
+      <ion-button color="primary" fill="solid" expand="full">继续添加</ion-button>
+    </div>
+  </form>
+</div>
