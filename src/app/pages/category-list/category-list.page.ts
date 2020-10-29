@@ -47,14 +47,12 @@ export class CategoryListPage implements OnInit {
         }, {
           text: '编辑分类',
           handler: () => {
-            console.log('Archive clicked');
+            this.onEditClick();
           }
         }, {
           text: '取消',
           role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
+          handler: () => {}
         }
       ]
     });
@@ -84,5 +82,14 @@ export class CategoryListPage implements OnInit {
       relativeTo: this.activatedRouter, 
       queryParams: {'main-index': this.mainIndex}
     });
+  }
+
+  onEditClick() {
+    this.router.navigate(['category-edit'], {
+      relativeTo: this.activatedRouter,
+      queryParams: {
+        index: this.mainIndex
+      },
+    })
   }
 }

@@ -199,6 +199,29 @@ export class MockCategoryService {
     };
   }
 
+  changeCategoryName(id: number, name: string): boolean {
+    if(id == 0) return false;
+
+    const dfs_changeName = (parent: StaticValue.Category) => {
+      if(parent.id == id) {
+        parent.name = name;
+      } else {
+        for (let c of parent.children) {
+          const ans = dfs_changeName(c);
+          if(ans) return ans;
+        }
+      }
+      return false;
+    }
+
+    if(dfs_changeName(this.category)) {
+      setTimeout(() => this.invokeHooks(), 0);
+      return true;
+    } else {
+      return false;
+    };
+  }
+
   async save(): Promise<void> {
     await this.accountManager.setCategories(this.category);
   }

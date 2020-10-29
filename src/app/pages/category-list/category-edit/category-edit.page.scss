@@ -1,0 +1,27 @@
+
+@use '../../../style/layout.scss' as layout;
+
+app-category-edit {
+    @include layout.header-content();
+    background-color: #EEE;
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+
+        .cat-name {
+            font-size: large;
+            font-weight: bold;
+        }
+
+        .sub-category {
+            margin-left: 1em;
+        }
+        .item-name {
+            font-size: medium;
+            font-weight: normal;
+            color: #777;
+        }
+    }
+}

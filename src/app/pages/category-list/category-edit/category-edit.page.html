@@ -1,0 +1,47 @@
+
+<ldy-copyright></ldy-copyright>
+<div class="container">
+  <ion-header>
+    <app-header leftText=' ' title='编辑分类'></app-header>
+  </ion-header>
+
+  <div class="content">
+    <ion-list class="ion-margin-top">
+      <ion-list-header>
+        <ion-label class='cat-name'>大分类</ion-label>
+      </ion-list-header>
+      <ion-item-sliding #sm0>
+        <ion-item>
+          <ion-label class='item-name'>{{ mainName }}</ion-label>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="primary" (click)="sm0.close(); onEditName(-1)">
+            <ion-icon name="create"></ion-icon>编辑
+          </ion-item-option>
+          <ion-item-option color="danger" (click)="sm0.close(); onDelete(-1)">
+            <ion-icon name="trash"></ion-icon>删除
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    
+      <ion-list-header>
+        <ion-label class='cat-name'>小分类</ion-label>
+      </ion-list-header>
+      <div class='sub-category'>
+        <ion-item-sliding *ngFor="let name of subNames; let i = index;" #sss>
+          <ion-item>
+            <ion-label class='item-name'>{{ name[0] }}</ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="primary" (click)="sss.close(); onEditName(i)">
+              <ion-icon name="create"></ion-icon>编辑
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="sss.close(); onDelete(i)">
+              <ion-icon name="trash"></ion-icon>删除
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </div>
+    </ion-list>
+  </div>
+</div>
