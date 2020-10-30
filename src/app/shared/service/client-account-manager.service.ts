@@ -157,4 +157,14 @@ export class ClientAccountManagerService {
             }
         }
     }
+
+    async setProducts(products: StaticValue.Product[]): Promise<boolean> {
+        if(this.token == null) return false;
+        return this.remoteAccountManagerWrapper.setProducts(this.token, products);
+    }
+
+    async getProducts(): Promise<StaticValue.Product[]> {
+        if(this.token == null) return null;
+        return this.remoteAccountManagerWrapper.getProducts(this.token);
+    }
 }

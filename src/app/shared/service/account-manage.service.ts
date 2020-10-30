@@ -462,5 +462,25 @@ export class AccountManageService {
             return;
         }
     }
+
+    public setProducts(token: StaticValue.LoginToken, products: StaticValue.Product[]): boolean {
+        const uid = this.checkLoginToken(token);
+        if(uid < 0) {
+            return false;
+        }
+        let all_products = this.localstorage.get(StaticValue.KEY_UESR_PRODUCTS, new StaticValue.UserProducts());
+        all_products[uid] = products;
+        this.localstorage.set(StaticValue.KEY_UESR_PRODUCTS, all_products);
+        return true;
+    }
+
+    public getProducts(token: StaticValue.LoginToken): StaticValue.Product[] {
+        const uid = this.checkLoginToken(token);
+        if(uid < 0) {
+            return null;
+        }
+        let all_products = this.localstorage.get(StaticValue.KEY_UESR_PRODUCTS, new StaticValue.UserProducts());
+        return all_products[uid] || [];
+    }
 }
 

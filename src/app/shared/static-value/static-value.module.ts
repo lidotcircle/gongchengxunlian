@@ -118,7 +118,7 @@ export module StaticValue {
     }
 
     export class UserProducts {
-        [key: number]: Product;
+        [key: number]: Product[];
     }
 }
 
