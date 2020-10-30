@@ -84,8 +84,9 @@ export class AppComponent implements OnInit {
 
     initializeApp() {
         this.platform.ready().then(() => {
-            this.statusBar.styleDefault();
-            this.splashScreen.hide();
+            // TODO doesn't work
+            this.statusBar.overlaysWebView(true);
+            this.statusBar.backgroundColorByHexString('#33000000');
         });
     }
 

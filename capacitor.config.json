@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "买买买",
+  "appId": "lidotcircle.businessExpert",
+  "appName": "生意专家 by LDY",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

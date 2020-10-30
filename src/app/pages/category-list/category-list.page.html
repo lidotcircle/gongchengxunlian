@@ -1,7 +1,7 @@
 <div class="container">
   <ion-header>
     <app-header *ngIf='false' title='选择商品分类' [tools]='["╳"]'></app-header>
-    <app-header *ngIf='!isSelect || true' leftText='商品列表' title='商品分类' [tools]='["🞢"]' (toolClick)='onAddClick($event)'></app-header>
+    <app-header *ngIf='!isSelect || true' leftText='商品列表' title='商品分类' [tools]='["<ion-icon name=\"add-outline\"></ion-icon>"]' (toolClick)='onAddClick($event)'></app-header>
   </ion-header>
 
   <div class="content">

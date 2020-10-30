@@ -9,16 +9,22 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } fro
   encapsulation: ViewEncapsulation.None
 })
 export class HeaderComponent implements OnInit {
-  @Input() leftIcon: string = "🡠";
+  @Input() leftIcon: string = '<ion-icon name="arrow-back-outline"></ion-icon>';
   @Input() leftText: string;
   @Input() url: string;
   @Input() title: string;
   @Input() tools: string[];
   @Output() leftClick = new EventEmitter<void>();
   @Output() toolClick = new EventEmitter<number>();
+  ionLeftIcon: string = null;
 
-  constructor(private location: Location,
-              private router: Router) {
+  static IonIconHTMLReg=/^\s*<\s*ion-icon\s+name=\s*"([^"]+)"\s*>\s*<\s*\/ion-icon\s*>\s*$/;
+  IONICONHTMLREG = HeaderComponent.IonIconHTMLReg;
+  constructor(private location: Location) {
+    const m = this.leftIcon.match(HeaderComponent.IonIconHTMLReg);
+    if(m) {
+      this.ionLeftIcon = m[1];
+    }
   }
 
   goBack() {

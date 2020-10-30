@@ -29,7 +29,7 @@
         条码
       </div>
       <div class='asterisk'></div>
-      <ion-input required type="text" name='barcode' [(ngModel)]="productModel.barcode" placeholder="输入商品条形码"></ion-input>
+      <ion-input required type="text" name='barcode' [(ngModel)]="productModel.barCode" placeholder="输入商品条形码"></ion-input>
       <div *ngIf='false' class='indent-text' (click)='onEditBarCode()'> {{ (productModel.barCode.length == 0) ? '输入商品条形码' : (productModel.barCode.length > 23 ? (productModel.barCode.slice(0,20) + '...') : productModel.barCode) }}</div>
       <div class='take-space'></div>
       <div class='scan-icon' (click)='onScanBarCode()'>
@@ -49,7 +49,7 @@
       <ion-input type="text" disabled='true'></ion-input>
       <div class='take-space'></div>
       <div (click)='onSelectCategory()'>
-        <span class='text'> {{ getCategoryName() }} </span>
+        <span class='text'> {{ categoryName }} </span>
         <span class='end-right-angle'></span>
       </div>
     </div>

@@ -1,13 +1,14 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ApplicationRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MockCategoryService } from 'src/app/shared/service/mock-category.service';
 import { ProductService } from 'src/app/shared/service/product.service';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
 import { Plugins, CameraResultType } from '@capacitor/core';
-import { AlertController, ModalController, ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 const { Camera } = Plugins;
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 @Component({
   selector: 'app-product-add',
@@ -18,23 +19,28 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 export class ProductAddPage implements OnInit {
   productModel: StaticValue.Product = new StaticValue.Product();
   photoURLs = [];
+  categoryName: string = '';
 
   private subscription;
   constructor(private productService: ProductService,
               private categoryService: MockCategoryService,
               private router: Router,
               private location: Location,
-              private modal: ModalController,
               private alert: AlertController,
               private toast: ToastController,
+              private statusBar: StatusBar,
+              private appRef: ApplicationRef,
               private barcodeScanner: BarcodeScanner) {
-                this.subscription = this.categoryService.watchSelectCategory().subscribe(obs => {
-                  this.productModel.categoryId = obs.id;
-                });
-                this.categoryService.selectCategoryId.next({id: 0, name: ''});
-              }
+    this.subscription = this.categoryService.watchSelectCategory().subscribe(obs => {
+      this.productModel.categoryId = obs.id;
+      this.categoryName = obs.name;
+      this.appRef.tick();
+    });
+    this.categoryService.selectCategoryId.next({id: 0, name: '默认分类'});
+  }
 
   ngOnInit() {
+    this.statusBar.overlaysWebView(true);
   }
 
   async onAddPhotoClick(){
@@ -98,26 +104,31 @@ export class ProductAddPage implements OnInit {
     this.router.navigate(['/category-list'], {queryParams: {select: true}})
   }
 
-  getCategoryName(): string {
-    return this.categoryService.getCategoryNameById(this.productModel.categoryId);
-  }
-
   inAdd: boolean = false;
   async addProductAndContinue(): Promise<boolean> {
     if(this.inAdd) return false;
     this.inAdd = true;
-    const ans = await this.productService.addProducts(this.productModel);
-    if(ans) {
-      this.productModel = new StaticValue.Product();
-      this.photoURLs = [];
-    } else {
-      (await this.toast.create({
+    let ans = false;
+    try {
+      ans = await this.productService.addProducts(this.productModel);
+      if (ans) {
+        this.productModel = new StaticValue.Product();
+        this.photoURLs = [];
+      } else {
+        (await this.toast.create({
           message: '添加商品失败',
           duration: 2000
         }
-      )).present();
+        )).present();
+      }
+    } catch (err) {
+      (await this.toast.create({
+        message: "添加商品异常，可能是照片过大。Require additional " + JSON.stringify(this.productModel).length + 'bytes',
+        duration: 2000
+      })).present();
+    } finally {
+      this.inAdd = false;
     }
-    this.inAdd = false;
     return ans;
   }
 

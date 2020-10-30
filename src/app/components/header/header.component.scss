@@ -13,6 +13,10 @@ app-header {
                 padding: 0.4em 1em 0.4em 0.4em;
                 background-color: transparent;
                 color: var(--ion-color-primary-contrast);
+
+                ion-icon {
+                    font-size: larger;
+                }
             }
 
             span {
@@ -37,6 +41,10 @@ app-header {
                     padding: 0.4em;
                     background-color: transparent;
                     color: var(--ion-color-primary-contrast);
+
+                    ion-icon {
+                        font-size: larger;
+                    }
                 }
             }
         }

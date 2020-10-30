@@ -2,15 +2,18 @@
 <ion-toolbar color="primary">
   <div *ngIf='!!url || leftText' slot="start" class="left-bar">
     <button *ngIf='!!url && url!="."' slot="start" [routerLink]="[url]">
-      {{ leftIcon }}
+      <div *ngIf='!ionLeftIcon' [innerHTML]='leftIcon'></div>
+      <ion-icon *ngIf='ionLeftIcon' [name]='ionLeftIcon'></ion-icon>
     </button>
     <button *ngIf='!!url && url=="."' slot="start" (click)="onLeftClick()">
-      {{ leftIcon }}
+      <div *ngIf='!ionLeftIcon' [innerHTML]='leftIcon'></div>
+      <ion-icon *ngIf='ionLeftIcon' [name]='ionLeftIcon'></ion-icon>
     </button>
     <button *ngIf='!url' slot="start" (click)="goBack()">
-      {{ leftIcon }}
+      <div *ngIf='!ionLeftIcon' [innerHTML]='leftIcon'></div>
+      <ion-icon *ngIf='ionLeftIcon' [name]='ionLeftIcon'></ion-icon>
     </button>
-    <span> {{ leftText }} </span>
+    <span [innerHTML]='leftText'></span>
   </div>
 
   <ion-title>
@@ -21,7 +24,8 @@
     <div class="take-space"></div>
     <div *ngFor="let tool of tools; let i = index;" class='header-tool'>
       <button (click)='onToolClick(i)'>
-        {{ tool }}
+        <div *ngIf='!tool.match(IONICONHTMLREG)' [innerHTML]='tool'></div>
+        <ion-icon *ngIf=' tool.match(IONICONHTMLREG)' name="{{tool.match(IONICONHTMLREG)[1]}}"></ion-icon>
       </button>
     </div>
   </div>
