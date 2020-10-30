@@ -1,6 +1,7 @@
 <div class="container">
   <ion-header>
-    <app-header leftText='商品列表' title='商品分类' [tools]='["🞢"]' (toolClick)='onAddClick($event)'></app-header>
+    <app-header *ngIf='false' title='选择商品分类' [tools]='["╳"]'></app-header>
+    <app-header *ngIf='!isSelect || true' leftText='商品列表' title='商品分类' [tools]='["🞢"]' (toolClick)='onAddClick($event)'></app-header>
   </ion-header>
 
   <div class="content">
@@ -37,7 +38,7 @@
           <div class='item-postfix'></div>
         </div>
 
-        <div class="category-item new-subcategory" (click)="onAddSubClick()">
+        <div *ngIf="!isSelect || true" class="category-item new-subcategory" (click)="onAddSubClick()">
           <ion-icon name="add-circle"></ion-icon>
           <div class='text'>新增小分类</div>
         </div>
@@ -46,7 +47,7 @@
       <div class='take-space'></div>
       <div class='summary-actions'>
         <div class='summary'>{{getCurrentSummary()}}</div>
-        <div class='action' (click)="onPresentActionSheet()">&#9783;</div>
+        <div *ngIf="!isSelect || true" class='action' (click)="onPresentActionSheet()">&#9783;</div>
       </div>
     </div>
   </div>

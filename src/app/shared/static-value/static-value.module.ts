@@ -110,9 +110,9 @@ export module StaticValue {
         barCode: string = '';
         photos: string[] = [];
         class: string = '';
-        salePrice: number = 0;
-        originalPrice: number = 0;
-        remainCount: number = 0;
+        salePrice: number = null;
+        originalPrice: number = null;
+        remainCount: number = null;
         specification: string = '';
         remarks: string = '';
     }

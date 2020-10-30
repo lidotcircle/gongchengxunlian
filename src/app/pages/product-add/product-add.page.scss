@@ -12,7 +12,7 @@ app-product-add {
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
-        background-color: #EEE;
+        background-color: white;
 
         .take-space {flex-grow: 20;}
 
@@ -21,6 +21,7 @@ app-product-add {
             flex-direction: row;
             align-items: center;
             padding: 1em 1.2em;
+            background-color: #EEE;
 
             .add-photo {
                 font-size: xx-large;
@@ -55,15 +56,67 @@ app-product-add {
             }
         }
 
+        .divider {
+            width: 100%;
+            height: 1em;
+            border-bottom: solid #AAA 1pt;
+        }
+
+        .product-prop {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            padding: 0.7em 0.8em;
+            border-bottom: solid #AAA 1pt;
+
+            .product-prop-name {
+                font-weight: bold;
+            }
+
+            .asterisk {
+                padding-left: 0.1em;
+
+                &::after {
+                    content: '*';
+                    color: var(--ion-color-primary);
+                }
+            }
+
+            .invisible {
+                visibility: hidden;
+            }
+
+            .end-right-angle {
+                padding-left: 0.5em;
+
+                &::after {
+                    content: "\3009";
+                }
+            }
+
+            .indent-text {
+                color: #AAA;
+            }
+
+            .indent-text, ion-input {
+                padding-left: 1em !important;
+            }
+
+            ion-icon {
+                font-size: xx-large;
+                color: var(--ion-color-primary);
+            }
+        }
+
         .buttons {
             display: flex;
             flex-direction: row;
-            padding: 0.5em 0em 1em 0em;
+            padding: 0.5em 0em 0em 0em;
 
             ion-button {
                 flex-grow: 1;
                 flex-basis: 0em;
-                margin: 0em 0.1em;
             }
         }
     }

@@ -9,7 +9,7 @@
       <div class='thumbnails'>
         <div class='thumbnail' *ngFor="let img of photoURLs; let i = index">
           <ion-thumbnail>
-            <img [src]="img">
+            <img src="{{ img }}">
           </ion-thumbnail>
           <div class='delete-photo' (click)="onCancelAddPhoto(i)">
             X
@@ -23,12 +23,77 @@
       <div class='take-space'></div>
       <div class='grey-text'>上传图片</div>
     </div>
-    
+
+    <div class='scan-qrcode product-prop'>
+      <div class='product-prop-name'>
+        条码
+      </div>
+      <div class='indent-text'> {{ (productModel.barCode.length == 0) ? '输入商品二维码' : (productModel.barCode.slice(0,10) + '...') }}</div>
+      <div class='take-space'></div>
+      <div class='scan-icon' (click)='onScanBarCode()'>
+        <ion-icon name="scan-outline"></ion-icon>
+      </div>
+    </div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>名称</div>
+      <div class='asterisk'></div>
+      <ion-input type="text" [(ngModel)]="productModel.productName" required name='pname'></ion-input>
+    </div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>分类</div>
+      <div class='asterisk'></div>
+      <ion-input type="text" disabled='true'></ion-input>
+      <div class='take-space'></div>
+      <div (click)='onSelectCategory()'>
+        <span class='text'> {{ getCategoryName() }} </span>
+        <span class='end-right-angle'></span>
+      </div>
+    </div>
+
+    <div class='divider'></div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>售价</div>
+      <div class='asterisk'></div>
+      <ion-input type="number" [(ngModel)]="productModel.salePrice" required name='sprice'
+                 placeholder='输入商品售价'></ion-input>
+    </div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>进价</div>
+      <div class='asterisk invisible'></div>
+      <ion-input type="number" [(ngModel)]="productModel.originalPrice" name='oprice'
+                 placeholder='输入商品进价'></ion-input>
+    </div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>库存</div>
+      <div class='asterisk invisible'></div>
+      <ion-input type="number" [(ngModel)]="productModel.remainCount" name='rcount'
+                 placeholder='输入商品库存'></ion-input>
+    </div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>规格</div>
+      <div class='asterisk invisible'></div>
+      <ion-input type="text" [(ngModel)]="productModel.specification" name='spec'
+                 placeholder='规格 型号 尺码'></ion-input>
+    </div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>备注</div>
+      <div class='asterisk invisible'></div>
+      <ion-input type="text" [(ngModel)]="productModel.remarks" name='remarks'
+                 placeholder='输入商品备注'></ion-input>
+    </div>
+
     <div class='take-space'></div>
     
     <div class='buttons'>
-      <ion-button color="primary" fill="solid" expand="full">保存</ion-button>
-      <ion-button color="primary" fill="solid" expand="full">继续添加</ion-button>
+      <ion-button color="primary" fill="solid" expand="full" [disabled]='productForm.invalid || check()'>保存</ion-button>
+      <ion-button color="primary" fill="solid" expand="full" [disabled]='productForm.invalid || check()'>继续添加</ion-button>
     </div>
   </form>
 </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { MockCategoryService } from 'src/app/shared/service/mock-category.service';
@@ -13,20 +14,29 @@ import { StaticValue } from 'src/app/shared/static-value/static-value.module';
 export class CategoryListPage implements OnInit {
   mainIndex: number = 0;
   subIndex: number = -2;
+  isSelect: boolean = false;
 
   category: StaticValue.Category;
   constructor(private categoryManagement: MockCategoryService,
               private actionSheetController: ActionSheetController,
               private router: Router,
-              private activatedRouter: ActivatedRoute) {
+              private activatedRouter: ActivatedRoute,
+              private location: Location) {
     this.categoryManagement.subcribe(() => {
       this.category = this.categoryManagement.getAll();
     });
     this.category = this.categoryManagement.getAll();
+    this.activatedRouter.queryParamMap.subscribe(params => {
+      this.isSelect = !!params.get('select');
+    })
   }
 
   private selectCategory(sub: StaticValue.Category) {
     console.log(`select ${JSON.stringify(sub)}`);
+    if(this.isSelect) {
+      this.categoryManagement.selectCategoryId.next({id: sub.id, name: sub.name});
+      this.location.back();
+    }
   }
 
   getCurrentSummary() {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { callCordovaPlugin } from '@ionic-native/core/decorators/common';
+import { Observable, Subject } from 'rxjs';
 import { StaticValue } from '../static-value/static-value.module';
 import { ClientAccountManagerService, HookType } from './client-account-manager.service';
 
@@ -95,6 +96,10 @@ const default_x = [
   }
 ];
 
+export interface ActiveCategory {
+  id: number,
+  name: string
+}
 
 @Injectable({
   providedIn: 'root'
@@ -102,6 +107,7 @@ const default_x = [
 export class MockCategoryService {
   private category: StaticValue.Category = new StaticValue.Category();
   private hooks: {():void}[] = [];
+  selectCategoryId = new Subject<ActiveCategory>();
 
   constructor(private accountManager: ClientAccountManagerService) {
     const updateCategory = () => {
@@ -116,6 +122,10 @@ export class MockCategoryService {
 
     this.accountManager.subscribe(HookType.CategoriesChange, updateCategory);
     updateCategory();
+  }
+
+  watchSelectCategory(): Observable<ActiveCategory> {
+    return this.selectCategoryId.asObservable();
   }
 
   private invokeHooks() {
