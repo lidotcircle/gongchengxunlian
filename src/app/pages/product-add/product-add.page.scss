@@ -67,6 +67,12 @@ app-product-add {
             border-bottom: solid #AAA 1pt;
         }
 
+        .scan-qrcode {
+            ion-input {
+                flex-grow: 80;
+            }
+        }
+
         .product-prop {
             display: flex;
             flex-direction: row;

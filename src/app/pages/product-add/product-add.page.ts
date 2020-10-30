@@ -128,10 +128,6 @@ export class ProductAddPage implements OnInit {
     }
   }
 
-  check(): boolean {
-    return this.productModel.photos.length == 0 || this.productModel.barCode.length == 0;
-  }
-
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

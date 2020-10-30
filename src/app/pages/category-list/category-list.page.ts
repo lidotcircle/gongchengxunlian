@@ -74,9 +74,8 @@ export class CategoryListPage implements OnInit {
     this.subIndex = -2;
   }
   onSubClick(n: number, cat: StaticValue.Category) {
-    if(n == this.subIndex) {
+    if(n == this.subIndex || this.isSelect) {
       this.selectCategory(cat);
-      return;
     }
     this.subIndex = n;
   }

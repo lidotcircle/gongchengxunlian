@@ -17,7 +17,7 @@
         </div>
       </div>
     
-      <div class='add-photo' (click)="onAddPhotoClick()">
+      <div [style]='photoURLs.length < 3 ? "" : "visibility: hidden;"' class='add-photo' (click)="onAddPhotoClick()">
         <ion-icon name="add-outline"></ion-icon>
       </div>
       <div class='take-space'></div>
@@ -28,7 +28,9 @@
       <div class='product-prop-name'>
         条码
       </div>
-      <div class='indent-text' (click)='onEditBarCode()'> {{ (productModel.barCode.length == 0) ? '输入商品条形码' : (productModel.barCode.length > 23 ? (productModel.barCode.slice(0,20) + '...') : productModel.barCode) }}</div>
+      <div class='asterisk'></div>
+      <ion-input required type="text" name='barcode' [(ngModel)]="productModel.barcode" placeholder="输入商品条形码"></ion-input>
+      <div *ngIf='false' class='indent-text' (click)='onEditBarCode()'> {{ (productModel.barCode.length == 0) ? '输入商品条形码' : (productModel.barCode.length > 23 ? (productModel.barCode.slice(0,20) + '...') : productModel.barCode) }}</div>
       <div class='take-space'></div>
       <div class='scan-icon' (click)='onScanBarCode()'>
         <ion-icon name="scan-outline"></ion-icon>
@@ -92,8 +94,8 @@
     <div class='take-space'></div>
     
     <div class='buttons'>
-      <ion-button color="primary" fill="solid" expand="full" [disabled]='productForm.invalid || check()' (click)="addProductAndGoBack()">保存</ion-button>
-      <ion-button color="primary" fill="solid" expand="full" [disabled]='productForm.invalid || check()' (click)="addProductAndContinue()">继续添加</ion-button>
+      <ion-button color="primary" fill="solid" expand="full" [disabled]='productForm.invalid || photoURLs.length == 0' (click)="addProductAndGoBack()">保存</ion-button>
+      <ion-button color="primary" fill="solid" expand="full" [disabled]='productForm.invalid || photoURLs.length == 0' (click)="addProductAndContinue()">继续添加</ion-button>
     </div>
   </form>
 </div>
