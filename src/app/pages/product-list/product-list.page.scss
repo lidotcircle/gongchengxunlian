@@ -1,0 +1,27 @@
+@use '../../style/layout.scss' as layout;
+
+app-product-list {
+    @include layout.header-content();
+
+    .header-tools {
+        .header-tool {
+            button {
+                font-size: medium !important;
+            }
+        }
+    }
+
+    .content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        background-color: white;
+        overflow: scroll;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .take-space {flex-grow: 20;}
+    }
+}

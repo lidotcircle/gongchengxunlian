@@ -40,6 +40,10 @@ const routes: Routes = [
       {
         path: 'product-add',
         loadChildren: () => import('./pages/product-add/product-add.module').then(m => m.ProductAddPageModule)
+      },
+      {
+        path: 'product-list',
+        loadChildren: () => import('./pages/product-list/product-list.module').then(m => m.ProductListPageModule)
       }
     ]
   },
@@ -50,6 +54,11 @@ const routes: Routes = [
     pathMatch: 'prefix',
     loadChildren: () => import('./pages/passport/passport.module').then(m => m.PassportPageModule)
   },
+  {
+    path: 'product-list',
+    loadChildren: () => import('./pages/product-list/product-list.module').then( m => m.ProductListPageModule)
+  },
+
 ];
 
 @NgModule({
