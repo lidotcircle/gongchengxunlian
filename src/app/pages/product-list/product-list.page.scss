@@ -1,4 +1,5 @@
 @use '../../style/layout.scss' as layout;
+@import '../../style/var.scss';
 
 app-product-list {
     @include layout.header-content();
@@ -16,12 +17,52 @@ app-product-list {
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
-        background-color: white;
+        background-color: #EEE;
         overflow: scroll;
         &::-webkit-scrollbar {
             display: none;
         }
 
         .take-space {flex-grow: 20;}
+
+        .search-bar {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            background-color: lighten($color-primary, 35%);
+            padding: 0.5em;
+
+            input {
+                outline: none;
+                border: none;
+                flex-grow: 1;
+                padding: 0.5em;
+                margin-right: 0.5em;
+            }
+        }
+
+        .summary {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: #777;
+            padding: 0.2em 0.5em;
+            background: white;
+
+            span {
+                color: black;
+            }
+            
+            .icon {
+                color: var(--ion-color-primary);
+                padding: 0.3em 0.4em;
+
+                ion-icon {
+                    font-size: x-large;
+                }
+            }
+        }
     }
 }

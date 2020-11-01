@@ -19,7 +19,7 @@ export class DefaultPage implements OnInit {
         {title: '新增会员', url: '/default/add-user', img: '../../../assets/img/default/add_user.png'},
         {title: '收银记账', url: '/default/account' , img: '../../../assets/img/default/sales_account.png'},
         {title: '支出管理', url: '/default/add-mech', img: '../../../assets/img/default/a_note.png'},
-        {title: '商品管理', url: '/default/add-mech', img: '../../../assets/img/default/sales_management.png'},
+        {title: '商品管理', url: '/product-list', img: '../../../assets/img/default/sales_management.png'},
         {title: '会员管理', url: '/default/add-mech', img: '../../../assets/img/default/user_management.png'},
         {title: '查询销售', url: '/default/add-mech', img: '../../../assets/img/default/shop_management.png'},
         {title: '智能分析', url: '/default/add-mech', img: '../../../assets/img/default/analysis.png'},

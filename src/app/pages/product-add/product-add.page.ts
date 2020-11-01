@@ -3,7 +3,7 @@ import { MockCategoryService } from 'src/app/shared/service/mock-category.servic
 import { ProductService } from 'src/app/shared/service/product.service';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
 import { Plugins, CameraResultType } from '@capacitor/core';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, ToastController, ViewWillEnter } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 const { Camera } = Plugins;
@@ -16,7 +16,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   styleUrls: ['./product-add.page.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ProductAddPage implements OnInit {
+export class ProductAddPage implements OnInit, ViewWillEnter {
   productModel: StaticValue.Product = new StaticValue.Product();
   photoURLs = [];
   categoryName: string = '';
@@ -34,9 +34,13 @@ export class ProductAddPage implements OnInit {
     this.subscription = this.categoryService.watchSelectCategory().subscribe(obs => {
       this.productModel.categoryId = obs.id;
       this.categoryName = obs.name;
-      this.appRef.tick();
     });
     this.categoryService.selectCategoryId.next({id: 0, name: '默认分类'});
+  }
+
+  ionViewWillEnter(): void {
+    console.log('flush view ');
+    this.appRef.tick();
   }
 
   ngOnInit() {
