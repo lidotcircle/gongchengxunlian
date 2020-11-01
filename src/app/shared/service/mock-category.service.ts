@@ -98,7 +98,8 @@ const default_x = [
 
 export interface ActiveCategory {
   id: number,
-  name: string
+  name: string,
+  requestor: string
 }
 
 @Injectable({

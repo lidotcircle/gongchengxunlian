@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 const { Camera } = Plugins;
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { makeid } from 'src/app/shared/utils/utils.module';
 
 @Component({
   selector: 'app-product-add',
@@ -21,6 +22,7 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
   photoURLs = [];
   categoryName: string = '';
 
+  private my_name: string = makeid(20);;
   private subscription;
   constructor(private productService: ProductService,
               private categoryService: MockCategoryService,
@@ -32,10 +34,13 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
               private appRef: ApplicationRef,
               private barcodeScanner: BarcodeScanner) {
     this.subscription = this.categoryService.watchSelectCategory().subscribe(obs => {
-      this.productModel.categoryId = obs.id;
-      this.categoryName = obs.name;
+      if (obs.requestor == this.my_name) {
+        this.productModel.categoryId = obs.id;
+        this.categoryName = obs.name;
+      }
     });
-    this.categoryService.selectCategoryId.next({id: 0, name: '默认分类'});
+    this.productModel.categoryId = 0;
+    this.categoryName = '默认分类';
   }
 
   ionViewWillEnter(): void {
@@ -105,7 +110,7 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
   }
 
   onSelectCategory() {
-    this.router.navigate(['/category-list'], {queryParams: {select: true}})
+    this.router.navigate(['/category-list'], {queryParams: {select: true, requestor: this.my_name}})
   }
 
   inAdd: boolean = false;

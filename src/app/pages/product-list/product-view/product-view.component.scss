@@ -1,0 +1,58 @@
+
+.product-view {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #F3F3F3;
+    width: 97%;
+    margin-left: 3%;
+    padding: 0.6em 0em;
+
+    .image {
+        padding-top: 0.2em;
+        align-self: flex-start;
+        margin-right: 0.7em;
+    }
+    
+    .info {
+        display: flex;
+        flex-direction: column;
+
+        .product-name {
+            color: black;
+        }
+
+        .product-price {
+            color: var(--ion-color-primary);
+            padding: 0.5em 0em;
+
+            .yuan {
+                font-size: large;
+            }
+        }
+
+        .product-count {
+            color: #777;
+
+            .barcode {
+                padding-right: 0.3em;
+            }
+        }
+    }
+
+    .take-space {
+        flex-grow: 1;
+    }
+    
+    .share {
+        color: var(--ion-color-primary);
+        font-size: x-large;
+        padding: 0em 1em;
+
+        ion-icon {
+            border: var(--ion-color-primary) solid 1pt;
+            border-radius: 50%;
+            padding: 15%;
+        }
+    }
+}

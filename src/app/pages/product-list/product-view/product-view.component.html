@@ -1,0 +1,22 @@
+
+<div class="product-view">
+  <div class='takelittle'></div>
+  <div class="image">
+    <ion-thumbnail>
+      <img *ngIf="!product.photos?.length" src="../../../../assets/img/products/c_goodspicture.png" alt="no photo">
+      <img *ngIf=" product.photos?.length" src="{{ 'data:image/jpeg;base64,' + product.photos[0] }}" alt="commidity photo">
+    </ion-thumbnail>
+  </div>
+  <div class="info">
+    <div class="product-name"> {{ product.productName }} </div>
+    <div class="product-price"> <span class="yuan">¥</span> {{ product.salePrice?.toFixed(2) || '0.00' }}</div>
+    <div class="product-count">
+      条码: <span class="barcode">{{ product.barCode}}</span>
+      库存: <span class="remain"> {{ product.remainCount || 0 }}</span>件
+    </div>
+  </div>
+  <div class="take-space"></div>
+  <div class="share" (click)="onShare()">
+    <ion-icon name="share-social-outline"></ion-icon>
+  </div>
+</div>

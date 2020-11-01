@@ -1,17 +1,32 @@
 <div class="container">
-  <app-header leftText="首页" title="商品管理" [tools]='["分类"]'></app-header>
+  <app-header leftText="首页" title="商品管理" [tools]='["分类"]' (toolClick)="onGotoSelectCategory()"></app-header>
 
-  <div class="content">
+  <div *ngIf="!empty" class="content">
     <div class="search-bar">
-      <input type="text" placeholder="请输入商品名称、拼音、数字" [(ngModel)]="queryTerm" (input)="onInput($event)">
-      <ion-button fill="outline" color="primary" size="small" shape="">商品盘点</ion-button>
+      <input type="text" placeholder="请输入商品名称、拼音、数字" [(ngModel)]="queryTerm" (keyup.enter)="onQueryText()">
+      <ion-button fill="outline" color="primary" size="small" shape="" (click)="onQueryText()">商品盘点</ion-button>
     </div>
 
     <div class="summary">
       <div class="summary-message">总正库存 <span>{{ remainCount }}</span> 件, 总成本 <span>{{ totalInPrice }}</span> 元 </div>
       <div class="take-space"></div>
       <div class="icon"><ion-icon name="notifications"></ion-icon></div>
-      <div class="icon" (click)="onGotoAddingProduct()"><ion-icon name="add-outline"></ion-icon></div>
+      <div class="icon" (click)="onGotoAddingProduct()"><ion-icon name="add-sharp"></ion-icon></div>
     </div>
+
+    <div class="products">
+      <div *ngFor="let prod of products;">
+        <ldy-product-view [product]='prod'></ldy-product-view>
+      </div> 
+    </div>
+  </div>
+   
+  <div *ngIf="empty" class="empty content">
+    <img src="../../../assets/img/products/commodity_no.png" alt="without any product">
+
+    <div>你还没有任何商品信息</div>
+    <div>您可以</div>
+
+    <ion-button color="primary" fill="solid" shape="">新增商品</ion-button>
   </div>
 </div>

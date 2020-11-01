@@ -10,6 +10,9 @@ import { ProductListPage } from './product-list.page';
 import { LdyComponentsModule } from 'src/app/components/ldy-components.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 
+import { ProductViewComponent } from './product-view/product-view.component';
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -19,6 +22,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SharedModule,
     ProductListPageRoutingModule
   ],
-  declarations: [ProductListPage]
+  declarations: [ProductListPage, ProductViewComponent]
 })
 export class ProductListPageModule {}

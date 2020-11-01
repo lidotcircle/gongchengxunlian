@@ -17,6 +17,7 @@ export class CategoryListPage implements OnInit {
   isSelect: boolean = false;
 
   category: StaticValue.Category;
+  private requestor: string;
   constructor(private categoryManagement: MockCategoryService,
               private actionSheetController: ActionSheetController,
               private router: Router,
@@ -28,13 +29,14 @@ export class CategoryListPage implements OnInit {
     this.category = this.categoryManagement.getAll();
     this.activatedRouter.queryParamMap.subscribe(params => {
       this.isSelect = !!params.get('select');
+      this.requestor = params.get('requestor');
     })
   }
 
   private selectCategory(sub: StaticValue.Category) {
     console.log(`select ${JSON.stringify(sub)}`);
     if(this.isSelect) {
-      this.categoryManagement.selectCategoryId.next({id: sub.id, name: sub.name});
+      this.categoryManagement.selectCategoryId.next({id: sub.id, name: sub.name, requestor: this.requestor});
       this.location.back();
     }
   }
@@ -73,8 +75,12 @@ export class CategoryListPage implements OnInit {
     this.mainIndex = n;
     this.subIndex = -2;
   }
+  private selected = false;
   onSubClick(n: number, cat: StaticValue.Category) {
+    if(this.selected) return;
+
     if(n == this.subIndex || this.isSelect) {
+      this.selected = true;
       this.selectCategory(cat);
     }
     this.subIndex = n;
