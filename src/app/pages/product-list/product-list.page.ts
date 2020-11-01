@@ -88,4 +88,11 @@ export class ProductListPage implements OnInit {
     this.selectecCategoryId = -1;
     await this.loading();
   }
+
+  async onRefresh(event) {
+    this.pageIndex = 0;
+    setTimeout(() => {
+      event.target.complete();
+    }, 50000);
+  }
 }

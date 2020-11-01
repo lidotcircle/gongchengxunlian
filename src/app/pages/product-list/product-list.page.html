@@ -1,7 +1,8 @@
+
 <div class="container">
   <app-header leftText="首页" title="商品管理" [tools]='["分类"]' (toolClick)="onGotoSelectCategory()"></app-header>
 
-  <div *ngIf="!empty" class="content">
+  <ion-content *ngIf="!empty" class="content">
     <div class="search-bar">
       <input type="text" placeholder="请输入商品名称、拼音、数字" [(ngModel)]="queryTerm" (keyup.enter)="onQueryText()">
       <ion-button fill="outline" color="primary" size="small" shape="" (click)="onQueryText()">商品盘点</ion-button>
@@ -14,12 +15,21 @@
       <div class="icon" (click)="onGotoAddingProduct()"><ion-icon name="add-sharp"></ion-icon></div>
     </div>
 
+    <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+      <ion-refresher-content
+        pullingIcon="chevron-down-circle-outline"
+        pullingText="下拉可以刷新"
+        refreshingSpinner="circles"
+        refreshingText="正在加载...">
+      </ion-refresher-content>
+    </ion-refresher>
+
     <div class="products">
       <div *ngFor="let prod of products;">
         <ldy-product-view [product]='prod'></ldy-product-view>
       </div> 
     </div>
-  </div>
+  </ion-content>
    
   <div *ngIf="empty" class="empty content">
     <img src="../../../assets/img/products/commodity_no.png" alt="without any product">
