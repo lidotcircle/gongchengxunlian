@@ -193,6 +193,7 @@ export class MockCategoryService {
         const c = parent.children[i];
         if(c.id == id) {
           parent.children.splice(i, 1);
+          return true;
         } else {
           if (dfs_del(c)) {
             return true;

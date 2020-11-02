@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { ifError } from 'assert';
 import { MockCategoryService } from 'src/app/shared/service/mock-category.service';
+import { ProductService } from 'src/app/shared/service/product.service';
 import { CategoryNameEditPage } from './category-name-edit/category-name-edit.page';
 
 @Component({
@@ -24,6 +25,7 @@ export class CategoryEditPage implements OnInit {
               private modalController: ModalController,
               private toast: ToastController,
               private activedRouter: ActivatedRoute,
+              private products: ProductService,
               private alertController: AlertController) {
     this.activedRouter.queryParams.subscribe(params => {
       this.mainIndex = params['index'] || -1;
@@ -71,7 +73,9 @@ export class CategoryEditPage implements OnInit {
 
   async onDelete(subId: number) {
     let header = '你确认要删除吗!';
-    let msg = (subId == -1 && this.subNames.length > 0) ? '请先删除该类别下的所有商品记录' : '';
+    let categoryId = (subId == -1) ? this.mainId : this.subNames[subId][1];
+    const has_products = ((await this.products.getListByCategoryId(0, 1, categoryId)).products.length > 0);
+    let msg = has_products ? '请先删除该类别下的所有商品记录' : '';
     let buttons = [
       {
         text: '取消',
@@ -83,13 +87,7 @@ export class CategoryEditPage implements OnInit {
       {
         text: '确认',
         handler: () => {
-          let id = -1;
-          if (subId == -1) {
-            id = this.mainId;
-          } else {
-            id = this.subNames[subId][1];
-          }
-          const ans = this.category.deleteCategory(id);
+          const ans = this.category.deleteCategory(categoryId);
           if (ans) {
             this.category.save().catch(() => { console.log("save error") });
             if (subId == -1) {
@@ -104,8 +102,7 @@ export class CategoryEditPage implements OnInit {
         }
       }
     ]
-    /** TODO */
-    if(subId == -1 && this.subNames.length > 0 && false) {
+    if(has_products) {
       header = '删除失败';
       buttons.pop();
     }
