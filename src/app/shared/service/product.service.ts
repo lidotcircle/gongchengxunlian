@@ -84,7 +84,8 @@ export class ProductService {
    * @memberof ProductService
    */
   async getListByCategoryId(index: number, size: number, categoryId: number): Promise<ProductListResult> {
-    return await this.getListByFilter(index, size, (p) => p.categoryId == categoryId);
+    const ids = await this.categoryManager.getIds(categoryId);
+    return await this.getListByFilter(index, size, (p) => ids.indexOf(p.categoryId) >= 0);
   }
 
   /**

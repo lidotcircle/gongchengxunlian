@@ -23,6 +23,10 @@ app-product-list {
             display: none;
         }
 
+        .refresher {
+            z-index: 2;
+        }
+
         .take-space {flex-grow: 20;}
 
         .search-bar {

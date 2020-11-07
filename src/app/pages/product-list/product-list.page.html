@@ -15,7 +15,7 @@
       <div class="icon" (click)="onGotoAddingProduct()"><ion-icon name="add-sharp"></ion-icon></div>
     </div>
 
-    <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)" class="refresher">
       <ion-refresher-content
         pullingIcon="chevron-down-circle-outline"
         pullingText="下拉可以刷新"
@@ -23,17 +23,23 @@
         refreshingText="正在加载...">
       </ion-refresher-content>
     </ion-refresher>
-
+    
     <div class="products">
       <div *ngFor="let prod of products;">
         <ldy-product-view [product]='prod'></ldy-product-view>
       </div> 
     </div>
+
+    <!-- <ion-infinite-scroll threshold="100px" (ionInfinite)="onInfinite($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="加载更多商品数据...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+ -->
+    <app-infinite-scroll message="加载数据中" (infinite)="onInfinite($event)"></app-infinite-scroll>
   </ion-content>
    
   <div *ngIf="empty" class="empty content">
-    <img src="../../../assets/img/products/commodity_no.png" alt="without any product">
-
+    <img src="../../../assets/img/products/commodity_no.png" alt="without any product"> 
     <div>你还没有任何商品信息</div>
     <div>您可以</div>
 

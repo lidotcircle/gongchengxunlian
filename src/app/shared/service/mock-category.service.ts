@@ -235,6 +235,27 @@ export class MockCategoryService {
     };
   }
 
+  async getIds(id: number): Promise<number[]> {
+    const ans = [];
+
+    const dfs_add  = (node: StaticValue.Category) => {
+      ans.push(node.id);
+      for(let c of node.children) dfs_add(c);
+    }
+    const dfs = (node: StaticValue.Category) => {
+      if(node.id == id) {
+        dfs_add(node);
+        return true;
+      }
+      for(const c of node.children) {
+        if(dfs(c)) return true;
+      }
+    }
+    dfs(this.category);
+
+    return ans;
+  }
+
   getCategoryNameById(id: number): string {
     let name: string;
 

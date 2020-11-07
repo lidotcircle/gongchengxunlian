@@ -6,10 +6,11 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from './header/header.component';
+import { InfiniteScrollComponent } from './infinite-scroll/infinite-scroll.component';
 
 
 @NgModule({
-  declarations: [CopyrightComponent, LogoComponent, HeaderComponent],
+  declarations: [CopyrightComponent, LogoComponent, HeaderComponent, InfiniteScrollComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -17,7 +18,8 @@ import { HeaderComponent } from './header/header.component';
     IonicModule
   ],
   exports: [
-    CopyrightComponent, LogoComponent, HeaderComponent
+    CopyrightComponent, LogoComponent, HeaderComponent,
+    InfiniteScrollComponent
   ]
 })
 export class LdyComponentsModule { }

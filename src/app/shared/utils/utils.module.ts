@@ -75,3 +75,7 @@ export function CopySourceEnumProp(src: Object, target: Object) {
 export function randomInt(max: number = Math.max()): number {
   return Math.floor(Math.random() * Math.floor(Math.floor(max)));
 }
+
+export function isElemHidden(elem: HTMLElement): boolean {
+  return elem.offsetParent === null;
+}
