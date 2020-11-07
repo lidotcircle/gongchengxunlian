@@ -123,6 +123,10 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
       if (ans) {
         this.productModel = new StaticValue.Product();
         this.photoURLs = [];
+        (await this.toast.create({
+          message: '添加商品成功',
+          duration: 2000
+        })).present();
       } else {
         (await this.toast.create({
           message: '添加商品失败',

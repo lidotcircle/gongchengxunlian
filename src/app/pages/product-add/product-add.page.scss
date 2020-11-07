@@ -118,6 +118,18 @@ app-product-add {
                 font-size: xx-large;
                 color: var(--ion-color-primary);
             }
+
+            ion-textarea {
+                padding: 0em 0.7em;
+                ::-webkit-input-placeholder {
+                    padding: 0.5em 0.2em;
+                }
+            }
+
+            .warning {
+                color: var(--ldy-color-warn);
+                font-size: small;
+            }
         }
 
         .buttons {

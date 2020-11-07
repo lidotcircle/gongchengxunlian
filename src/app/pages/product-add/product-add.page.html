@@ -29,7 +29,7 @@
         条码
       </div>
       <div class='asterisk'></div>
-      <ion-input required type="text" name='barcode' [(ngModel)]="productModel.barCode" placeholder="输入商品条形码"></ion-input>
+      <ion-input required ldyBarcode type="text" name='barcode' [(ngModel)]="productModel.barCode" placeholder="输入商品条形码"></ion-input>
       <div *ngIf='false' class='indent-text' (click)='onEditBarCode()'> {{ (productModel.barCode.length == 0) ? '输入商品条形码' : (productModel.barCode.length > 23 ? (productModel.barCode.slice(0,20) + '...') : productModel.barCode) }}</div>
       <div class='take-space'></div>
       <div class='scan-icon' (click)='onScanBarCode()'>
@@ -40,7 +40,8 @@
     <div class='product-prop'>
       <div class='product-prop-name'>名称</div>
       <div class='asterisk'></div>
-      <ion-input type="text" [(ngModel)]="productModel.productName" required name='pname'></ion-input>
+      <ion-input type="text" [(ngModel)]="productModel.productName" required name='pname' #pname="ngModel"></ion-input>
+      <div class="warning" *ngIf="pname.touched && pname.errors.required">请输入商品名称</div>
     </div>
 
     <div class='product-prop'>
@@ -59,21 +60,22 @@
     <div class='product-prop'>
       <div class='product-prop-name'>售价</div>
       <div class='asterisk'></div>
-      <ion-input type="number" [(ngModel)]="productModel.salePrice" required name='sprice'
+      <ion-input type="number" ldyNonNegativeNumber [(ngModel)]="productModel.salePrice" required name='sprice' #sprice="ngModel"
                  placeholder='输入商品售价'></ion-input>
+      <div class="warning" *ngIf="sprice.touched && sprice.errors?.required">请输入商品售价</div>
     </div>
 
     <div class='product-prop'>
       <div class='product-prop-name'>进价</div>
       <div class='asterisk invisible'></div>
-      <ion-input type="number" [(ngModel)]="productModel.originalPrice" name='oprice'
+      <ion-input type="number" ldyNonNegativeNumber [(ngModel)]="productModel.originalPrice" name='oprice'
                  placeholder='输入商品进价'></ion-input>
     </div>
 
     <div class='product-prop'>
       <div class='product-prop-name'>库存</div>
       <div class='asterisk invisible'></div>
-      <ion-input type="number" [(ngModel)]="productModel.remainCount" name='rcount'
+      <ion-input type="number" ldyNonNegativeNumber [(ngModel)]="productModel.remainCount" name='rcount'
                  placeholder='输入商品库存'></ion-input>
     </div>
 
@@ -87,8 +89,9 @@
     <div class='product-prop'>
       <div class='product-prop-name'>备注</div>
       <div class='asterisk invisible'></div>
-      <ion-input type="text" [(ngModel)]="productModel.remarks" name='remarks'
-                 placeholder='输入商品备注'></ion-input>
+      <ion-textarea type="text" ldyMaxLength='30' [(ngModel)]="productModel.remarks" name='remarks' #remarks="ngModel"
+                 placeholder='输入商品备注'></ion-textarea>
+      <div class="warning" *ngIf="remarks.errors?.maxLength">备注过长</div>
     </div>
 
     <div class='take-space'></div>
