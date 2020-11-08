@@ -16,6 +16,7 @@ export class ProductListPage implements OnInit {
   empty: boolean = true;
   queryTerm: string = '';
   remainCount: number = 0;
+  totalRemain: number = 0;
   totalInPrice: number = 0;
   selectecCategoryId: number = -1;
   pageIndex: number = 0;
@@ -32,6 +33,9 @@ export class ProductListPage implements OnInit {
               private loadingController: LoadingController,
               private toastController: ToastController,
               private productService: ProductService) {
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+    this.pageSize = Math.floor((vh - 200) / 110);
     this.categoryService.selectCategoryId.subscribe(sel => {
       if (sel.requestor != this.my_name) return;
       this.selectecCategoryId = sel.id;
@@ -46,7 +50,7 @@ export class ProductListPage implements OnInit {
   }
 
   async ngOnInit() {
-    await this.loading();
+   await this.loading();
   }
 
   private async refresh(force: boolean): Promise<boolean> {
@@ -64,8 +68,9 @@ export class ProductListPage implements OnInit {
         return false;
       }
       this.remainCount = p.total;
+      this.totalRemain = p.totalRemain;
       this.products = JSON.parse(JSON.stringify(p.products));
-      this.totalInPrice = p.totalPrice;
+      this.totalInPrice = p.totalInPrice;
       return true;
     });
   }

@@ -9,7 +9,7 @@
     </div>
 
     <div class="summary">
-      <div class="summary-message">总正库存 <span>{{ remainCount }}</span> 件, 总成本 <span>{{ totalInPrice }}</span> 元 </div>
+      <div class="summary-message">总正库存 <span>{{ totalRemain }}</span> 件, 总成本 <span>{{ totalInPrice }}</span> 元 </div>
       <div class="take-space"></div>
       <div class="icon"><ion-icon name="notifications"></ion-icon></div>
       <div class="icon" (click)="onGotoAddingProduct()"><ion-icon name="add-sharp"></ion-icon></div>
@@ -43,6 +43,6 @@
     <div>你还没有任何商品信息</div>
     <div>您可以</div>
 
-    <ion-button color="primary" fill="solid" shape="">新增商品</ion-button>
+    <ion-button color="primary" fill="solid" shape="" (click)="onGotoAddingProduct()">新增商品</ion-button>
   </div>
 </div>

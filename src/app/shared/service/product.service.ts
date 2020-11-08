@@ -6,7 +6,8 @@ import * as pinyin from 'pinyin';
 
 export class ProductListResult {
   total: number = 0;
-  totalPrice: number = 0;
+  totalRemain: number = 0;
+  totalInPrice: number = 0;
   products: StaticValue.Product[] = [];
 }
 @Injectable({
@@ -34,8 +35,16 @@ export class ProductService {
 
   async addProducts(product: StaticValue.Product): Promise<boolean> {
     product.productId = this.autoIncrementId();
-    this.products.push(product);
-    return await this.accountManager.setProducts(this.products);
+    this.products.push(JSON.parse(JSON.stringify(product)));
+    let ans = false;
+    try {
+      ans = await this.accountManager.setProducts(this.products);
+    } finally {
+      if(!ans) {
+        this.products.pop();
+      }
+    }
+    return ans;
   }
 
   private async getListByFilter(index: number, size: number, filter: {(p: StaticValue.Product): boolean}): Promise<ProductListResult> {
@@ -48,8 +57,10 @@ export class ProductService {
     }
     let vv = this.products.filter(filter);
     let total_price = 0;
+    let total_remain = 0;
     for(let p of vv) {
       total_price += p.originalPrice * p.remainCount;
+      total_remain += p.remainCount;
     }
     const u = index * size;
     if(u < vv.length) {
@@ -57,7 +68,8 @@ export class ProductService {
     }
     return {
       total: vv.length,
-      totalPrice: total_price,
+      totalRemain: total_remain,
+      totalInPrice: total_price,
       products: ans
     };
   }

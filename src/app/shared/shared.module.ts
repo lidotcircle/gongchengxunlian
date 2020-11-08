@@ -8,6 +8,7 @@ import { BarcodeDirective } from './directive/validation/barcode.directive';
 import { MaxLengthDirective } from './directive/validation/max-length.directive';
 import { PositiveNumberDirective } from './directive/format/positive-number.directive';
 import { NonNegativeNumberDirective } from './directive/format/non-negative-number.directive';
+import { NG_VALIDATORS } from '@angular/forms';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { NonNegativeNumberDirective } from './directive/format/non-negative-numb
         NonNegativeNumberDirective
     ],
     providers: [
+        {provide: NG_VALIDATORS, useExisting: BarcodeDirective, multi: true}
     ]
 })
 export class SharedModule { }
