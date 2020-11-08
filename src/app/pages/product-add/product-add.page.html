@@ -24,24 +24,24 @@
       <div class='grey-text'>上传图片</div>
     </div>
 
-    <div class='scan-qrcode product-prop'>
+    <div class='scan-qrcode product-prop with-warning'>
       <div class='product-prop-name'>
         条码
       </div>
       <div class='asterisk'></div>
-      <ion-input required ldyBarcode type="text" name='barcode' [(ngModel)]="productModel.barCode" placeholder="输入商品条形码"></ion-input>
-      <div *ngIf='false' class='indent-text' (click)='onEditBarCode()'> {{ (productModel.barCode.length == 0) ? '输入商品条形码' : (productModel.barCode.length > 23 ? (productModel.barCode.slice(0,20) + '...') : productModel.barCode) }}</div>
+      <ion-input required ldyBarcode type="text" name='barcode' #barcode="ngModel" [(ngModel)]="productModel.barCode" placeholder="输入商品条形码"></ion-input>
+      <div class="warning" *ngIf='barcode.touched && barcode.errors?.barcode'>请输入13位数字条形码</div>
       <div class='take-space'></div>
       <div class='scan-icon' (click)='onScanBarCode()'>
         <ion-icon name="scan-outline"></ion-icon>
       </div>
     </div>
 
-    <div class='product-prop'>
+    <div class='product-prop with-warning'>
       <div class='product-prop-name'>名称</div>
       <div class='asterisk'></div>
       <ion-input type="text" [(ngModel)]="productModel.productName" required name='pname' #pname="ngModel"></ion-input>
-      <div class="warning" *ngIf="pname.touched && pname.errors.required">请输入商品名称</div>
+      <div class="warning" *ngIf="pname.touched && pname.errors?.required">请输入商品名称</div>
     </div>
 
     <div class='product-prop'>
@@ -57,7 +57,7 @@
 
     <div class='divider'></div>
 
-    <div class='product-prop'>
+    <div class='product-prop with-warning'>
       <div class='product-prop-name'>售价</div>
       <div class='asterisk'></div>
       <ion-input type="number" ldyNonNegativeNumber [(ngModel)]="productModel.salePrice" required name='sprice' #sprice="ngModel"
@@ -86,7 +86,7 @@
                  placeholder='规格 型号 尺码'></ion-input>
     </div>
 
-    <div class='product-prop'>
+    <div class='product-prop with-warning'>
       <div class='product-prop-name'>备注</div>
       <div class='asterisk invisible'></div>
       <ion-textarea type="text" ldyMaxLength='30' [(ngModel)]="productModel.remarks" name='remarks' #remarks="ngModel"

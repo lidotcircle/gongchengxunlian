@@ -77,6 +77,7 @@ app-product-add {
             display: flex;
             flex-direction: row;
             align-items: center;
+            position: relative;
 
             padding: 0.7em 0.8em;
             border-bottom: solid #AAA 1pt;
@@ -127,9 +128,16 @@ app-product-add {
             }
 
             .warning {
+                position: absolute;
+                left: 5.2em;
+                bottom: 0.2em;
                 color: var(--ldy-color-warn);
                 font-size: small;
             }
+        }
+
+        .with-warning {
+            padding-bottom: 1.1em;
         }
 
         .buttons {
