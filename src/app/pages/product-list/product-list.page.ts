@@ -61,7 +61,7 @@ export class ProductListPage implements OnInit {
    * @return {*}  {Promise<boolean>}
    * @memberof ProductListPage
    */
-  private async refresh(force: boolean): Promise<boolean> {
+  private async refresh(force: boolean, append: boolean = false): Promise<boolean> {
     let prom: Promise<ProductListResult>;
     if (this.queryTerm && this.queryTerm.length > 0) {
       prom = this.productService.getListByCondition(this.pageIndex, this.pageSize, this.queryTerm);
@@ -77,7 +77,11 @@ export class ProductListPage implements OnInit {
       }
       this.remainCount = p.total;
       this.totalRemain = p.totalRemain;
-      this.products = JSON.parse(JSON.stringify(p.products));
+      if (append) {
+        for(let m of JSON.parse(JSON.stringify(p.products))) this.products.push(m);
+      } else {
+        this.products = JSON.parse(JSON.stringify(p.products));
+      }
       this.totalInPrice = p.totalInPrice;
       return true;
     });
@@ -159,7 +163,7 @@ export class ProductListPage implements OnInit {
   async onInfinite(event) {
     this.pageIndex++;
     setTimeout(() => {
-      this.refresh(false)
+      this.refresh(false, false)
       .then(refreshed => {
         if (!refreshed) {
           this.toastController.create({
