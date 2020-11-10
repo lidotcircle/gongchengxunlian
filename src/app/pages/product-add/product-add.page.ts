@@ -43,16 +43,31 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
     this.categoryName = '默认分类';
   }
 
+  /**
+   * 更新 Angular 视图,解决在 Android 下的返回刷新 Bug
+   *
+   * @memberof ProductAddPage
+   */
   ionViewWillEnter(): void {
     console.log('flush view ');
     this.appRef.tick();
   }
 
+  /**
+   * 开启沉浸式状态
+   *
+   * @memberof ProductAddPage
+   */
   ngOnInit() {
     this.statusBar.overlaysWebView(true);
   }
 
-  async onAddPhotoClick(){
+  /**
+   * 添加商品图片
+   *
+   * @memberof ProductAddPage
+   */
+  async onAddPhotoClick() {
     const photo = await Camera.getPhoto({
       quality: 100,
       resultType: CameraResultType.Base64
@@ -63,6 +78,12 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
     this.productModel.photos.push(photo.base64String);
   }
 
+  /**
+   * 删除已经添加的商品图片
+   *
+   * @param {number} n
+   * @memberof ProductAddPage
+   */
   onCancelAddPhoto(n: number) {
     if(n >= this.photoURLs.length) {
       throw new Error('runtime error');
@@ -72,6 +93,11 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
     this.productModel.photos.splice(n, 1);
   }
 
+  /**
+   * 扫描条形码
+   *
+   * @memberof ProductAddPage
+   */
   onScanBarCode() {
     this.barcodeScanner.scan({prompt: '将条形码置于扫描区域'}).then(result => {
       this.productModel.barCode = result.text
@@ -80,6 +106,11 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
     });
   }
 
+  /**
+   * 无用，用弹出窗口编辑条形码
+   *
+   * @memberof ProductAddPage
+   */
   async onEditBarCode() {
     const alert = await this.alert.create({
       header: '编辑条形码',
@@ -109,11 +140,22 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
     await alert.present();
   }
 
+  /**
+   * 跳转到商品分类选择, 利用 RxJs 进行分类选择的同步
+   *
+   * @memberof ProductAddPage
+   */
   onSelectCategory() {
     this.router.navigate(['/category-list'], {queryParams: {select: true, requestor: this.my_name}})
   }
 
   inAdd: boolean = false;
+  /**
+   * 添加商品，并且刷新界面, Input 的 touched 在 HTML 直接调用 API 消除
+   *
+   * @return {*}  {Promise<boolean>}
+   * @memberof ProductAddPage
+   */
   async addProductAndContinue(): Promise<boolean> {
     if(this.inAdd) return false;
     this.inAdd = true;
@@ -121,7 +163,9 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
     try {
       ans = await this.productService.addProducts(this.productModel);
       if (ans) {
+        const cid = this.productModel.categoryId;
         this.productModel = new StaticValue.Product();
+        this.productModel.categoryId = cid;
         this.photoURLs = [];
         (await this.toast.create({
           message: '添加商品成功',
@@ -152,6 +196,11 @@ export class ProductAddPage implements OnInit, ViewWillEnter {
     }
   }
 
+  /**
+   * 取消 商品分类的 RxJS 订阅
+   *
+   * @memberof ProductAddPage
+   */
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

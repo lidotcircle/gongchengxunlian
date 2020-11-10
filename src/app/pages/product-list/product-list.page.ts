@@ -53,6 +53,14 @@ export class ProductListPage implements OnInit {
    await this.loading();
   }
 
+  /**
+   * 刷新商品列表视图
+   *
+   * @private
+   * @param {boolean} force 在得到商品没变化时是否刷新
+   * @return {*}  {Promise<boolean>}
+   * @memberof ProductListPage
+   */
   private async refresh(force: boolean): Promise<boolean> {
     let prom: Promise<ProductListResult>;
     if (this.queryTerm && this.queryTerm.length > 0) {
@@ -75,6 +83,13 @@ export class ProductListPage implements OnInit {
     });
   }
 
+  /**
+   * 商品列表加载效果, 0.5s 延时
+   *
+   * @private
+   * @return {*}  {Promise<void>}
+   * @memberof ProductListPage
+   */
   private async loading(): Promise<void> {
     const loading = await this.loadingController.create({
       message: '正在加载数据，请稍后...',
@@ -91,21 +106,43 @@ export class ProductListPage implements OnInit {
     });
   }
 
+  /**
+   * 根据分类选择商品列表
+   *
+   * @return {*} 
+   * @memberof ProductListPage
+   */
   onGotoSelectCategory() {
     if(this.empty) return;
     this.router.navigate(['/category-list'], {queryParams: {select: true, requestor: this.my_name}});
   }
 
+  /**
+   * 跳转到添加商品
+   *
+   * @memberof ProductListPage
+   */
   onGotoAddingProduct() {
     this.router.navigate(['/product-add']);
   }
 
+  /**
+   * 根据关键字如商品名称，条形码进行商品筛选
+   *
+   * @memberof ProductListPage
+   */
   async onQueryText() {
     this.pageIndex = 0;
     this.selectecCategoryId = -1;
     await this.loading();
   }
 
+  /**
+   * 下拉刷新 Callback
+   *
+   * @param {*} event
+   * @memberof ProductListPage
+   */
   async onRefresh(event) {
     this.pageIndex = 0;
     setTimeout(() => {
@@ -113,6 +150,12 @@ export class ProductListPage implements OnInit {
     }, 1000);
   }
 
+  /**
+   * 上拉翻页 Callback
+   *
+   * @param {*} event
+   * @memberof ProductListPage
+   */
   async onInfinite(event) {
     this.pageIndex++;
     setTimeout(() => {
