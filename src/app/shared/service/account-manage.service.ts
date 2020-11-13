@@ -502,5 +502,20 @@ export class AccountManageService {
         let all_products = this.localstorage.get(StaticValue.KEY_UESR_PRODUCTS, new StaticValue.UserProducts());
         return all_products[uid] || [];
     }
+
+    public newInOutRecord(token: StaticValue.LoginToken, productId: number, record: StaticValue.InOutRecord): boolean {
+        const uid = this.checkLoginToken(token);
+        if(uid < 0) {
+            return false;
+        }
+        let all_records = this.localstorage.get(StaticValue.KEY_IN_OUT_STOCK_RECORDS, []);
+        let recordn = new StaticValue.InOutRecordWithId();
+        utils.assignTargetEnumProp(record, recordn);
+        recordn.uid = uid;
+        recordn.productId = productId;
+        all_records.push(recordn);
+        this.localstorage.set(StaticValue.KEY_IN_OUT_STOCK_RECORDS, all_records);
+        return true;
+    }
 }
 

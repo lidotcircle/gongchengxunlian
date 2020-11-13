@@ -175,4 +175,9 @@ export class ClientAccountManagerService {
         if(this.token == null) return null;
         return this.remoteAccountManagerWrapper.getProducts(this.token);
     }
+
+    async newInOutRecord(productId: number, record: StaticValue.InOutRecord): Promise<boolean> {
+        this.update();
+        return this.remoteAccountManagerWrapper.newInOutRecord(this.token, productId, record);
+    }
 }

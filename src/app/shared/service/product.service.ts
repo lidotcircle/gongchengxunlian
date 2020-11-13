@@ -159,6 +159,52 @@ export class ProductService {
     return ans;
   }
 
+  async InStock(productId: number, count: number, remark: string): Promise<boolean> {
+    let record = new StaticValue.InOutRecord();
+    let ans = false;
+    if(count <= 0) {
+      return ans;
+    }
+    for(let p of this.products) {
+      if(p.productId == productId) {
+        record.current = p.remainCount;
+        record.in = count;
+        record.remarks = remark;
+        p.remainCount += count;
+        ans = await this.accountManager.setProducts(this.products);
+        break;
+      }
+    }
+    if(ans) {
+      this.accountManager.newInOutRecord(productId, record);
+    }
+    return ans;
+  }
+
+  async OutStock(productId: number, count: number, remark: string): Promise<boolean> {
+    let record = new StaticValue.InOutRecord();
+    let ans = false;
+    if(count < 0) {
+      return ans;
+    }
+    for(let p of this.products) {
+      if(p.productId == productId) {
+        record.current = p.remainCount;
+        record.in = count;
+        record.remarks = remark;
+        if(p.remainCount >= count) {
+          p.remainCount -= count;
+          ans = await this.accountManager.setProducts(this.products);
+        }
+        break;
+      }
+    }
+    if(ans) {
+      this.accountManager.newInOutRecord(productId, record);
+    }
+    return ans;
+  }
+
   async empty(): Promise<boolean> {
     const products = await this.accountManager.getProducts();
     return !products || products.length == 0;

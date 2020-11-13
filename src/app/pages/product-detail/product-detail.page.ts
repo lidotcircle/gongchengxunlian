@@ -70,6 +70,12 @@ export class ProductDetailPage implements OnInit, OnDestroy {
   }
 
   onClickInOutOfStock() {
+    this.router.navigate(['/product-in-out-of-stock'], {
+      queryParams: {
+        productId: this.productId, 
+        productStockCount: this.product.remainCount
+      }
+    });
   }
 
   onClickShare() {

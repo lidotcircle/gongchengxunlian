@@ -12,6 +12,7 @@ export module StaticValue {
     export const LOGIN_TOKENS = "LOGIN_TOKENS";
     export const KEY_USER_CATEGORIES = "USER_CATEGORIES";
     export const KEY_UESR_PRODUCTS = "USER_PRODUCSTS";
+    export const KEY_IN_OUT_STOCK_RECORDS = "IN_OUT_STOCK_RECORDS";
 
     /** session storage keys */
     export const SIGNUP_INFO = 'SIGNUP_INFO';
@@ -120,5 +121,18 @@ export module StaticValue {
     export class UserProducts {
         [key: number]: Product[];
     }
-}
 
+    export class InOutRecord {
+        in: number = 0;
+        out: number = 0;
+        remarks: string = '';
+        current: number = 0;
+    }
+
+    export class InOutRecordWithId extends InOutRecord {
+        uid: number = -1;
+        productId: number = -1;
+    }
+    
+    export type InOutRecords = InOutRecordWithId[];
+}

@@ -1,9 +1,55 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>productInOutOfStock</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class='container'>
+  <ion-header>
+    <app-header leftText='返回' title='修改库存' [tools]='["出入库记录"]'></app-header>
+  </ion-header>
 
-<ion-content>
+  <form #productForm="ngForm" class='content'>
+    <div class="switchers">
+      <div [class]="'switcher ' + ( inIn ? 'selected' : '')" (click)="onClickInStockButton()" >入库</div>
+      <div [class]="'switcher ' + (!inIn ? 'selected' : '')" (click)="onClickOutStockButton()">出库</div>
+    </div>
 
-</ion-content>
+    <div class="container1">
+      <div class="container2" #panel>
+        <div class="in-stock">
+          <div class='product-prop'>
+            <div class='product-prop-name'>入库数量</div>
+            <ion-input type="number" ldyNonNegativeNumber [(ngModel)]="inInput" name='inOfStock'></ion-input>
+          </div>
+
+          <div class='product-prop without-border'>
+            <div class='product-prop-name'>备注</div>
+            <ion-input type="text" ldyMaxLength='30' [(ngModel)]="inRemark" name='remarks' #remarks="ngModel">
+            </ion-input>
+          </div>
+        </div>
+
+        <div class="out-stock">
+          <div class='product-prop'>
+            <div class='product-prop-name'>出库数量</div>
+            <ion-input type="number" ldyNonNegativeNumber [(ngModel)]="outInput" name='outOfStock'></ion-input>
+          </div>
+
+          <div class='product-prop without-border'>
+            <div class='product-prop-name'>备注</div>
+            <ion-input type="text" ldyMaxLength='30' [(ngModel)]="outRemark" name='oremarks' #remarks="ngModel">
+            </ion-input>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="in-stock-count">当前库存: {{ inStockCount }}件</div>
+
+    <div class="take-space"></div>
+
+    <div class='buttons'>
+    <ion-button *ngIf="inIn"  (click)="confirmIn()" expand="block" fill="solid" shape="">
+      确认入库
+    </ion-button>
+    <ion-button *ngIf="!inIn" (click)="confirmOut()" expand="block" fill="solid" shape="">
+      确认出库
+    </ion-button>
+    </div>
+  </form>
+</div>

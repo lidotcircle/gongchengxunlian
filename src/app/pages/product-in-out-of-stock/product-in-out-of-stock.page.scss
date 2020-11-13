@@ -1,0 +1,115 @@
+@use '../../style/layout.scss' as layout;
+
+app-product-in-out-of-stock {
+    app-header {
+        .header-tool {
+            div {
+                font-size: small;
+            }
+        }
+    }
+
+    @include layout.header-content();
+
+    .content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        background-color: #F3F3F3;
+
+        & > div {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .switchers {
+            display: flex;
+            flex-direction: row;
+            border: solid transparent;
+            font-size: large;
+            border-left-width:  1.2em;
+            border-right-width: 1.2em;
+            margin: 0.7em 0em 1.4em 0em;
+
+            .switcher {
+                flex-basis: 0em;
+                flex-grow: 1;
+                padding: 0.2em;
+
+                text-align: center;
+                color: var(--ion-color-primary);
+                outline: 0.1pt solid var(--ion-color-primary);
+                background-color: white;
+            }
+            
+            .switcher.selected {
+                color: white;
+                background-color: var(--ion-color-primary);
+            }
+        }
+
+        .container1 {
+            position: relative;
+
+            .container2 {
+                position: relative;
+                display: flex;
+                flex-direction: row;
+
+                .in-stock, .out-stock {
+                    flex-shrink: 0;
+                    width: 100vw;
+                    background-color: white;
+                    
+                    .product-prop {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        margin: 0em 0em 0em 0.7em;
+                        padding: 0.7em 1.3em 0.7em 0.6em;
+                        border-bottom: solid 1pt #DDD;
+
+                        .product-prop-name {
+                            color: #777;
+                        }
+
+                        ion-input {
+                            text-align: right;
+                            color: #666;
+                        }
+                    }
+
+                    .product-prop.without-border {
+                        border: transparent !important;
+                    }
+                }
+            }
+
+            .inAnim {
+                animation: moveRight 0.25s linear forwards;
+            }
+
+            .outAnim {
+                animation: moveLeft 0.25s linear forwards;
+            }
+
+            @keyframes moveLeft {
+                0%   {left: 0%;}
+                100% {left: -100%;}
+            }
+            @keyframes moveRight {
+                0% {left: -100%;}
+                100% {left: 0%;}
+            }
+        }
+        
+        .in-stock-count {
+            padding: 2em 1.7em;
+            color: #777;
+            text-align: right;
+        }
+
+        .take-space {flex-grow: 20;}
+    }
+}

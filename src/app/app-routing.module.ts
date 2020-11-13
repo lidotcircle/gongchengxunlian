@@ -49,6 +49,10 @@ const routes: Routes = [
         path: 'product-detail',
         loadChildren: () => import('./pages/product-detail/product-detail.module').then(m => m.ProductDetailPageModule)
       },
+      {
+        path: 'product-in-out-of-stock',
+        loadChildren: () => import('./pages/product-in-out-of-stock/product-in-out-of-stock.module').then(m => m.ProductInOutOfStockPageModule)
+      },
     ]
   },
 
@@ -57,11 +61,7 @@ const routes: Routes = [
     path: 'passport',
     pathMatch: 'prefix',
     loadChildren: () => import('./pages/passport/passport.module').then(m => m.PassportPageModule)
-  },  {
-    path: 'product-in-out-of-stock',
-    loadChildren: () => import('./pages/product-in-out-of-stock/product-in-out-of-stock.module').then( m => m.ProductInOutOfStockPageModule)
   },
-
 ];
 
 @NgModule({
