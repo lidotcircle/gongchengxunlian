@@ -1,6 +1,6 @@
 <div class='container'>
   <ion-header>
-    <app-header leftText='返回' title='修改库存' [tools]='["出入库记录"]'></app-header>
+    <app-header leftText='返回' title='修改库存' [tools]='["出入库记录"]' (toolClick)="onCheckRecords()"></app-header>
   </ion-header>
 
   <form #productForm="ngForm" class='content'>

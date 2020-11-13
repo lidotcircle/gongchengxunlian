@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/shared/service/product.service';
@@ -25,6 +25,7 @@ export class ProductInOutOfStockPage implements OnInit {
 
   constructor(private productService: ProductService,
               private activatedRouter: ActivatedRoute,
+              private router: Router,
               private toast: ToastController) { }
 
   ngOnInit() {
@@ -50,6 +51,14 @@ export class ProductInOutOfStockPage implements OnInit {
     panele.classList.add   ('outAnim');
   }
 
+  onCheckRecords() {
+    this.router.navigate(['product-in-out-records'], {
+      queryParams: {
+        productId: this.productId
+      }
+    });
+  }
+
   async confirmIn()  {
     const ans = await this.productService.InStock(this.productId, this.inInput, this.inRemark);
     let msg = ans ? '入库成功' : '入库失败';
@@ -64,7 +73,7 @@ export class ProductInOutOfStockPage implements OnInit {
     }
   }
   async confirmOut() {
-    const ans = await this.productService.OutStock(this.productId, this.inInput, this.inRemark);
+    const ans = await this.productService.OutStock(this.productId, this.outInput, this.outRemark);
     let msg = ans ? '出库成功' : '出库失败';
     await (await this.toast.create({
       message: msg,

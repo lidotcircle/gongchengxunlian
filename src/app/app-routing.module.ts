@@ -61,7 +61,11 @@ const routes: Routes = [
     path: 'passport',
     pathMatch: 'prefix',
     loadChildren: () => import('./pages/passport/passport.module').then(m => m.PassportPageModule)
+  },  {
+    path: 'product-in-out-records',
+    loadChildren: () => import('./pages/product-in-out-records/product-in-out-records.module').then( m => m.ProductInOutRecordsPageModule)
   },
+
 ];
 
 @NgModule({

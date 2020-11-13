@@ -1,0 +1,14 @@
+<div class='container'>
+  <ion-header>
+    <app-header leftText='返回' title='出入库记录'></app-header>
+  </ion-header>
+
+  <div class='content'>
+    <div class="record" *ngFor="let record of records">
+      <div class="record-type">{{ record.in == 0 ? '出库' : '入库' }}</div>
+      <div class="record-count">数量: {{ record.in == 0 ? record.in : record.out }}件</div>
+      <div class="record-own">当前拥有: {{ record.current }}件</div>
+      <div class="record-remark" *ngIf="record.remarks"><div>备注:</div><div>{{ record.remarks }}</div></div>
+    </div>
+  </div>
+</div>

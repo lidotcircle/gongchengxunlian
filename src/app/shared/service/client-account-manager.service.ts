@@ -180,4 +180,9 @@ export class ClientAccountManagerService {
         this.update();
         return this.remoteAccountManagerWrapper.newInOutRecord(this.token, productId, record);
     }
+
+    async getRecords(productId: number): Promise<StaticValue.InOutRecord[]> {
+        this.update();
+        return this.remoteAccountManagerWrapper.getRecords(this.token, productId);
+    }
 }

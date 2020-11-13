@@ -517,5 +517,22 @@ export class AccountManageService {
         this.localstorage.set(StaticValue.KEY_IN_OUT_STOCK_RECORDS, all_records);
         return true;
     }
+
+    public getRecords(token: StaticValue.LoginToken, productId: number): StaticValue.InOutRecord[] {
+        let ans = [];
+        const uid = this.checkLoginToken(token);
+        if(uid < 0) {
+            return ans;
+        }
+        let all_records = this.localstorage.get(StaticValue.KEY_IN_OUT_STOCK_RECORDS, []) as StaticValue.InOutRecords;
+        for(const r of all_records) {
+            if(r.uid == uid && r.productId == productId) {
+                let rr = new StaticValue.InOutRecord();
+                utils.assignTargetEnumProp(r, rr);
+                ans.push(rr);
+            }
+        }
+        return ans;
+    }
 }
 

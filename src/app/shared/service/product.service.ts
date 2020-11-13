@@ -51,6 +51,9 @@ export class ProductService {
         this.products.pop();
       }
     }
+    if(ans) {
+      this._change.next(true);
+    }
     return ans;
   }
 
@@ -162,7 +165,7 @@ export class ProductService {
   async InStock(productId: number, count: number, remark: string): Promise<boolean> {
     let record = new StaticValue.InOutRecord();
     let ans = false;
-    if(count <= 0) {
+    if(!count || count <= 0) {
       return ans;
     }
     for(let p of this.products) {
@@ -184,13 +187,13 @@ export class ProductService {
   async OutStock(productId: number, count: number, remark: string): Promise<boolean> {
     let record = new StaticValue.InOutRecord();
     let ans = false;
-    if(count < 0) {
+    if(!count || count <= 0) {
       return ans;
     }
     for(let p of this.products) {
       if(p.productId == productId) {
         record.current = p.remainCount;
-        record.in = count;
+        record.out = count;
         record.remarks = remark;
         if(p.remainCount >= count) {
           p.remainCount -= count;
@@ -203,6 +206,10 @@ export class ProductService {
       this.accountManager.newInOutRecord(productId, record);
     }
     return ans;
+  }
+
+  async getRecords(productId: number): Promise<StaticValue.InOutRecord[]> {
+    return this.accountManager.getRecords(productId);
   }
 
   async empty(): Promise<boolean> {
