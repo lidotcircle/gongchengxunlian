@@ -1,6 +1,6 @@
 
 <div class="container">
-  <app-header leftText="首页" title="商品管理" [tools]='["分类"]' (toolClick)="onGotoSelectCategory()"></app-header>
+  <app-header leftText="首页" title="商品列表" [tools]='["分类"]' (toolClick)="onGotoSelectCategory()"></app-header>
 
   <ion-content *ngIf="!empty" class="content">
     <div class="search-bar">
@@ -25,8 +25,8 @@
     </ion-refresher>
     
     <div class="products">
-      <div *ngFor="let prod of products;">
-        <ldy-product-view [product]='prod'></ldy-product-view>
+      <div *ngFor="let prod of products; let i = index;">
+        <ldy-product-view [product]='prod' (share)="onShare(i)"></ldy-product-view>
       </div> 
     </div>
 
@@ -45,4 +45,5 @@
 
     <ion-button color="primary" fill="solid" shape="" (click)="onGotoAddingProduct()">新增商品</ion-button>
   </div>
+  <app-share-in-bottom [message]="shareMessage"></app-share-in-bottom>
 </div>

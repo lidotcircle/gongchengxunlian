@@ -136,6 +136,14 @@ export class ClientAccountManagerService {
         return this.remoteAccountManagerWrapper.changePassword(this.token, __old, __new);
     }
 
+    async verifyUser(username: string, password: string): Promise<boolean> {
+        this.update();
+        if(this.token == null) {
+            return false;
+        }
+        return this.remoteAccountManagerWrapper.verifyUser(this.token, username, password);
+    }
+
     subscribeAccountChange(func: () => void) {
         this.subscribe(HookType.UserInfoChange, func);
     }

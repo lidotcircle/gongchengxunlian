@@ -1,0 +1,87 @@
+
+
+<div class='container' (click)="onTouchAnything()">
+  <ion-header>
+    <app-header leftText='商品列表' title='商品详情' [tools]='["⋮"]' (toolClick)="onClickDropDownMenu()"></app-header>
+  </ion-header>
+  
+  <form #productForm="ngForm" class='content'>
+    <div class="dropdown-menu-container" [style]="showDropDownMenu ? 'display: flex;' : 'display: none;'">
+      <div class="dropdown-menu">
+        <div class="button item" (click)="onClickModify()">修改商品</div>
+        <div class="button item" (click)="onClickDelete()">删除商品</div>
+      </div>
+    </div>
+
+    <div class='take-photos product-prop product-prop-extend-border'>
+      <div class='thumbnails'>
+        <div class='thumbnail' *ngFor="let img of photoURLs; let i = index">
+          <ion-thumbnail>
+            <img src="{{ img }}">
+          </ion-thumbnail>
+          <div class='delete-photo' (click)="onCancelAddPhoto(i)">
+            X
+          </div>
+        </div>
+      </div>
+      <div class="without-photos" *ngIf="photoURLs.length == 0"> 无 </div>
+    
+      <div [style]='photoURLs.length < 3 ? "" : "visibility: hidden;"' class='add-photo' (click)="onClickAddPhoto()">
+        <ion-icon name="add-outline"></ion-icon>
+      </div>
+    </div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>名称</div>
+      <div class="take-space"></div>
+      <div class="product-prop-value">{{ product.productName }}</div>
+    </div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>分类</div>
+      <div class='take-space'></div>
+      <div class="product-prop-value">{{ categoryName }}</div>
+    </div>
+
+    <div class='product-prop product-prop-extend-border'>
+      <div class='product-prop-name'>条码</div>
+      <div class='take-space'></div>
+      <div class="product-prop-value">{{ product.barCode }}</div>
+    </div>
+
+    <div class='divider'></div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>进价</div>
+      <div class="take-space"></div>
+      <div class="product-prop-value" *ngIf="showOriginalPrice"><span class="yuan" *ngIf="product.originalPrice">¥</span> {{ product.originalPrice?.toFixed(2) || '' }}</div>
+      <div class="product-prop-value" *ngIf="!showOriginalPrice"><ion-button color="primary" fill="outline" size="small" (click)="onClickShowOriPrice()">查看进价</ion-button></div>
+    </div>
+
+    <div class='product-prop with-warning'>
+      <div class='product-prop-name'>售价</div>
+      <div class="take-space"></div>
+      <div class="product-prop-value"><span class="yuan">¥</span> {{ product.salePrice?.toFixed(2) || '' }}</div>
+    </div>
+
+    <div class='product-prop'>
+      <div class='product-prop-name'>规格</div>
+      <div class="take-space"></div>
+      <div class="product-prop-value">{{product.specification}}</div>
+    </div>
+
+    <div class='product-prop product-prop-extend-border'>
+      <div class='product-prop-name'>库存</div>
+      <div class="take-space"></div>
+      <div class="product-prop-value">{{product.remainCount}}</div>
+    </div>
+
+    <div class='take-space'></div>
+    
+    <div class='buttons'>
+      <ion-button color="primary" fill="solid" expand="full" (click)="onClickInOutOfStock()">出/入库</ion-button>
+      <ion-button color="primary" fill="clear" expand="full" (click)="onClickShare()">分享</ion-button>
+    </div>
+  </form>
+  <app-share-in-bottom [message]="shareMessage"></app-share-in-bottom>
+</div>

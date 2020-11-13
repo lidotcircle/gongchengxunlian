@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { StaticValue } from '../static-value/static-value.module';
 import { ClientAccountManagerService, HookType } from './client-account-manager.service';
 import { MockCategoryService } from './mock-category.service';
+import * as rxjs from 'rxjs';
 import * as pinyin from 'pinyin';
 
 export class ProductListResult {
@@ -16,10 +17,16 @@ export class ProductListResult {
 export class ProductService {
   private products: StaticValue.Product[];
 
+  private _change: rxjs.Subject<boolean> = new rxjs.Subject<boolean>();
+  get change() {return this._change;}
+
   constructor(private accountManager: ClientAccountManagerService,
               private categoryManager: MockCategoryService) {
     const update = () => {
-      this.accountManager.getProducts().then(products => this.products = products || []);
+      this.accountManager.getProducts().then(products => {
+        this.products = products || []
+        this.change.next(true);
+      });
     }
     update();
     this.accountManager.subscribe(HookType.UserInfoChange, update);
@@ -42,6 +49,24 @@ export class ProductService {
     } finally {
       if(!ans) {
         this.products.pop();
+      }
+    }
+    return ans;
+  }
+
+  async removeProducts(productId: number): Promise<boolean> {
+    let ans = false;
+    for(let i=0;i<this.products.length;i++) {
+      if(this.products[i].productId == productId) {
+        const deletep = this.products.splice(i, 1);
+        try {
+          ans = await this.accountManager.setProducts(this.products);
+          setTimeout(() => this._change.next(true));
+        } catch {
+          this.products.push(deletep[0]);
+          ans = false;
+        }
+        break;
       }
     }
     return ans;
@@ -121,6 +146,17 @@ export class ProductService {
         return false;
       }
     });
+  }
+
+  async getProductByProductId(id: number): Promise<StaticValue.Product> {
+    let ans = null;
+    for(const p of this.products || []) {
+      if(p.productId == id) {
+        ans = JSON.parse(JSON.stringify(p));
+        break;
+      }
+    }
+    return ans;
   }
 
   async empty(): Promise<boolean> {

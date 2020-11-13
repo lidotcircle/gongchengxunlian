@@ -1,0 +1,145 @@
+@use '../../style/layout.scss' as layout;
+
+$greyA: #555;
+$greyB: #AAA;
+$greyC: #EEE;
+$color-border: #CCC;
+
+app-product-detail {
+    @include layout.header-content();
+
+    .dropdown-menu-container {
+        position: absolute;
+        width: 100%;
+        display: flex;
+        padding: 0.4em 0.8em;
+        flex-direction: row-reverse;
+
+        .dropdown-menu {
+            background-color: white;
+            width: max-content;
+            border: solid #EEE 1pt;
+            z-index: 100;
+
+            .button {
+                padding: 0.7em 2.5em 0.7em 0.8em;
+                border: solid #EEE 1pt;
+                color: $greyA;
+
+                &:hover {
+                    background-color: #EEE;
+                }
+
+                &:active {
+                    background-color: #E0E0E0;
+                }
+            }
+        }
+    }
+
+    .content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        position: relative;
+        background-color: white;
+        overflow: scroll;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .take-space {flex-grow: 20;}
+
+        .take-photos {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 1em 1.2em;
+
+            .add-photo {
+                font-size: xx-large;
+                color: $greyB;
+                border: dashed 2pt;
+                border-radius: 0.15em;
+                padding: 0.24em 0.3em 0.1em 0.3em;
+                background-color: #FAFAFA;
+
+                ion-icon {
+                    font-weight: bold;
+                    color: $greyA;
+                }
+            }
+            
+            .without-photos {
+                color: $greyB;
+                padding: 1em 1em 1em 0.2em;
+            }
+
+            .thumbnails {
+                display: flex;
+                flex-direction: row;
+                padding: 0em 0.35em;
+
+                .thumbnail {
+                    padding-right: 0.3em;
+                    position: relative;
+
+                    .delete-photo {
+                        display: none;
+                        padding: 0.1em 0.3em;
+                        border-radius: 1em;
+                        color: #777;
+                        background-color: rgba(200, 200, 200, 0.3);
+                        position: absolute;
+                        top: -0.3em;
+                        right: -0.1em;
+                    }
+                }
+            }
+        }
+
+        .divider {
+            width: 100%;
+            height: 1.5em;
+            flex-shrink: 0;
+            border-bottom: solid $color-border 1pt;
+            background-color: $greyC;
+        }
+
+        .product-prop {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            padding: 1.2em 0.8em 1.2em 0em;
+            margin-left: 0.8em;
+            border-bottom: solid $color-border 1pt;
+
+            .product-prop-name, .product-prop-value {
+                color: $greyB;
+            }
+
+           .invisible {
+                visibility: hidden;
+            }
+        }
+
+        .product-prop-extend-border {
+            padding-left: 0.8em;
+            margin-left: 0em;
+        }
+
+       .buttons {
+            display: flex;
+            flex-direction: row;
+            padding: 1em 0em 0.5em 0em;
+            flex-shrink: 0;
+
+            ion-button {
+                flex-grow: 1;
+                flex-basis: 0em;
+            }
+        }
+    }
+}

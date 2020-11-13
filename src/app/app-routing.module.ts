@@ -44,7 +44,11 @@ const routes: Routes = [
       {
         path: 'product-list',
         loadChildren: () => import('./pages/product-list/product-list.module').then(m => m.ProductListPageModule)
-      }
+      },
+      {
+        path: 'product-detail',
+        loadChildren: () => import('./pages/product-detail/product-detail.module').then(m => m.ProductDetailPageModule)
+      },
     ]
   },
 
@@ -53,10 +57,9 @@ const routes: Routes = [
     path: 'passport',
     pathMatch: 'prefix',
     loadChildren: () => import('./pages/passport/passport.module').then(m => m.PassportPageModule)
-  },
-  {
-    path: 'product-list',
-    loadChildren: () => import('./pages/product-list/product-list.module').then( m => m.ProductListPageModule)
+  },  {
+    path: 'product-in-out-of-stock',
+    loadChildren: () => import('./pages/product-in-out-of-stock/product-in-out-of-stock.module').then( m => m.ProductInOutOfStockPageModule)
   },
 
 ];

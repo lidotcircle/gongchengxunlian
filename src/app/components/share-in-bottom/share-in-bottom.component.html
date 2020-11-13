@@ -1,0 +1,52 @@
+<div class="root" [style]="!showComponent ? 'display: none;' : ''" #shareRoot>
+  <div class="take-space" (click)="onClickCancel()"></div>
+
+  <div class="share">
+    <div class="share-wrapper share-anim">
+      <div class="icons">
+        <div class="icon">
+          <div class="img-container">
+            <div class="img-container-inner" (click)="onClickWechat()">
+              <img src="../../../assets/img/share/weixin.svg">
+            </div>
+          </div>
+          <div class="take-space"></div>
+          <div class="text">好友</div>
+        </div>
+        <div class="icon">
+          <div class="img-container">
+            <div class="img-container-inner" (click)="onClickMoment()">
+              <img src="../../../assets/img/share/chrome.svg">
+            </div>
+          </div>
+          <div class="take-space"></div>
+          <div class="text">朋友圈</div>
+        </div>
+        <div class="icon">
+          <div class="img-container">
+            <div class="img-container-inner" (click)="onClickSMS()">
+              <img src="../../../assets/img/share/sms.svg">
+            </div>
+          </div>
+          <div class="take-space"></div>
+          <div class="text">短信</div>
+        </div>
+        <div class="icon">
+          <div class="img-container">
+            <div class="img-container-inner" (click)="onClickQQ()">
+              <img src="../../../assets/img/share/qq.svg">
+            </div>
+          </div>
+          <div class="take-space"></div>
+          <div class="text">QQ</div>
+        </div>
+      </div>
+
+      <div class="take-space"></div>
+
+      <div class="bottom" (click)="onClickCancel()">
+        <div class="cancel-button">取消</div>
+      </div>
+    </div>
+  </div>
+</div>

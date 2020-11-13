@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonInfiniteScroll, LoadingController, ToastController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { ShareInBottomComponent } from 'src/app/components/share-in-bottom/share-in-bottom.component';
 import { MockCategoryService } from 'src/app/shared/service/mock-category.service';
 import { ProductService, ProductListResult } from 'src/app/shared/service/product.service';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
@@ -12,7 +14,7 @@ import { makeid } from 'src/app/shared/utils/utils.module';
   styleUrls: ['./product-list.page.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ProductListPage implements OnInit {
+export class ProductListPage implements OnInit, OnDestroy {
   empty: boolean = true;
   queryTerm: string = '';
   remainCount: number = 0;
@@ -23,9 +25,13 @@ export class ProductListPage implements OnInit {
   productsTotal: number = 0;
   pageSize: number = 4;
   products: StaticValue.Product[] = [];
+  shareMessage: string = '';
 
   @ViewChild(IonInfiniteScroll)
   infiniteScroll: IonInfiniteScroll;
+
+  @ViewChild(ShareInBottomComponent, {static: true})
+  private shareElem: ShareInBottomComponent;
 
   private my_name = makeid(20);
   constructor(private router: Router,
@@ -49,8 +55,16 @@ export class ProductListPage implements OnInit {
     });
   }
 
+  private subscriptionOfProductChange: Subscription;
   async ngOnInit() {
    await this.loading();
+   this.subscriptionOfProductChange = this.productService.change.subscribe(_ => {
+     this.loading();
+   });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionOfProductChange.unsubscribe();
   }
 
   /**
@@ -87,6 +101,7 @@ export class ProductListPage implements OnInit {
     });
   }
 
+  private inLoading: boolean = false;
   /**
    * 商品列表加载效果, 0.5s 延时
    *
@@ -95,6 +110,10 @@ export class ProductListPage implements OnInit {
    * @memberof ProductListPage
    */
   private async loading(): Promise<void> {
+    if(this.inLoading) {
+      return;
+    }
+    this.inLoading = true;
     const loading = await this.loadingController.create({
       message: '正在加载数据，请稍后...',
       spinner: 'bubbles'
@@ -105,7 +124,10 @@ export class ProductListPage implements OnInit {
       setTimeout(() => {
         this.refresh(true).
         catch(() => { }).
-        finally(() => loading.dismiss().then(() => resolve()));
+        finally(() => {
+          loading.dismiss().then(() => resolve())
+          this.inLoading = false;
+        });
       }, 500);
     });
   }
@@ -176,5 +198,10 @@ export class ProductListPage implements OnInit {
         event.target.complete();
       });
     }, 1000);
+  }
+
+  onShare(n: number) {
+    // TODO
+    this.shareElem.show();
   }
 }

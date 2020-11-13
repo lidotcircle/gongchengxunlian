@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
 
 @Component({
@@ -9,10 +10,11 @@ import { StaticValue } from 'src/app/shared/static-value/static-value.module';
 export class ProductViewComponent implements OnInit {
   @Input()
   product: StaticValue.Product;
-  @Output()
+  @Output('share')
   share = new EventEmitter<void>();
 
-  constructor() { }
+  constructor(private router: Router) { 
+  }
 
   
   ngOnInit() {
@@ -23,5 +25,9 @@ export class ProductViewComponent implements OnInit {
 
   onShare() {
     this.share.emit();
+  }
+
+  onClickGotoDetail() {
+    this.router.navigate(['/product-detail'], {queryParams: {productId: this.product.productId}});
   }
 }

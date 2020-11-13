@@ -141,6 +141,26 @@ export class AccountManageService {
         return uid;
     }
 
+    verifyUser(loginToken: StaticValue.LoginToken, username: string, password: string): boolean {
+        const id = this.checkLoginToken(loginToken);
+        let ans = false;
+        if(id < 0) {
+            return ans;
+        }
+        const users = this.localstorage.get(StaticValue.USERDB_KEY, new StaticValue.UserDB()) as StaticValue.UserDB;
+        for(let u of users.users) {
+            if(u.userid == id){
+                if(username == u.shopName || username == u.phone || username == u.email) {
+                    if(MD5(password) == u.password) {
+                        ans = true;
+                    }
+                }
+                break;
+            }
+        }
+        return ans;
+    }
+
     /**
      * 获取当前登录用户的用户基本信息
      *

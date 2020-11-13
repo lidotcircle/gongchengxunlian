@@ -18,7 +18,7 @@ import { SessionStorageService } from './shared/service/session-storage.service'
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [
     StatusBar,
