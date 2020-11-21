@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-share-in-bottom',
@@ -20,7 +21,7 @@ export class ShareInBottomComponent implements OnInit {
   private shareRoot: ElementRef;
 
   showComponent: boolean = false;
-  constructor() { }
+  constructor(private toast: ToastController) { }
   ngOnInit() {
     const htmle = this.shareRoot.nativeElement as HTMLElement;
     const events = ['touchstart', 'click', 'dragstart'];
@@ -35,23 +36,34 @@ export class ShareInBottomComponent implements OnInit {
     this.showComponent = false;
   }
 
+  private notifyShare(msg: string) {
+    this.toast.create({
+      message: `分享页面, ${msg}`,
+      duration: 2000
+    }).then(t => t.present());
+  }
+
   onClickWechat() {
     this.wechatEmitter.emit();
+    this.notifyShare('微信');
     this.hide();
   }
 
   onClickMoment() {
     this.momentEmitter.emit();
+    this.notifyShare('朋友圈');
     this.hide();
   }
 
   onClickSMS() {
     this.smsEmitter.emit();
+    this.notifyShare('短信');
     this.hide();
   }
 
   onClickQQ() {
     this.qqEmitter.emit();
+    this.notifyShare('QQ');
     this.hide();
   }
 

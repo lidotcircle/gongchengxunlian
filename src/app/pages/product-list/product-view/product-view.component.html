@@ -3,8 +3,8 @@
   <div class='takelittle'></div>
   <div class="image" (click)="onClickGotoDetail()">
     <ion-thumbnail>
-      <img *ngIf="!product.photos?.length" src="../../../../assets/img/products/c_goodspicture.png" alt="no photo">
-      <img *ngIf=" product.photos?.length" src="{{ 'data:image/jpeg;base64,' + product.photos[0] }}" alt="commidity photo">
+      <img *ngIf="!product.photos?.length || product.photos.length == 0" src="../../../../assets/img/products/c_goodspicture.png" alt="no photo">
+      <img *ngIf=" product.photos?.length && product.photos.length > 0" src="{{ 'data:image/jpeg;base64,' + product.photos[0] }}" alt="commidity photo">
     </ion-thumbnail>
   </div>
   <div class="info" (click)="onClickGotoDetail()">

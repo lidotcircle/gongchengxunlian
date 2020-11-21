@@ -97,8 +97,8 @@
     <div class='take-space'></div>
     
     <div class='buttons'>
-      <ion-button color="primary" fill="solid" expand="full" [disabled]='productForm.invalid || photoURLs.length == 0' (click)="addProductAndGoBack(); pname.reset(); sprice.reset(); barcode.reset();">保存</ion-button>
-      <ion-button color="primary" fill="solid" expand="full" [disabled]='productForm.invalid || photoURLs.length == 0' (click)="addProductAndContinue(); pname.reset(); sprice.reset(); barcode.reset();">继续添加</ion-button>
+      <ion-button color="primary" fill="solid" expand="full" [disabled]='productForm.invalid' (click)="addProductAndGoBack(); pname.reset(); sprice.reset(); barcode.reset();">保存</ion-button>
+      <ion-button color="primary" fill="solid" expand="full" [disabled]='productForm.invalid' (click)="addProductAndContinue(); pname.reset(); sprice.reset(); barcode.reset();">继续添加</ion-button>
     </div>
   </form>
 </div>
