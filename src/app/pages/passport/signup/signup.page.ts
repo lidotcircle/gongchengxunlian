@@ -111,12 +111,14 @@ export class SignupPage implements OnInit {
             this.signupSuccess = true;
             this.sessionStorage.remove(StaticValue.SIGNUP_INFO);
             this.sessionStorage.remove(StaticValue.SIGNUP_MD5);
-            window.setTimeout(() => {
-                this.router.navigateByUrl(StaticValue.URLS.SIGNIN);
-                this.signupSuccess = false;
-                this.signupData = new StaticValue.SignupDataModel();
-                this.slides.slideTo(0);
-            }, 2000);
+            this.accountManager.login(this.signupData.phone, this.signupData.password).finally(() => {
+                window.setTimeout(() => {
+                    this.router.navigateByUrl(StaticValue.URLS.SIGNIN);
+                    this.signupSuccess = false;
+                    this.signupData = new StaticValue.SignupDataModel();
+                    this.slides.slideTo(0);
+                }, 2000);
+            });
         } else {
             this.signupFail = true;
         }

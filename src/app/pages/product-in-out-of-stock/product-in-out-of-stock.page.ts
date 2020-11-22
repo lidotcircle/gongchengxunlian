@@ -1,6 +1,6 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ApplicationRef, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ToastController, ViewWillEnter } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { ProductService } from 'src/app/shared/service/product.service';
 
@@ -26,12 +26,13 @@ export class ProductInOutOfStockPage implements OnInit {
   constructor(private productService: ProductService,
               private activatedRouter: ActivatedRoute,
               private router: Router,
-              private toast: ToastController) { }
+              private toast: ToastController,
+              private appRef: ApplicationRef) { }
 
   ngOnInit() {
     this.activatedRouter.queryParams.subscribe(param => {
       this.productId    = param['productId'];
-      this.inStockCount = parseInt(param['productStockCount'] || 0);
+      this.inStockCount = this.inStockCount || parseInt(param['productStockCount'] || 0);
     });
   }
 
@@ -70,6 +71,7 @@ export class ProductInOutOfStockPage implements OnInit {
       this.inRemark = '';
       this.inStockCount += this.inInput;
       this.inInput = 0;
+      this.appRef.tick();
     }
   }
   async confirmOut() {
@@ -83,6 +85,7 @@ export class ProductInOutOfStockPage implements OnInit {
       this.outRemark = '';
       this.inStockCount -= this.outInput;
       this.outInput = 0;
+      this.appRef.tick();
     }
   }
 }

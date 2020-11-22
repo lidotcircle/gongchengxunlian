@@ -30,7 +30,7 @@
       </div>
       <div class='asterisk'></div>
       <ion-input required ldyBarcode pattern="^[0-9]{13}$" type="text" name='barcode' #barcode="ngModel" [(ngModel)]="productModel.barCode" placeholder="输入商品条形码"></ion-input>
-      <div class="warning" *ngIf='barcode.touched && (barcode.errors?.required || barcode.errors?.pattern)'>请输入13位数字条形码</div>
+      <div class="warning" *ngIf='barcode.touched && (barcode.errors?.required || barcode.errors?.pattern)'>请输入12、13位数字条形码</div>
       <div class='take-space'></div>
       <div class='scan-icon' (click)='onScanBarCode()'>
         <ion-icon name="scan-outline"></ion-icon>

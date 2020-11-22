@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ApplicationRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, ViewWillEnter } from '@ionic/angular';
 import { MockCategoryService } from 'src/app/shared/service/mock-category.service';
 import { StaticValue } from 'src/app/shared/static-value/static-value.module';
 
@@ -11,7 +11,7 @@ import { StaticValue } from 'src/app/shared/static-value/static-value.module';
   styleUrls: ['./category-list.page.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class CategoryListPage implements OnInit {
+export class CategoryListPage implements OnInit, ViewWillEnter {
   mainIndex: number = 0;
   subIndex: number = -2;
   isSelect: boolean = false;
@@ -22,6 +22,7 @@ export class CategoryListPage implements OnInit {
               private actionSheetController: ActionSheetController,
               private router: Router,
               private activatedRouter: ActivatedRoute,
+              private appRef: ApplicationRef,
               private location: Location) {
     this.categoryManagement.subcribe(() => {
       this.category = this.categoryManagement.getAll();
@@ -31,6 +32,10 @@ export class CategoryListPage implements OnInit {
       this.isSelect = !!params.get('select');
       this.requestor = params.get('requestor');
     })
+  }
+
+  ionViewWillEnter(): void {
+    this.appRef.tick();
   }
 
   private selectCategory(sub: StaticValue.Category) {

@@ -1,7 +1,7 @@
 import { Directive, HostListener, Optional } from '@angular/core';
 import { AbstractControl, NgModel, NG_VALIDATORS, ValidationErrors, Validators } from '@angular/forms';
 
-const barcodeRegex = new RegExp('^[0-9]{13,14}$');
+const barcodeRegex = new RegExp('^[0-9]{12,14}$');
 const permitInput = new RegExp('^[0-9]{0,13}$');
 
 @Directive({
@@ -13,7 +13,7 @@ export class BarcodeDirective implements Validators {
   constructor(@Optional() private ngModel: NgModel) { }
 
   validate(control: AbstractControl): ValidationErrors {
-    return (control.value && control.value.match(barcodeRegex)) ? null : {barcode: true};
+    return (control.value && !control.value.match(barcodeRegex)) ? {barcode: true} : null;
   }
 
   @HostListener('input', ['$event']) onInput(event) {

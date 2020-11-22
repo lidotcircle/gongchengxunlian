@@ -112,7 +112,7 @@
                         </ion-input>
                     </ion-item>
                     <div color="danger" class="warning" *ngIf="password.touched  && password.errors?.required">需要密码</div>
-                    <div color="danger" class="warning" *ngIf="!password.touched && password.errors?.password">密码长度大于6，且含0-9, a-z, A-Z</div>
+                    <div color="danger" class="warning" *ngIf="password.touched && password.errors?.password">密码长度大于6，且含0-9, a-z, A-Z</div>
                 </div>
                 <div class="confirm-password-line with-warning">
                     <ion-item>
@@ -165,7 +165,7 @@
                     确认注册
                 </ion-button>
                 <ion-label color="danger"    *ngIf="signupFail">注册失败，原因未知，请重试</ion-label>
-                <ion-label color="secondary" *ngIf="signupSuccess">注册成功，将跳转到登录页</ion-label>
+                <ion-label color="secondary" *ngIf="signupSuccess">注册成功，将自动登录</ion-label>
                 <div class="take-space"></div>
                 <div class="prev-next-slide">
                     <ion-button class="prev-slide" (click)="prevSlide()" expand="block" fill="solid"

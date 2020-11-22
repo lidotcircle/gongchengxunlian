@@ -12,14 +12,13 @@
       <div class='text'>大分类</div>
       <input class="input" type="text" placeholder="商品大分类名称"
              [(ngModel)]="mainName" name="mvalue" #mvalue='ngModel'
-             required ldyName>
+             required>
     </div>
 
     <div *ngFor="let name of subNames; let i = index;" class='itemx'>
       <div class='text'>小分类</div>
       <input class="input" type="text" placeholder="商品小分类名称"
-             [(ngModel)]="subNames_DUP[i]" name="nvalue-{{i}}"
-             ldyName>
+             [(ngModel)]="subNames_DUP[i]" name="nvalue-{{i}}">
     </div>
 
     <div class="new-subcategory" (click)="addSubCat()">
