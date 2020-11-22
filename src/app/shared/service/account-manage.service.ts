@@ -13,7 +13,7 @@ import * as utils from '../utils/utils.module';
 
 const EMPTY_SIGNUP = new StaticValue.SignupDataModel();
 
-const retrieve_message = "【生意专家】验证码: {code}, 5分钟有效";
+const retrieve_message = "【生意专家】验证码: {code}, 1分钟有效";
 const NewUserMessage =  '【生意专家】尊敬的用户，您的验证码: { code }.工作人员不会索取，请勿泄露。';
 
 /** Authentication Code */
@@ -24,7 +24,7 @@ type TIME    = number;
 class AuthCode {
     private static TOKENS: Map<AUTHCODE_TOKEN, [HASH, ACCOUNT, TIME]> = new
     Map<AUTHCODE_TOKEN, [HASH, ACCOUNT, TIME]>();
-    private static MAX_VALID_TIME_SPAN_MS: number = 5 * 60 * 1000;
+    private static MAX_VALID_TIME_SPAN_MS: number = 1 * 60 * 1000;
     private static TokenLength = 64;
 
     static newToken(): AUTHCODE_TOKEN {

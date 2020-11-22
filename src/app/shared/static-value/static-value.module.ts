@@ -3,7 +3,7 @@
 export module StaticValue {
     /** local storage keys */
     export const APP_KEY = 'APP';
-    export const APP_VERSION = '1.0.0';
+    export const APP_VERSION = '0.4.6';
     export const LOGIN_TOKEN = "LOGIN_TOKEN";
 
     /** database keys */
@@ -23,7 +23,7 @@ export module StaticValue {
     export const VerificationCodeWait = 5;
 
     /** time to valid login */
-    export const LoginKeepTimeSpan = (5 * 24 * 60 * 60 * 1000);
+    export const LoginKeepTimeSpan = (5 * 60 * 1000);
 
     export class AppConfig {
         isLaunched: boolean = false;
