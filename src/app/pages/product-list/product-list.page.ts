@@ -58,7 +58,7 @@ export class ProductListPage implements OnInit, OnDestroy, ViewWillEnter {
     });
   }
 
-  private changed = false;
+  private changed = true;
   ionViewWillEnter() {
     if (this.changed) {
       this.loading().finally(() => this.changed = false);
