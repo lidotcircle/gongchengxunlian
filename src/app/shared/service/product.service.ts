@@ -64,7 +64,7 @@ export class ProductService {
         const deletep = this.products.splice(i, 1);
         try {
           ans = await this.accountManager.setProducts(this.products);
-          setTimeout(() => this._change.next(true));
+          setTimeout(() => this._change.next(true), 0);
         } catch {
           this.products.push(deletep[0]);
           ans = false;

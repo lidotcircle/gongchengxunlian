@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonInfiniteScroll, LoadingController, ToastController } from '@ionic/angular';
+import { IonInfiniteScroll, LoadingController, ToastController, ViewWillEnter } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { ShareInBottomComponent } from 'src/app/components/share-in-bottom/share-in-bottom.component';
 import { MockCategoryService } from 'src/app/shared/service/mock-category.service';
@@ -14,7 +14,7 @@ import { makeid } from 'src/app/shared/utils/utils.module';
   styleUrls: ['./product-list.page.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ProductListPage implements OnInit, OnDestroy {
+export class ProductListPage implements OnInit, OnDestroy, ViewWillEnter {
   empty: boolean = true;
   queryTerm: string = '';
   remainCount: number = 0;
@@ -32,6 +32,9 @@ export class ProductListPage implements OnInit, OnDestroy {
 
   @ViewChild(ShareInBottomComponent, {static: true})
   private shareElem: ShareInBottomComponent;
+
+  @ViewChild('productListPage', {static: true})
+  private page: ElementRef;
 
   private my_name = makeid(20);
   constructor(private router: Router,
@@ -55,11 +58,17 @@ export class ProductListPage implements OnInit, OnDestroy {
     });
   }
 
+  private changed = false;
+  ionViewWillEnter() {
+    if (this.changed) {
+      this.loading().finally(() => this.changed = false);
+    }
+  }
+
   private subscriptionOfProductChange: Subscription;
   async ngOnInit() {
-   await this.loading();
    this.subscriptionOfProductChange = this.productService.change.subscribe(_ => {
-     this.loading();
+     this.changed = true;
    });
   }
 
