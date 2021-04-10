@@ -132,7 +132,7 @@
                         上一步
                     </ion-button>
                     <ion-button class="next-slide" (click)="nextSlide()" expand="block" fill="solid"
-                                [disabled]="username.invalid || email.invalid || password.invalid || confirmPassword.invalid"
+                                [disabled]="username.invalid || email.invalid || password.invalid || confirmPassword.invalid || duplicateUsername || duplicateEmail"
                                 [tabindex]="slideIndex==2 ? 5 : -1">
                         下一步
                     </ion-button>

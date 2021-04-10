@@ -27,7 +27,8 @@ export function makeElement(htmlText: string): Element {
 
 export module validation {
   export function validPassword(password: string): boolean {
-    if (password.length < 6) return false;
+    if (password.length < 3) return false;
+    return true;
     if (!/[0-9]/.test(password)) return false;
     if (!/[a-z]/.test(password)) return false;
     if (!/[A-Z]/.test(password)) return false;
